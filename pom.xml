@@ -9,7 +9,7 @@
 		<version>2.5.2</version>
 	</parent>
 
-	<groupId>com.worldcalls</groupId>
+	<groupId>com.newestworld</groupId>
 	<artifactId>root</artifactId>
 	<packaging>pom</packaging>
 	<version>0.0.1-SNAPSHOT</version>
