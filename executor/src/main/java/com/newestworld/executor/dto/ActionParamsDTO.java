@@ -1,7 +1,7 @@
-package com.newestworld.content.dto;
+package com.newestworld.executor.dto;
 
 import com.newestworld.commons.dto.ActionParams;
-import com.newestworld.content.model.entity.ActionParamsEntity;
+import com.newestworld.executor.model.entity.ActionParamsEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

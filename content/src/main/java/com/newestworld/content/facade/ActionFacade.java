@@ -1,6 +1,6 @@
 package com.newestworld.content.facade;
 
-import com.newestworld.content.dto.Action;
+import com.newestworld.commons.dto.Action;
 import com.newestworld.content.dto.ActionCreateDTO;
 import com.newestworld.content.service.ActionService;
 import lombok.RequiredArgsConstructor;

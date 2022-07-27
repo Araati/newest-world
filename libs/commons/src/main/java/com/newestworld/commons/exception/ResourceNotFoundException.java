@@ -1,4 +1,4 @@
-package com.newestworld.content.exception;
+package com.newestworld.commons.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

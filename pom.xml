@@ -17,6 +17,7 @@
 		<module>libs/commons</module>
 		<module>content</module>
 		<module>scheduler</module>
+		<module>executor</module>
 	</modules>
 
 	<properties>

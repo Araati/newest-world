@@ -1,4 +1,4 @@
-package com.newestworld.content.dto;
+package com.newestworld.commons.dto;
 
 public interface ActionParams {
     

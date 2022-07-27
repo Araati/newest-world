@@ -1,9 +1,8 @@
-package com.newestworld.content.dto;
+package com.newestworld.executor.dto;
 
 import com.newestworld.commons.dto.Action;
 import com.newestworld.commons.dto.ActionParams;
-import com.newestworld.content.model.entity.ActionEntity;
-import com.newestworld.content.model.entity.ActionTimeoutEntity;
+import com.newestworld.executor.model.entity.ActionEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,21 +19,14 @@ public class ActionDTO implements Action {
 
     private int type;
 
-    private long timeout;
-
     private List<ActionParams> params;
-
-    private boolean inProgress;
 
     private LocalDateTime createdAt;
 
-    public ActionDTO(final ActionEntity source, final List<ActionParams> source1, final ActionTimeoutEntity source2)    {
+    public ActionDTO(final ActionEntity source, final List<ActionParams> source1) {
         this.id = source.getId();
         this.type = source.getType();
-        this.timeout = source2.getTimeout();
         this.params = source1;
-        this.inProgress = source.isInProgress();
         this.createdAt = source.getCreatedAt();
     }
-
 }

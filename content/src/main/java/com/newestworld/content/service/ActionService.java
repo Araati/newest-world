@@ -1,7 +1,9 @@
 package com.newestworld.content.service;
 
+import com.newestworld.commons.dto.Action;
+import com.newestworld.commons.dto.ActionParams;
 import com.newestworld.content.dto.*;
-import com.newestworld.content.exception.ResourceNotFoundException;
+import com.newestworld.commons.exception.ResourceNotFoundException;
 import com.newestworld.content.model.entity.ActionParamsEntity;
 import com.newestworld.content.dao.ActionParamsRepository;
 import com.newestworld.content.dao.ActionRepository;

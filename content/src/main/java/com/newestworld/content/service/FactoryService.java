@@ -4,7 +4,7 @@ import com.newestworld.content.dto.Factory;
 import com.newestworld.content.dto.FactoryCreateDTO;
 import com.newestworld.content.dto.FactoryDTO;
 import com.newestworld.content.dao.FactoryRepository;
-import com.newestworld.content.exception.ResourceNotFoundException;
+import com.newestworld.commons.exception.ResourceNotFoundException;
 import com.newestworld.content.model.entity.FactoryEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
