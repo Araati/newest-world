@@ -4,7 +4,6 @@ import com.newestworld.scheduler.dao.ActionTimeoutRepository;
 import com.newestworld.scheduler.model.entity.ActionTimeoutEntity;
 import com.newestworld.streams.EventPublisher;
 import com.newestworld.streams.dto.ActionTimeoutEventDTO;
-import io.nats.client.JetStream;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -25,7 +24,6 @@ public class ActionTimeoutChecker {
 
     @Scheduled(fixedDelay = 1000)
     private void timeoutChecker()   {
-        JetStream
         List<ActionTimeoutEntity> actionTimeoutEntityList = actionTimeoutRepository.findAllByTimeoutLessThan(System.currentTimeMillis());
         List<Long> actionIdList = new ArrayList<>();
         for(int i = 0; actionTimeoutEntityList.size() > i; i++) {

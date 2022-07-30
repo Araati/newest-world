@@ -5,7 +5,7 @@ import org.springframework.messaging.MessageChannel;
 
 public interface ActionTimeoutTopicInput {
 
-    String INPUT = "action.timeout";
+    String INPUT = "action-timeout";
 
     @Input(INPUT)
     MessageChannel input();
