@@ -28,7 +28,8 @@ public class ActionAdd implements ActionExecutor    {
                 amount = Long.getLong(params.getValue());
             }
         }
-        publisher.send(new FactoryUpdateEventDTO(target, amount));
+        // TODO: 01.08.2022 Точно Optional.ofNullable()?
+        publisher.send(new FactoryUpdateEventDTO(target, null, Optional.ofNullable(amount)));
     }
 
     @Override
