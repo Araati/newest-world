@@ -23,7 +23,7 @@ public class FactoryUpdateListener {
     private final FactoryService factoryService;
 
     // TODO: 01.08.2022 Зачем @Valid? В других listener такой же вопрос
-    @StreamListener
+    @StreamListener(FactoryUpdateTopicInput.INPUT)
     public void handleFactoryUpdateTopicInput(@Valid @Payload final FactoryUpdateEventDTO event)  {
         factoryService.update(new FactoryUpdateDTO(event), event.getFactoryId());
     }
