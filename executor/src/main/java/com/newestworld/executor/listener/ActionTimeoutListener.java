@@ -1,5 +1,6 @@
 package com.newestworld.executor.listener;
 
+import com.newestworld.executor.service.ActionExecutorService;
 import com.newestworld.streams.dto.ActionTimeoutEventDTO;
 import com.newestworld.streams.topic.ActionTimeoutTopicInput;
 import lombok.RequiredArgsConstructor;
@@ -17,9 +18,13 @@ import javax.validation.Valid;
 @RequiredArgsConstructor
 public class ActionTimeoutListener {
 
+    private final ActionExecutorService service;
+
     @StreamListener(ActionTimeoutTopicInput.INPUT)
     public void handleActionTimeoutTopicInput(@Valid @Payload final ActionTimeoutEventDTO event) {
-        System.out.println(event.getActionId());
+        for(long id : event.getActionId())  {
+            service.execute(id);
+        }
     }
 
 }
