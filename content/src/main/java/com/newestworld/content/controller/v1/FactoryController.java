@@ -2,12 +2,14 @@ package com.newestworld.content.controller.v1;
 
 import com.newestworld.content.dto.Factory;
 import com.newestworld.content.dto.FactoryCreateDTO;
+import com.newestworld.content.dto.FactoryUpdateDTO;
 import com.newestworld.content.facade.FactoryFacade;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
+// TODO: 01.08.2022 Взаимодействие пользователя только через Action. Удалить
 @RestController
 @RequestMapping("/v1/factory")
 @RequiredArgsConstructor
@@ -20,7 +22,10 @@ public class FactoryController {
         return factoryFacade.create(request);
     }
 
-    // TODO: 27.04.2022 update
+    @PostMapping("/{id}")
+    public Factory update(@RequestBody final FactoryUpdateDTO request, @PathVariable final long id)  {
+        return factoryFacade.update(request, id);
+    }
 
     @DeleteMapping("/{id}")
     public void delete(@PathVariable final long id)  {

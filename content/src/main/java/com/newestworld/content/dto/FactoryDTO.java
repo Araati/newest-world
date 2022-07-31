@@ -14,6 +14,7 @@ public class FactoryDTO implements Factory {
 
     private long id;
 
+    // FIXME: 01.08.2022 isIsWorking
     private boolean isWorking;
 
     private long store;
