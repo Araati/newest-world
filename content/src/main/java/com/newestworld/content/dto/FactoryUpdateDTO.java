@@ -1,6 +1,7 @@
 package com.newestworld.content.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.newestworld.streams.dto.FactoryUpdateEventDTO;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
@@ -15,6 +16,11 @@ public class FactoryUpdateDTO {
 
     @JsonProperty(value = "store")
     private Long store;
+
+    public FactoryUpdateDTO(FactoryUpdateEventDTO event) {
+        this.isWorking = event.getWorking().orElse(isWorking);
+        this.store = event.getAmount().orElse(store);
+    }
 
     public Optional<Boolean> isWorking()    {
         return Optional.ofNullable(isWorking);
