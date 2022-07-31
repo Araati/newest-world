@@ -1,14 +1,64 @@
 version: "3"
 services:
-  mysql:
-    image: mysql:latest
-    ports:
-      - 3306:3306
-    volumes:
-      - ".docker/volumes/mysql:/var/lib/mysql"
-      - ".docker/dev/mysql/init:/docker-entrypoint-initdb.d"
+
+  content:
+    image: content:latest
+    build:
+        context: content
+    container_name: content
+    depends_on:
+      - postgres_db
     environment:
-      - "MYSQL_ROOT_PASSWORD=root"
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/compose-postgres
+      - SPRING_DATASOURCE_USERNAME=compose-postgres
+      - SPRING_DATASOURCE_PASSWORD=compose-postgres
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - SPRING_PROFILES_ACTIVE=prod
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+
+  executor:
+    image: executor:latest
+    build:
+      context: executor
+    container_name: executor
+    depends_on:
+      - content
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+    restart: unless-stopped
+
+  scheduler:
+    image: scheduler:latest
+    build:
+      context: scheduler
+    container_name: scheduler
+    depends_on:
+      - executor
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/compose-postgres
+      - SPRING_DATASOURCE_USERNAME=compose-postgres
+      - SPRING_DATASOURCE_PASSWORD=compose-postgres
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - SPRING_PROFILES_ACTIVE=prod
+    restart: unless-stopped
+
+  postgres_db:
+    image: postgres:13.1-alpine
+    container_name: postgres_db
+    environment:
+      - POSTGRES_DB=compose-postgres
+      - POSTGRES_USER=compose-postgres
+      - POSTGRES_PASSWORD=compose-postgres
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U compose-postgres -d compose-postgres" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
 
   zookeeper:
     profiles:
