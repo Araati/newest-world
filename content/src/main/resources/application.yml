@@ -12,8 +12,8 @@ spring:
           min-partition-count: 1
           required-acks: 1
       bindings:
-        action-timeout:
-          destination: action-timeout
+        factory-update:
+          destination: factory-update
           group: content
           binder: kafka
           consumer:
