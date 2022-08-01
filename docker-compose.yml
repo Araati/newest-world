@@ -8,12 +8,14 @@ services:
     container_name: content
     depends_on:
       - postgres_db
+      - kafka
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres_db:5432/compose-postgres
       - SPRING_DATASOURCE_USERNAME=compose-postgres
       - SPRING_DATASOURCE_PASSWORD=compose-postgres
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
       - SPRING_PROFILES_ACTIVE=prod
+      - SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS=PLAINTEXT://kafka:9092
     ports:
       - "8080:8080"
     restart: unless-stopped
@@ -25,12 +27,14 @@ services:
     container_name: executor
     depends_on:
       - content
+      - kafka
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres_db:5432/compose-postgres
       - SPRING_DATASOURCE_USERNAME=compose-postgres
       - SPRING_DATASOURCE_PASSWORD=compose-postgres
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
       - SPRING_PROFILES_ACTIVE=prod
+      - SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS=PLAINTEXT://kafka:9092
     restart: unless-stopped
 
   scheduler:
@@ -40,12 +44,14 @@ services:
     container_name: scheduler
     depends_on:
       - executor
+      - kafka
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres_db:5432/compose-postgres
       - SPRING_DATASOURCE_USERNAME=compose-postgres
       - SPRING_DATASOURCE_PASSWORD=compose-postgres
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
       - SPRING_PROFILES_ACTIVE=prod
+      - SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS=PLAINTEXT://kafka:9092
     restart: unless-stopped
 
   postgres_db:
@@ -65,16 +71,12 @@ services:
     restart: unless-stopped
 
   zookeeper:
-    profiles:
-      - infra
     image: confluentinc/cp-zookeeper:5.0.0
     restart: on-failure
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
 
   kafka:
-    profiles:
-      - infra
     image: confluentinc/cp-kafka:5.0.0
     restart: on-failure
     ports:
