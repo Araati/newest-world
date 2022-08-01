@@ -25,15 +25,21 @@ public class ActionTimeoutChecker {
     @Scheduled(fixedDelay = 1000)
     private void timeoutChecker()   {
         List<ActionTimeoutEntity> actionTimeoutEntityList = actionTimeoutRepository.findAllByTimeoutLessThan(System.currentTimeMillis());
-        List<Long> actionIdList = new ArrayList<>();
-        for(int i = 0; actionTimeoutEntityList.size() > i; i++) {
-            actionIdList.add(actionTimeoutEntityList.get(i).getActionId());
+
+        if(!actionTimeoutEntityList.isEmpty()) {
+            List<Long> actionIdList = new ArrayList<>();
+            for (int i = 0; actionTimeoutEntityList.size() > i; i++) {
+                actionIdList.add(actionTimeoutEntityList.get(i).getActionId());
+            }
+
+            if (!actionIdList.isEmpty()) {
+                actionTimeoutPublisher.send(new ActionTimeoutEventDTO(actionIdList));
+            }
+
+            // TODO: 01.08.2022 Logger
+            System.out.println("MESSAGE SENT: " + actionIdList);
         }
 
-        actionTimeoutPublisher.send(new ActionTimeoutEventDTO(actionIdList));
-
-        for(int i = 0; actionTimeoutEntityList.size() > i; i++)
-            System.out.println(actionTimeoutEntityList.get(i).getActionId());
     }
 
 }
