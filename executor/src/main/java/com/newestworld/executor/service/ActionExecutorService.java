@@ -28,6 +28,7 @@ public class ActionExecutorService {
 
     public void execute(final long id) {
 
+        // TODO: 03.08.2022 Экзекутор НЕ ДОЛЖЕН общаться с БД
         ActionEntity actionEntity = actionRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Action", id));
         List<ActionParams> actionParams = actionParamsRepository.findAllByActionId(id)
                 .orElseThrow(() -> new ResourceNotFoundException("ActionParams", id))

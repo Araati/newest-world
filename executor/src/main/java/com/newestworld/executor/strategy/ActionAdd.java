@@ -4,6 +4,7 @@ import com.newestworld.commons.dto.Action;
 import com.newestworld.commons.dto.ActionParams;
 import com.newestworld.executor.util.ActionType;
 import com.newestworld.streams.EventPublisher;
+import com.newestworld.streams.dto.ActionDeleteEventDTO;
 import com.newestworld.streams.dto.FactoryUpdateEventDTO;
 import lombok.RequiredArgsConstructor;
 
@@ -13,6 +14,7 @@ import java.util.Optional;
 public class ActionAdd implements ActionExecutor    {
 
     private final EventPublisher<FactoryUpdateEventDTO> publisher;
+    private final EventPublisher<ActionDeleteEventDTO> deletePublisher;
 
     @Override
     public void exec(Action action) {
@@ -30,6 +32,7 @@ public class ActionAdd implements ActionExecutor    {
         }
         // TODO: 01.08.2022 Точно Optional.ofNullable()?
         publisher.send(new FactoryUpdateEventDTO(target, null, Optional.ofNullable(amount)));
+        deletePublisher.send(new ActionDeleteEventDTO(action.getId()));
     }
 
     @Override
