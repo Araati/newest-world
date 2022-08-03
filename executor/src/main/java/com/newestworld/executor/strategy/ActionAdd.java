@@ -7,9 +7,11 @@ import com.newestworld.streams.EventPublisher;
 import com.newestworld.streams.dto.ActionDeleteEventDTO;
 import com.newestworld.streams.dto.FactoryUpdateEventDTO;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
+@Component
 @RequiredArgsConstructor
 public class ActionAdd implements ActionExecutor    {
 
@@ -31,7 +33,7 @@ public class ActionAdd implements ActionExecutor    {
             }
         }
         // TODO: 01.08.2022 Точно Optional.ofNullable()?
-        publisher.send(new FactoryUpdateEventDTO(target, null, Optional.ofNullable(amount)));
+        publisher.send(new FactoryUpdateEventDTO(target, Optional.ofNullable(null), Optional.ofNullable(amount)));
         deletePublisher.send(new ActionDeleteEventDTO(action.getId()));
     }
 
