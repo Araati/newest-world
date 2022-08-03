@@ -19,5 +19,12 @@ spring:
           consumer:
             autoRebalanceEnabled: true
             autoCommitOnError: false
+        action-delete:
+          destination: action-delete
+          group: content
+          binder: kafka
+          consumer:
+            autoRebalanceEnabled: true
+            autoCommitOnError: false
 
       default-binder: kafka
