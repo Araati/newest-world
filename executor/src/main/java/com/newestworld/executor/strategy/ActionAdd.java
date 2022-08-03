@@ -26,10 +26,10 @@ public class ActionAdd implements ActionExecutor    {
         Long amount = null;
 
         for(ActionParams params : action.getParams())   {
-            if(params.getName() == "target")    {
-                target = Long.getLong(params.getValue());
-            } else if(params.getName() == "amount") {
-                amount = Long.getLong(params.getValue());
+            if(params.getName().equals("target"))    {;
+                target = Long.valueOf(params.getValue());
+            } else if(params.getName().equals("amount")) {
+                amount = Long.valueOf(params.getValue());
             }
         }
         // TODO: 01.08.2022 Точно Optional.ofNullable()?
