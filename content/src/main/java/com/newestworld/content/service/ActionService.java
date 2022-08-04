@@ -44,11 +44,9 @@ public class ActionService {
         ActionEntity entity = actionRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Action", id));
         actionRepository.delete(entity);
 
-        ActionParamsEntity entity1 = actionParamsRepository.findByActionId(id);
-        actionParamsRepository.delete(entity1);
+        actionParamsRepository.deleteAll(actionParamsRepository.findAllByActionId(id));
 
-        ActionTimeoutEntity entity2 = actionTimeoutRepository.findByActionId(id);
-        actionTimeoutRepository.delete(entity2);
+        actionTimeoutRepository.delete(actionTimeoutRepository.findByActionId(id));
     }
 
     public Action findById(long id) {
