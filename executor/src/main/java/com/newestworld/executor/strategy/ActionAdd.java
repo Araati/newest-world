@@ -7,10 +7,12 @@ import com.newestworld.streams.EventPublisher;
 import com.newestworld.streams.dto.ActionDeleteEventDTO;
 import com.newestworld.streams.dto.FactoryUpdateEventDTO;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class ActionAdd implements ActionExecutor    {
@@ -36,6 +38,7 @@ public class ActionAdd implements ActionExecutor    {
         publisher.send(new FactoryUpdateEventDTO(target, Optional.ofNullable(null), Optional.ofNullable(amount)));
         deletePublisher.send(new ActionDeleteEventDTO(action.getId()));
         // TODO: 05.08.2022 Этот экшен должен уметь пересоздаваться
+        log.info("ActionAdd with {} id processed", action.getId());
     }
 
     @Override
