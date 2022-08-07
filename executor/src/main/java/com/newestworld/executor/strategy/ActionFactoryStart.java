@@ -5,6 +5,7 @@ import com.newestworld.commons.dto.ActionParams;
 import com.newestworld.executor.util.ActionType;
 import com.newestworld.streams.EventPublisher;
 import com.newestworld.streams.dto.ActionCreateEventDTO;
+import com.newestworld.streams.dto.ActionDeleteEventDTO;
 import com.newestworld.streams.dto.FactoryUpdateEventDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -19,6 +20,8 @@ public class ActionFactoryStart implements ActionExecutor    {
     private final EventPublisher<FactoryUpdateEventDTO> publisher;
     private final EventPublisher<ActionCreateEventDTO> actionCreatePublisher;
 
+    private final EventPublisher<ActionDeleteEventDTO> deletePublisher;
+
     @Override
     public void exec(Action action) {
 
@@ -31,12 +34,13 @@ public class ActionFactoryStart implements ActionExecutor    {
             }
         }
 
-        publisher.send(new FactoryUpdateEventDTO(target, Optional.empty(), Optional.empty()));
+        publisher.send(new FactoryUpdateEventDTO(target, Optional.of(true), Optional.empty()));
         HashMap<String, String> params = new HashMap<>();
         params.put("target", target.toString());
         // TODO: 05.08.2022 Значение с потолка
         params.put("amount", "1000");
-        actionCreatePublisher.send(new ActionCreateEventDTO(1, params));
+        deletePublisher.send(new ActionDeleteEventDTO(action.getId()));
+        actionCreatePublisher.send(new ActionCreateEventDTO(ActionType.ADD.getType(), params));
     }
 
     @Override

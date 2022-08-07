@@ -35,6 +35,7 @@ public class ActionAdd implements ActionExecutor    {
         // TODO: 01.08.2022 Точно Optional.ofNullable()?
         publisher.send(new FactoryUpdateEventDTO(target, Optional.ofNullable(null), Optional.ofNullable(amount)));
         deletePublisher.send(new ActionDeleteEventDTO(action.getId()));
+        // TODO: 05.08.2022 Этот экшен должен уметь пересоздаваться
     }
 
     @Override
