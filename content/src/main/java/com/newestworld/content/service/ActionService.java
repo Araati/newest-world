@@ -11,12 +11,14 @@ import com.newestworld.content.dao.ActionTimeoutRepository;
 import com.newestworld.content.model.entity.ActionEntity;
 import com.newestworld.content.model.entity.ActionTimeoutEntity;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ActionService {
@@ -36,6 +38,7 @@ public class ActionService {
         }
         ActionTimeoutEntity actionTimeoutEntity = new ActionTimeoutEntity(actionEntity.getId(), request);
         actionTimeoutRepository.save(actionTimeoutEntity);
+        log.info("Action with {} id created", actionEntity.getId());
         return new ActionDTO(actionEntity, actionParamsList, actionTimeoutEntity);
 
     }
@@ -47,6 +50,7 @@ public class ActionService {
         actionParamsRepository.deleteAll(actionParamsRepository.findAllByActionId(id));
 
         actionTimeoutRepository.delete(actionTimeoutRepository.findByActionId(id));
+        log.info("Action with {} id deleted", id);
     }
 
     public Action findById(long id) {
