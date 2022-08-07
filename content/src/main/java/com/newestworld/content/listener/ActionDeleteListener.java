@@ -4,6 +4,7 @@ import com.newestworld.content.service.ActionService;
 import com.newestworld.streams.dto.ActionDeleteEventDTO;
 import com.newestworld.streams.topic.ActionDeleteTopicInput;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.integration.annotation.MessageEndpoint;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Component;
 
 import javax.validation.Valid;
 
+@Slf4j
 @Component
 @EnableBinding({ActionDeleteTopicInput.class})
 @MessageEndpoint
@@ -24,6 +26,7 @@ public class ActionDeleteListener {
     // TODO: 01.08.2022 Зачем @Valid? В других listener такой же вопрос
     @StreamListener(ActionDeleteTopicInput.INPUT)
     public void handleActionDeleteTopicInput(@Valid @Payload final ActionDeleteEventDTO event)  {
+        log.info("ActionDelete message received for action {}", event.getActionId());
         actionService.delete(event.getActionId());
     }
 

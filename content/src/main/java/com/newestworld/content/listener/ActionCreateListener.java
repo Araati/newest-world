@@ -5,6 +5,7 @@ import com.newestworld.content.service.ActionService;
 import com.newestworld.streams.dto.ActionCreateEventDTO;
 import com.newestworld.streams.topic.ActionCreateTopicInput;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.integration.annotation.MessageEndpoint;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Component;
 
 import javax.validation.Valid;
 
+@Slf4j
 @Component
 @EnableBinding({ActionCreateTopicInput.class})
 @MessageEndpoint
@@ -23,6 +25,7 @@ public class ActionCreateListener {
 
     @StreamListener(ActionCreateTopicInput.INPUT)
     public void handleActionDeleteTopicInput(@Valid @Payload final ActionCreateEventDTO event)  {
+        log.info("ActionCreate message received with type {}", event.getType());
         actionService.create(new ActionCreateDTO(event));
     }
 }

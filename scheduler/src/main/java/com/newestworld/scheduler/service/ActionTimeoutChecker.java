@@ -36,9 +36,6 @@ public class ActionTimeoutChecker {
                 actionTimeoutPublisher.send(new ActionTimeoutEventDTO(actionIdList));
                 actionTimeoutRepository.deleteAll(actionTimeoutEntityList);
             }
-
-            // TODO: 01.08.2022 Logger
-            System.out.println("MESSAGE SENT: " + actionIdList);
         }
 
     }
