@@ -24,7 +24,7 @@ public class ActionCreateListener {
     private final ActionService actionService;
 
     @StreamListener(ActionCreateTopicInput.INPUT)
-    public void handleActionDeleteTopicInput(@Valid @Payload final ActionCreateEventDTO event)  {
+    public void handleActionCreateTopicInput(@Valid @Payload final ActionCreateEventDTO event)  {
         log.info("ActionCreate message received with type {}", event.getType());
         actionService.create(new ActionCreateDTO(event));
     }
