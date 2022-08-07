@@ -34,6 +34,7 @@ public class ActionTimeoutChecker {
 
             if (!actionIdList.isEmpty()) {
                 actionTimeoutPublisher.send(new ActionTimeoutEventDTO(actionIdList));
+                actionTimeoutRepository.deleteAll(actionTimeoutEntityList);
             }
 
             // TODO: 01.08.2022 Logger
