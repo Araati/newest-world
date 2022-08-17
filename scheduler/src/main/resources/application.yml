@@ -1,6 +1,41 @@
 spring:
+  profiles:
+    active: ${ENV}
+
+  jpa:
+    database: postgresql
+    generate-ddl: true
+    hibernate:
+      ddl-auto: create
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQL10Dialect
+        jdbc:
+          time_zone: UTC
+    open-in-view: false
+
+  datasource:
+    url: jdbc:postgresql://postgres:5432/compose-postgres
+    username: root
+    password: root
+
   cloud:
     stream:
+      function:
+        definition: producerActionTimeoutBatchEvent, consumerActionDeleteEvent
+
+      bindings:
+        producerActionTimeoutBatchEvent-out-0:
+          destination: action-timeout
+
+        consumerActionDeleteEvent-in-0:
+          destination: action-deleted
+
+      poller:
+        fixed-delay: 2
+        time-unit: seconds
+
       kafka:
         binder:
           brokers:
@@ -13,3 +48,8 @@ spring:
           required-acks: 1
 
       default-binder: kafka
+
+logging:
+  level:
+    com:
+      newestworld: debug

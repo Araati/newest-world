@@ -1,4 +1,4 @@
-package com.newestworld.streams.dto;
+package com.newestworld.commons.event;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

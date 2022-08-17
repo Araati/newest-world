@@ -9,5 +9,5 @@ import java.util.Optional;
 public interface ActionParamsRepository extends CrudRepository<ActionParamsEntity, Long> {
 
     ActionParamsEntity findByActionId(long id);
-    Optional<List<ActionParamsEntity>> findAllByActionId(long id);
+    List<ActionParamsEntity> findAllByActionId(long id);
 }

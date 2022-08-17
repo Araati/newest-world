@@ -1,4 +1,25 @@
 spring:
+  profiles:
+    active: ${ENV}
+
+  jpa:
+    database: postgresql
+    generate-ddl: true
+    hibernate:
+      ddl-auto: create
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQL10Dialect
+        jdbc:
+          time_zone: UTC
+    open-in-view: false
+
+  datasource:
+    url: jdbc:postgresql://postgres:5432/compose-postgres
+    username: root
+    password: root
+
   cloud:
     stream:
       kafka:
@@ -28,3 +49,7 @@ spring:
             autoCommitOnError: false
 
       default-binder: kafka
+
+nats:
+  spring:
+    server: nats://localhost:4222

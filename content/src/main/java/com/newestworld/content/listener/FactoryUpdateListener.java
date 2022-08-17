@@ -2,7 +2,7 @@ package com.newestworld.content.listener;
 
 import com.newestworld.content.dto.FactoryUpdateDTO;
 import com.newestworld.content.service.FactoryService;
-import com.newestworld.streams.dto.FactoryUpdateEventDTO;
+import com.newestworld.commons.event.FactoryUpdateEventDTO;
 import com.newestworld.streams.topic.FactoryUpdateTopicInput;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,9 +15,9 @@ import org.springframework.stereotype.Component;
 import javax.validation.Valid;
 
 @Slf4j
-@Component
-@EnableBinding({FactoryUpdateTopicInput.class})
-@MessageEndpoint
+//@Component
+//@EnableBinding({FactoryUpdateTopicInput.class})
+//@MessageEndpoint
 @RequiredArgsConstructor
 public class FactoryUpdateListener {
 

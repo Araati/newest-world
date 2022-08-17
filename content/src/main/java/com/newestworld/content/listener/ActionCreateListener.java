@@ -2,7 +2,7 @@ package com.newestworld.content.listener;
 
 import com.newestworld.content.dto.ActionCreateDTO;
 import com.newestworld.content.service.ActionService;
-import com.newestworld.streams.dto.ActionCreateEventDTO;
+import com.newestworld.commons.event.ActionCreateEventDTO;
 import com.newestworld.streams.topic.ActionCreateTopicInput;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,9 +15,9 @@ import org.springframework.stereotype.Component;
 import javax.validation.Valid;
 
 @Slf4j
-@Component
-@EnableBinding({ActionCreateTopicInput.class})
-@MessageEndpoint
+//@Component
+//@EnableBinding({ActionCreateTopicInput.class})
+//@MessageEndpoint
 @RequiredArgsConstructor
 public class ActionCreateListener {
 

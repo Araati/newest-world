@@ -1,16 +1,14 @@
-package com.newestworld.streams.dto;
+package com.newestworld.commons.event;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ActionTimeoutEventDTO {
+public class ActionDeleteEvent {
 
-    private List<Long> actionId;
+    private long actionId;
 
 }

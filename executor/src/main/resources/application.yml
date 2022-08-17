@@ -1,7 +1,24 @@
 spring:
+  profiles:
+    active: ${ENV}
+
   cloud:
     stream:
+      function:
+        definition: consumerActionTimeoutBatchEvent
+
+      bindings:
+        consumerActionTimeoutBatchEvent-in-0:
+          destination: action-timeout
+
+        producerActionDeletedEvent-out-0:
+          destination: action-deleted
+
       kafka:
+        bindings:
+          actionTimeoutConsumer-in-0:
+            consumer:
+              ack-mode: manual
         binder:
           brokers:
             - "127.0.0.1:9092"
@@ -11,13 +28,10 @@ spring:
           replication-factor: 1
           min-partition-count: 1
           required-acks: 1
-      bindings:
-        action-timeout:
-          destination: action-timeout
-          group: executor
-          binder: kafka
-          consumer:
-            autoRebalanceEnabled: true
-            autoCommitOnError: false
 
       default-binder: kafka
+
+logging:
+  level:
+    com:
+      newestworld: debug

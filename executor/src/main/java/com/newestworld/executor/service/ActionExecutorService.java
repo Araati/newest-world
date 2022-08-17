@@ -1,7 +1,9 @@
 package com.newestworld.executor.service;
 
-import com.newestworld.commons.dto.Action;
+import com.newestworld.commons.model.Action;
 import com.newestworld.commons.dto.ActionParams;
+import com.newestworld.commons.event.ActionTimeoutBatchEvent;
+import com.newestworld.commons.event.ActionTimeoutEvent;
 import com.newestworld.commons.exception.ResourceNotFoundException;
 import com.newestworld.executor.dao.ActionParamsRepository;
 import com.newestworld.executor.dao.ActionRepository;
@@ -11,9 +13,9 @@ import com.newestworld.executor.model.entity.ActionEntity;
 import com.newestworld.executor.model.entity.ActionParamsEntity;
 import com.newestworld.executor.strategy.ActionExecutor;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -31,10 +33,9 @@ public class ActionExecutorService {
         // TODO: 03.08.2022 Экзекутор НЕ ДОЛЖЕН общаться с БД
         ActionEntity actionEntity = actionRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Action", id));
         List<ActionParams> actionParams = actionParamsRepository.findAllByActionId(id)
-                .orElseThrow(() -> new ResourceNotFoundException("ActionParams", id))
                 .stream().map(ActionParamsDTO::new).collect(Collectors.toList());
 
-        Action action = new ActionDTO(actionEntity, actionParams);
+        Action action = new ActionDTO(actionEntity);
 
         for (final ActionExecutor executor : executors) {
             if (executor.support(action)) {
@@ -43,5 +44,20 @@ public class ActionExecutorService {
         }
 
         throw new RuntimeException(String.format("Action type - %d not supporting", action.getType()));
+    }
+
+    public void execute(final List<Long> listId) {
+        final Iterable<ActionEntity> actionList = actionRepository.findAllById(listId);
+        actionList.spliterator().forEachRemaining(this::execute);
+    }
+
+    private void execute(final ActionEntity action) {
+        final List<ActionParamsEntity> actionParams = actionParamsRepository.findAllByActionId(action.getId());
+
+    }
+
+    @SneakyThrows
+    public void execute(final ActionTimeoutBatchEvent x) {
+        execute(x.getBatch().stream().map(ActionTimeoutEvent::getId).collect(Collectors.toList()));
     }
 }
