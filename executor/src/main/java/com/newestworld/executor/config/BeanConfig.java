@@ -19,18 +19,4 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class BeanConfig {
 
-    @Bean
-    public Consumer<ActionTimeoutBatchEvent> consumerActionTimeoutBatchEvent(
-            final ActionService actionService,
-            final ActionExecutorAggregator aggregator
-    ) {
-        return x -> {
-            log.debug("received {} actions for execution", x.getSize());
-            var list = actionService.findAllByIds(x.getBatch().stream()
-                    .map(ActionTimeoutEvent::getId)
-                    .collect(Collectors.toList()));
-
-            aggregator.execute(list);
-        };
-    }
 }

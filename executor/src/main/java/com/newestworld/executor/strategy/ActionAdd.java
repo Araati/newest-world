@@ -6,6 +6,7 @@ import com.newestworld.commons.model.Action;
 import com.newestworld.commons.model.ActionParameters;
 import com.newestworld.commons.model.ActionType;
 import com.newestworld.executor.service.ActionService;
+import com.newestworld.streams.publisher.EventPublisher;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.stream.function.StreamBridge;
@@ -18,7 +19,8 @@ public class ActionAdd implements ActionExecutor {
 
     private final ActionService service;
 
-    private final StreamBridge publisher;
+    private final EventPublisher<FactoryUpdateEventDTO> factoryUpdateEventPublisher;
+    private final EventPublisher<ActionDeleteEvent> actionDeleteEventEventPublisher;
 
     @Override
     public void exec(Action action) {
@@ -31,8 +33,13 @@ public class ActionAdd implements ActionExecutor {
         var target = params.mustGetByName("target");
         var amount = params.mustGetByName("amount");
 
-        publisher.send("producerFactoryUpdateEvent-out-0", new FactoryUpdateEventDTO((long) target.getValue(), null, (Long) amount.getValue()));
-        publisher.send("producerActionDeletedEvent-out-0", new ActionDeleteEvent(action.getId()));
+        factoryUpdateEventPublisher.send(
+                new FactoryUpdateEventDTO((long) target.getValue(),
+                        null,
+                        (Long) amount.getValue())
+        );
+
+        actionDeleteEventEventPublisher.send(new ActionDeleteEvent(action.getId()));
 
         // TODO: 05.08.2022 Этот экшен должен уметь пересоздаваться
         log.info("ActionAdd with {} id processed", action.getId());
