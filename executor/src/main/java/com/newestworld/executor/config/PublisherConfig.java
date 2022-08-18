@@ -2,7 +2,7 @@ package com.newestworld.executor.config;
 
 import com.newestworld.commons.event.ActionDeleteEvent;
 import com.newestworld.commons.event.FactoryUpdateEventDTO;
-import com.newestworld.streams.publisher.ActionDeletedEventPublisher;
+import com.newestworld.streams.publisher.AbstractEventPublisher;
 import com.newestworld.streams.publisher.EventPublisher;
 import com.newestworld.streams.publisher.FactoryUpdateEventPublisher;
 import lombok.RequiredArgsConstructor;
@@ -19,11 +19,11 @@ public class PublisherConfig {
 
     @Bean
     public EventPublisher<ActionDeleteEvent> actionDeleteEventEventPublisher() {
-        return new ActionDeletedEventPublisher(bridge, "actionDeletedEventProducer-out-0");
+        return new AbstractEventPublisher<>(bridge, "actionDeletedEventProducer-out-0");
     }
 
     @Bean
     public EventPublisher<FactoryUpdateEventDTO> factoryUpdateEventPublisher() {
-        return new FactoryUpdateEventPublisher(bridge, "producerFactoryUpdateEvent-out-0");
+        return new AbstractEventPublisher<>(bridge, "producerFactoryUpdateEvent-out-0");
     }
 }
