@@ -2,9 +2,8 @@ package com.newestworld.executor.config;
 
 import com.newestworld.commons.event.ActionDeleteEvent;
 import com.newestworld.commons.event.FactoryUpdateEvent;
-import com.newestworld.streams.publisher.ActionDeletedEventPublisher;
+import com.newestworld.streams.publisher.AbstractEventPublisher;
 import com.newestworld.streams.publisher.EventPublisher;
-import com.newestworld.streams.publisher.FactoryUpdateEventPublisher;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.context.annotation.Bean;
@@ -19,11 +18,11 @@ public class PublisherConfig {
 
     @Bean
     public EventPublisher<ActionDeleteEvent> actionDeleteEventEventPublisher() {
-        return new ActionDeletedEventPublisher(bridge, "actionDeletedEventProducer-out-0");
+        return new AbstractEventPublisher<>(bridge, "actionDeletedEventProducer-out-0");
     }
 
     @Bean
     public EventPublisher<FactoryUpdateEvent> factoryUpdateEventPublisher() {
-        return new FactoryUpdateEventPublisher(bridge, "factoryUpdateEventProducer-out-0");
+        return new AbstractEventPublisher<>(bridge, "FactoryUpdateEventProducer-out-0");
     }
 }
