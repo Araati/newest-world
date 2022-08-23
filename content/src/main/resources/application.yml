@@ -22,6 +22,15 @@ spring:
 
   cloud:
     stream:
+      function:
+        definition: actionDeleteEventConsumer;factoryUpdateEventConsumer
+
+      bindings:
+        actionDeleteEventConsumer-in-0:
+          destination: action-deleted
+        factoryUpdateEventConsumer-in-0:
+          destination: factory-update
+
       kafka:
         binder:
           brokers:
@@ -32,24 +41,10 @@ spring:
           replication-factor: 1
           min-partition-count: 1
           required-acks: 1
-      bindings:
-        factory-update:
-          destination: factory-update
-          group: content
-          binder: kafka
-          consumer:
-            autoRebalanceEnabled: true
-            autoCommitOnError: false
-        action-delete:
-          destination: action-delete
-          group: content
-          binder: kafka
-          consumer:
-            autoRebalanceEnabled: true
-            autoCommitOnError: false
 
       default-binder: kafka
 
-nats:
-  spring:
-    server: nats://localhost:4222
+logging:
+  level:
+    com:
+      newestworld: debug

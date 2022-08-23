@@ -9,7 +9,7 @@ import java.util.Optional;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class FactoryUpdateEventDTO {
+public class FactoryUpdateEvent {
 
     private long factoryId;
     private Boolean working;

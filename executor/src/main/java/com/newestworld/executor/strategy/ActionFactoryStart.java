@@ -14,7 +14,7 @@ import java.util.HashMap;
 @RequiredArgsConstructor
 public class ActionFactoryStart implements ActionExecutor    {
 
-//    private final EventPublisher<FactoryUpdateEventDTO> publisher;
+//    private final EventPublisher<FactoryUpdateEvent> publisher;
 //    private final EventPublisher<ActionCreateEventDTO> actionCreatePublisher;
 //
 //    private final EventPublisher<ActionDeleteEvent> deletePublisher;
@@ -31,7 +31,7 @@ public class ActionFactoryStart implements ActionExecutor    {
 //            }
 //        }
 //
-////        publisher.send(new FactoryUpdateEventDTO(target, Optional.of(true), Optional.empty()));
+////        publisher.send(new FactoryUpdateEvent(target, Optional.of(true), Optional.empty()));
 //        HashMap<String, String> params = new HashMap<>();
 //        params.put("target", target.toString());
 //        // TODO: 05.08.2022 Значение с потолка

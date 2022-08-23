@@ -1,7 +1,7 @@
 package com.newestworld.executor.strategy;
 
 import com.newestworld.commons.event.ActionDeleteEvent;
-import com.newestworld.commons.event.FactoryUpdateEventDTO;
+import com.newestworld.commons.event.FactoryUpdateEvent;
 import com.newestworld.commons.model.Action;
 import com.newestworld.commons.model.ActionParameters;
 import com.newestworld.commons.model.ActionType;
@@ -9,7 +9,6 @@ import com.newestworld.executor.service.ActionService;
 import com.newestworld.streams.publisher.EventPublisher;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.stereotype.Component;
 
 @Slf4j
@@ -19,7 +18,7 @@ public class ActionAdd implements ActionExecutor {
 
     private final ActionService service;
 
-    private final EventPublisher<FactoryUpdateEventDTO> factoryUpdateEventPublisher;
+    private final EventPublisher<FactoryUpdateEvent> factoryUpdateEventPublisher;
     private final EventPublisher<ActionDeleteEvent> actionDeleteEventEventPublisher;
 
     @Override
@@ -34,9 +33,9 @@ public class ActionAdd implements ActionExecutor {
         var amount = params.mustGetByName("amount");
 
         factoryUpdateEventPublisher.send(
-                new FactoryUpdateEventDTO((long) target.getValue(),
+                new FactoryUpdateEvent(Long.parseLong(target.getValue().toString()),
                         null,
-                        (Long) amount.getValue())
+                        Long.parseLong(amount.getValue().toString()))
         );
 
         actionDeleteEventEventPublisher.send(new ActionDeleteEvent(action.getId()));

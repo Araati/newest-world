@@ -57,8 +57,6 @@ services:
   postgres_db:
     image: postgres:11.8
     container_name: postgres_db
-    profiles:
-      - infra
     environment:
       - POSTGRES_DB=compose-postgres
       - POSTGRES_USER=root
@@ -90,16 +88,12 @@ services:
   zookeeper:
     image: confluentinc/cp-zookeeper:5.0.0
     restart: on-failure
-    profiles:
-      - infra
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
 
   kafka:
     image: confluentinc/cp-kafka:5.0.0
     restart: on-failure
-    profiles:
-      - infra
     ports:
       - 9092:9092
     environment:

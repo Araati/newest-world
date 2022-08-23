@@ -32,6 +32,9 @@ spring:
         actionDeletedEventProducer-out-0:
           destination: action-deleted
 
+        factoryUpdateEventProducer-out-0:
+          destination: factory-update
+
       kafka:
         bindings:
           actionTimeoutConsumer-in-0:
