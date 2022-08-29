@@ -1,48 +1,51 @@
 package com.newestworld.executor.strategy;
 
-import com.newestworld.commons.dto.Action;
-import com.newestworld.commons.dto.ActionParams;
-import com.newestworld.executor.util.ActionType;
-import com.newestworld.streams.EventPublisher;
-import com.newestworld.streams.dto.ActionDeleteEventDTO;
-import com.newestworld.streams.dto.FactoryUpdateEventDTO;
+import com.newestworld.commons.event.ActionDeleteEvent;
+import com.newestworld.commons.event.FactoryUpdateEvent;
+import com.newestworld.commons.model.Action;
+import com.newestworld.commons.model.ActionParameters;
+import com.newestworld.commons.model.ActionType;
+import com.newestworld.executor.service.ActionService;
+import com.newestworld.streams.publisher.EventPublisher;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import java.util.Optional;
-
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class ActionAdd implements ActionExecutor    {
+public class ActionAdd implements ActionExecutor {
 
-    private final EventPublisher<FactoryUpdateEventDTO> publisher;
-    private final EventPublisher<ActionDeleteEventDTO> deletePublisher;
+    private final ActionService service;
+
+    private final EventPublisher<FactoryUpdateEvent> factoryUpdateEventPublisher;
+    private final EventPublisher<ActionDeleteEvent> actionDeleteEventEventPublisher;
 
     @Override
     public void exec(Action action) {
 
-        // TODO: 01.08.2022 Не надо так
-        Long target = null;
-        Long amount = null;
-
-        for(ActionParams params : action.getParams())   {
-            if(params.getName().equals("target"))    {;
-                target = Long.valueOf(params.getValue());
-            } else if(params.getName().equals("amount")) {
-                amount = Long.valueOf(params.getValue());
-            }
+        final ActionParameters params = service.findAllParamsByActionId(action.getId());
+        if (params.isEmpty()) {
+            throw new IllegalArgumentException(String.format("Action parameters is not defined; action id %d", action.getId()));
         }
-        // TODO: 01.08.2022 Точно Optional.ofNullable()?
-        publisher.send(new FactoryUpdateEventDTO(target, Optional.ofNullable(null), Optional.ofNullable(amount)));
-        deletePublisher.send(new ActionDeleteEventDTO(action.getId()));
+
+        var target = params.mustGetByName("target");
+        var amount = params.mustGetByName("amount");
+
+        factoryUpdateEventPublisher.send(
+                new FactoryUpdateEvent(Long.parseLong(target.getValue().toString()),
+                        null,
+                        Long.parseLong(amount.getValue().toString()))
+        );
+
+        actionDeleteEventEventPublisher.send(new ActionDeleteEvent(action.getId()));
+
         // TODO: 05.08.2022 Этот экшен должен уметь пересоздаваться
         log.info("ActionAdd with {} id processed", action.getId());
     }
 
     @Override
     public boolean support(Action action) {
-        return action.getType() == ActionType.ADD.getType();
+        return action.getType() == ActionType.ADD;
     }
 }

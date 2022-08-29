@@ -1,6 +1,6 @@
 package com.newestworld.content.service;
 
-import com.newestworld.commons.dto.Action;
+import com.newestworld.commons.model.Action;
 import com.newestworld.commons.dto.ActionParams;
 import com.newestworld.content.dto.*;
 import com.newestworld.commons.exception.ResourceNotFoundException;

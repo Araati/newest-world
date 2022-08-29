@@ -1,6 +1,36 @@
 spring:
+  profiles:
+    active: ${ENV}
+
+  jpa:
+    database: postgresql
+    generate-ddl: true
+    hibernate:
+      ddl-auto: create
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQL10Dialect
+        jdbc:
+          time_zone: UTC
+    open-in-view: false
+
+  datasource:
+    url: jdbc:postgresql://postgres:5432/compose-postgres
+    username: root
+    password: root
+
   cloud:
     stream:
+      function:
+        definition: actionDeleteEventConsumer;factoryUpdateEventConsumer
+
+      bindings:
+        actionDeleteEventConsumer-in-0:
+          destination: action-deleted
+        factoryUpdateEventConsumer-in-0:
+          destination: factory-update
+
       kafka:
         binder:
           brokers:
@@ -11,20 +41,10 @@ spring:
           replication-factor: 1
           min-partition-count: 1
           required-acks: 1
-      bindings:
-        factory-update:
-          destination: factory-update
-          group: content
-          binder: kafka
-          consumer:
-            autoRebalanceEnabled: true
-            autoCommitOnError: false
-        action-delete:
-          destination: action-delete
-          group: content
-          binder: kafka
-          consumer:
-            autoRebalanceEnabled: true
-            autoCommitOnError: false
 
       default-binder: kafka
+
+logging:
+  level:
+    com:
+      newestworld: debug

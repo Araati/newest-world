@@ -1,4 +1,4 @@
-package com.newestworld.executor.util;
+package com.newestworld.commons.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
@@ -27,18 +27,18 @@ public enum ActionType {
 
     static {
         TYPE_MAP = Arrays.stream(ActionType.values())
-                .collect(Collectors.toMap(ActionType::getType, Function.identity()));
+                .collect(Collectors.toMap(ActionType::getId, Function.identity()));
     }
 
-    private int type;
+    private int id;
 
     @NonNull
     @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
-    public static ActionType fromValue(final String type){
-        return fromValue(Integer.parseInt(type));
+    public static ActionType decode(final String type){
+        return decode(Integer.parseInt(type));
     }
 
-    public static ActionType fromValue(final int type){
+    public static ActionType decode(final int type){
         if(!TYPE_MAP.containsKey(type)){
             throw new RuntimeException("ActionType not found");
         }
@@ -46,7 +46,7 @@ public enum ActionType {
     }
 
     @JsonValue
-    public int toValue(){
-        return type;
+    public int encode(){
+        return id;
     }
 }

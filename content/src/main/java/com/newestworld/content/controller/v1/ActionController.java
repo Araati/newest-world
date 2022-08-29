@@ -1,6 +1,6 @@
 package com.newestworld.content.controller.v1;
 
-import com.newestworld.commons.dto.Action;
+import com.newestworld.commons.model.Action;
 import com.newestworld.content.dto.ActionCreateDTO;
 import com.newestworld.content.facade.ActionFacade;
 import lombok.RequiredArgsConstructor;

@@ -1,4 +1,4 @@
-package com.newestworld.streams.dto;
+package com.newestworld.commons.event;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ActionDeleteEventDTO {
+public class ActionDeleteEvent {
 
     private long actionId;
 

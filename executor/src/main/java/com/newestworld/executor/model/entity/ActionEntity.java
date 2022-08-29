@@ -1,5 +1,7 @@
 package com.newestworld.executor.model.entity;
 
+import com.newestworld.commons.model.ActionType;
+import com.newestworld.commons.util.converter.ActionTypeConverter;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,11 +20,12 @@ import java.time.LocalDateTime;
 public class ActionEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @Column(name = "type")
-    private int type;
+    @Convert(converter = ActionTypeConverter.class)
+    private ActionType type;
 
     @Column(name = "in_progress")
     private boolean inProgress;

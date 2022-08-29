@@ -11,8 +11,8 @@ services:
       - kafka
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres_db:5432/compose-postgres
-      - SPRING_DATASOURCE_USERNAME=compose-postgres
-      - SPRING_DATASOURCE_PASSWORD=compose-postgres
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=root
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
       - SPRING_PROFILES_ACTIVE=prod
       - SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS=PLAINTEXT://kafka:9092
@@ -30,8 +30,8 @@ services:
       - kafka
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres_db:5432/compose-postgres
-      - SPRING_DATASOURCE_USERNAME=compose-postgres
-      - SPRING_DATASOURCE_PASSWORD=compose-postgres
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=root
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
       - SPRING_PROFILES_ACTIVE=prod
       - SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS=PLAINTEXT://kafka:9092
@@ -47,20 +47,22 @@ services:
       - kafka
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres_db:5432/compose-postgres
-      - SPRING_DATASOURCE_USERNAME=compose-postgres
-      - SPRING_DATASOURCE_PASSWORD=compose-postgres
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=root
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
       - SPRING_PROFILES_ACTIVE=prod
       - SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS=PLAINTEXT://kafka:9092
     restart: unless-stopped
 
   postgres_db:
-    image: postgres:13.1-alpine
+    image: postgres:11.8
     container_name: postgres_db
     environment:
       - POSTGRES_DB=compose-postgres
-      - POSTGRES_USER=compose-postgres
-      - POSTGRES_PASSWORD=compose-postgres
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
+    ports:
+      - "5432:5432"
     volumes:
       - ./postgres_data:/var/lib/postgresql/data
     healthcheck:
