@@ -1,11 +1,8 @@
 package com.newestworld.executor.service;
 
-import com.newestworld.commons.dto.ActionParams;
 import com.newestworld.commons.exception.ResourceNotFoundException;
 import com.newestworld.commons.model.Action;
 import com.newestworld.commons.model.ActionParameters;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 import java.util.List;

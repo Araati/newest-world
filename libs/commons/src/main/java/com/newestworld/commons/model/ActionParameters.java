@@ -2,7 +2,6 @@ package com.newestworld.commons.model;
 
 import com.newestworld.commons.exception.ResourceNotFoundException;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.List;

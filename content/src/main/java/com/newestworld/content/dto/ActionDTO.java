@@ -1,7 +1,7 @@
 package com.newestworld.content.dto;
 
-import com.newestworld.commons.model.Action;
 import com.newestworld.commons.dto.ActionParams;
+import com.newestworld.commons.model.Action;
 import com.newestworld.commons.model.ActionType;
 import com.newestworld.content.model.entity.ActionEntity;
 import com.newestworld.content.model.entity.ActionTimeoutEntity;

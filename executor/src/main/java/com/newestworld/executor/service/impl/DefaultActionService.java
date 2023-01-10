@@ -1,13 +1,11 @@
 package com.newestworld.executor.service.impl;
 
-import com.newestworld.commons.dto.ActionParams;
 import com.newestworld.commons.model.Action;
 import com.newestworld.commons.model.ActionParameter;
 import com.newestworld.commons.model.ActionParameters;
 import com.newestworld.executor.dao.ActionParamsRepository;
 import com.newestworld.executor.dao.ActionRepository;
 import com.newestworld.executor.dto.ActionDTO;
-import com.newestworld.executor.dto.ActionParamsDTO;
 import com.newestworld.executor.model.entity.ActionEntity;
 import com.newestworld.executor.service.ActionService;
 import lombok.RequiredArgsConstructor;
