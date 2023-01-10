@@ -1,5 +1,6 @@
 package com.newestworld.executor.config;
 
+import com.newestworld.commons.event.ActionCreateEvent;
 import com.newestworld.commons.event.ActionDeleteEvent;
 import com.newestworld.commons.event.FactoryUpdateEvent;
 import com.newestworld.streams.publisher.AbstractEventPublisher;
@@ -23,6 +24,11 @@ public class PublisherConfig {
 
     @Bean
     public EventPublisher<FactoryUpdateEvent> factoryUpdateEventPublisher() {
-        return new AbstractEventPublisher<>(bridge, "FactoryUpdateEventProducer-out-0");
+        return new AbstractEventPublisher<>(bridge, "factoryUpdateEventProducer-out-0");
+    }
+
+    @Bean
+    public EventPublisher<ActionCreateEvent> actionCreateEventPublisher()   {
+        return new AbstractEventPublisher<>(bridge, "actionCreateEventProducer-out-0");
     }
 }

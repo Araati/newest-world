@@ -1,7 +1,7 @@
 package com.newestworld.content.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.newestworld.commons.event.ActionCreateEventDTO;
+import com.newestworld.commons.event.ActionCreateEvent;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,7 +23,7 @@ public class ActionCreateDTO {
     @JsonProperty(value = "params")
     private List<ActionParamsCreateDTO> params;
 
-    public ActionCreateDTO(ActionCreateEventDTO event) {
+    public ActionCreateDTO(ActionCreateEvent event) {
         this.type = event.getType();
 
         // TODO: 05.08.2022 Уродство.

@@ -1,8 +1,13 @@
 package com.newestworld.executor.strategy;
 
+import com.newestworld.commons.event.ActionCreateEvent;
+import com.newestworld.commons.event.ActionDeleteEvent;
+import com.newestworld.commons.event.FactoryUpdateEvent;
 import com.newestworld.commons.model.Action;
-import com.newestworld.commons.dto.ActionParams;
+import com.newestworld.commons.model.ActionParameters;
 import com.newestworld.commons.model.ActionType;
+import com.newestworld.executor.service.ActionService;
+import com.newestworld.streams.publisher.EventPublisher;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -14,30 +19,34 @@ import java.util.HashMap;
 @RequiredArgsConstructor
 public class ActionFactoryStart implements ActionExecutor    {
 
-//    private final EventPublisher<FactoryUpdateEvent> publisher;
-//    private final EventPublisher<ActionCreateEventDTO> actionCreatePublisher;
-//
-//    private final EventPublisher<ActionDeleteEvent> deletePublisher;
+    private final ActionService actionService;
+
+    private final EventPublisher<FactoryUpdateEvent> factoryUpdateEventPublisher;
+    private final EventPublisher<ActionDeleteEvent> actionDeleteEventPublisher;
+    private final EventPublisher<ActionCreateEvent> actionCreateEventPublisher;
 
     @Override
     public void exec(Action action) {
 
-//        // TODO: 01.08.2022 Не надо так
-//        Long target = null;
-//
-//        for (ActionParams params : action.getParams()) {
-//            if (params.getName().equals("target")) {
-//                target = Long.valueOf(params.getValue());
-//            }
-//        }
-//
-////        publisher.send(new FactoryUpdateEvent(target, Optional.of(true), Optional.empty()));
-//        HashMap<String, String> params = new HashMap<>();
-//        params.put("target", target.toString());
-//        // TODO: 05.08.2022 Значение с потолка
-//        params.put("amount", "1000");
-//        deletePublisher.send(new ActionDeleteEvent(action.getId()));
-//        actionCreatePublisher.send(new ActionCreateEventDTO(ActionType.ADD.getType(), params));
+       final ActionParameters params = actionService.findAllParamsByActionId(action.getId());
+        if(params.isEmpty())    {
+            throw new IllegalArgumentException(String.format("Action parameters is not defined; action id %d", action.getId()));
+        }
+
+        var target = params.mustGetByName("target");
+
+        factoryUpdateEventPublisher.send(
+                new FactoryUpdateEvent(Long.parseLong(target.getValue().toString()),
+                        true,
+                        null));
+
+        actionDeleteEventPublisher.send(new ActionDeleteEvent(action.getId()));
+        HashMap<String, String> createParams = new HashMap<>();
+        createParams.put("target", target.getValue().toString());
+        createParams.put("amount", "1000");
+
+        actionCreateEventPublisher.send(new ActionCreateEvent(ActionType.ADD.getId(), createParams));
+
         log.info("ActionFactoryStart with {} id processed", action.getId());
     }
 

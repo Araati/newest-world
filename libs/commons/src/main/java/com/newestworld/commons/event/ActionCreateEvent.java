@@ -9,7 +9,7 @@ import java.util.HashMap;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ActionCreateEventDTO {
+public class ActionCreateEvent {
 
     private int type;
 

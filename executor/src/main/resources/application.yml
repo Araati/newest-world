@@ -35,6 +35,9 @@ spring:
         factoryUpdateEventProducer-out-0:
           destination: factory-update
 
+        actionCreateEventProducer-out-0:
+          destination: action-create
+
       kafka:
         bindings:
           actionTimeoutConsumer-in-0:

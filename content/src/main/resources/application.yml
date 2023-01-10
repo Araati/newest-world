@@ -23,13 +23,15 @@ spring:
   cloud:
     stream:
       function:
-        definition: actionDeleteEventConsumer;factoryUpdateEventConsumer
+        definition: actionDeleteEventConsumer;factoryUpdateEventConsumer;actionCreateEventConsumer;
 
       bindings:
         actionDeleteEventConsumer-in-0:
           destination: action-deleted
         factoryUpdateEventConsumer-in-0:
           destination: factory-update
+        actionCreateEventConsumer-in-0:
+          destination: action-create
 
       kafka:
         binder:
