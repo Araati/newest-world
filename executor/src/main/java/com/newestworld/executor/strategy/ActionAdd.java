@@ -1,5 +1,6 @@
 package com.newestworld.executor.strategy;
 
+import com.newestworld.commons.event.ActionCreateEvent;
 import com.newestworld.commons.event.ActionDeleteEvent;
 import com.newestworld.commons.event.FactoryUpdateEvent;
 import com.newestworld.commons.model.Action;
@@ -11,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.HashMap;
+
 @Slf4j
 @Component
 @RequiredArgsConstructor
@@ -20,6 +23,7 @@ public class ActionAdd implements ActionExecutor {
 
     private final EventPublisher<FactoryUpdateEvent> factoryUpdateEventPublisher;
     private final EventPublisher<ActionDeleteEvent> actionDeleteEventEventPublisher;
+    private final EventPublisher<ActionCreateEvent> actionCreateEventPublisher;
 
     @Override
     public void exec(Action action) {
@@ -31,6 +35,7 @@ public class ActionAdd implements ActionExecutor {
 
         var target = params.mustGetByName("target");
         var amount = params.mustGetByName("amount");
+        var repeat = params.mustGetByName("repeat");
 
         factoryUpdateEventPublisher.send(
                 new FactoryUpdateEvent(Long.parseLong(target.getValue().toString()),
@@ -39,6 +44,18 @@ public class ActionAdd implements ActionExecutor {
         );
 
         actionDeleteEventEventPublisher.send(new ActionDeleteEvent(action.getId()));
+
+        if(Long.parseLong(repeat.getValue().toString()) == -1 || Long.parseLong(repeat.getValue().toString()) > 0)  {
+            HashMap<String, String> createParams = new HashMap<>();
+            createParams.put("target", target.getValue().toString());
+            createParams.put("amount", amount.getValue().toString());
+            if(Long.parseLong(repeat.getValue().toString()) == -1)
+                createParams.put("repeat", "-1");
+            else
+                createParams.put("repeat", String.valueOf(Long.parseLong(repeat.getValue().toString())-1));
+
+            actionCreateEventPublisher.send(new ActionCreateEvent(ActionType.ADD.getId(), createParams));
+        }
 
         // TODO: 05.08.2022 Этот экшен должен уметь пересоздаваться
         log.info("ActionAdd with {} id processed", action.getId());

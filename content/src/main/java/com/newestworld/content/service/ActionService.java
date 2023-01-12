@@ -45,6 +45,7 @@ public class ActionService {
 
     }
 
+    // FIXME: 11.01.2023 Удаление в буквальном смысле локает бд, нужно либо сохранять со значением deleted=true, либо переходить на монгу
     public void delete(long id) {
         ActionEntity entity = actionRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Action", id));
         actionRepository.delete(entity);

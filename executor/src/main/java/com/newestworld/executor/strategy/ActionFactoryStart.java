@@ -43,7 +43,9 @@ public class ActionFactoryStart implements ActionExecutor    {
         actionDeleteEventPublisher.send(new ActionDeleteEvent(action.getId()));
         HashMap<String, String> createParams = new HashMap<>();
         createParams.put("target", target.getValue().toString());
+        // TODO: 11.01.2023 test values
         createParams.put("amount", "1000");
+        createParams.put("repeat", "-1");
 
         actionCreateEventPublisher.send(new ActionCreateEvent(ActionType.ADD.getId(), createParams));
 
