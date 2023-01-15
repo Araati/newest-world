@@ -29,7 +29,7 @@ public class ActionService {
     private final ActionParamsRepository actionParamsRepository;
     private final ActionTimeoutRepository actionTimeoutRepository;
 
-    public Action create(ActionCreateDTO request) {
+    public Action create(final ActionCreateDTO request) {
         ActionEntity actionEntity = new ActionEntity(request);
         actionRepository.save(actionEntity);
         List<ActionParams> actionParamsList = new ArrayList<>();
@@ -46,7 +46,7 @@ public class ActionService {
     }
 
     // FIXME: 11.01.2023 Удаление в буквальном смысле локает бд, нужно либо сохранять со значением deleted=true, либо переходить на монгу
-    public void delete(long id) {
+    public void delete(final long id) {
         ActionEntity entity = actionRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Action", id));
         actionRepository.delete(entity);
 
@@ -56,7 +56,7 @@ public class ActionService {
         log.info("Action with {} id deleted", id);
     }
 
-    public Action findById(long id) {
+    public Action findById(final long id) {
         ActionEntity entity = actionRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Action", id));
         List<ActionParams> actionParamsList = actionParamsRepository.findAllByActionId(id).stream().map(ActionParamsDTO::new).collect(Collectors.toList());
         ActionTimeoutEntity entity2 = actionTimeoutRepository.findByActionId(id);

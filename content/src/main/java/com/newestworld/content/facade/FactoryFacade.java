@@ -25,7 +25,7 @@ public class FactoryFacade {
         factoryService.delete(id);
     }
 
-    public Factory findById(long id) {
+    public Factory findById(final long id) {
         return factoryService.findById(id);
     }
 }

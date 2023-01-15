@@ -18,8 +18,7 @@ public class FactoryService {
 
     private final FactoryRepository factoryRepository;
 
-    // FIXME: 01.08.2022 FINAL MUST BE EVERYWHERE
-    public Factory create(FactoryCreateDTO request) {
+    public Factory create(final FactoryCreateDTO request) {
         FactoryEntity entity = new FactoryEntity(request);
         factoryRepository.save(entity);
         log.info("Factory with {} id created", entity.getId());
@@ -42,13 +41,13 @@ public class FactoryService {
         return new FactoryDTO(entity);
     }
 
-    public void delete(long id) {
+    public void delete(final long id) {
         FactoryEntity entity = factoryRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Factory", id));
         factoryRepository.delete(entity);
         log.info("Factory with {} id deleted", entity.getId());
     }
 
-    public Factory findById(long id) {
+    public Factory findById(final long id) {
         return new FactoryDTO(factoryRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Factory", id)));
     }
 }
