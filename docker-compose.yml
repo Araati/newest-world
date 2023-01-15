@@ -1,14 +1,47 @@
 version: "3"
 services:
 
+  consul:
+    image: consul:latest
+    hostname: consul
+    restart: on-failure
+    ports:
+      - "8500:8500"
+    command:
+      - "consul"
+      - "agent"
+      - "-server"
+      - "-bootstrap-expect=1"
+      - "-node=agent-one"
+      - "-ui"
+      - "-data-dir=/consul/data"
+      - "-client=0.0.0.0"
+      - "-config-dir=/consul/config"
+    environment:
+      CONSUL_BIND_INTERFACE: eth0
+    volumes:
+      - ".docker/volumes/consul:/consul/data"
+
+  #todo Регистратор не в состоянии подчищать за собой неработающие сервисы, чем захламляет консул
+  registrator:
+    image: gliderlabs/registrator:latest
+    depends_on:
+      - consul
+    volumes:
+      - "/var/run/docker.sock:/tmp/docker.sock"
+    command:
+      - "-cleanup=true"
+      - "-ip=${MY_IP}"
+      - "consul://consul:8500"
+
   content:
     image: content:latest
     build:
         context: content
-    container_name: content
     depends_on:
       - postgres_db
       - kafka
+      - consul
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres_db:5432/compose-postgres
       - SPRING_DATASOURCE_USERNAME=root
@@ -19,15 +52,20 @@ services:
     ports:
       - "8080:8080"
     restart: unless-stopped
+    healthcheck:
+      test: [ "CMD", "curl", "http://127.0.0.1:8080/actuator/health" ]
+      interval: 5s
+      timeout: 5s
+      retries: 50
 
   executor:
     image: executor:latest
     build:
       context: executor
-    container_name: executor
     depends_on:
       - content
       - kafka
+      - consul
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres_db:5432/compose-postgres
       - SPRING_DATASOURCE_USERNAME=root
@@ -35,16 +73,23 @@ services:
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
       - SPRING_PROFILES_ACTIVE=prod
       - SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS=PLAINTEXT://kafka:9092
+    ports:
+      - "8020:8020"
     restart: unless-stopped
+    healthcheck:
+      test: [ "CMD", "curl", "http://127.0.0.1:8020/actuator/health" ]
+      interval: 5s
+      timeout: 5s
+      retries: 50
 
   scheduler:
     image: scheduler:latest
     build:
       context: scheduler
-    container_name: scheduler
     depends_on:
       - executor
       - kafka
+      - consul
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres_db:5432/compose-postgres
       - SPRING_DATASOURCE_USERNAME=root
@@ -52,11 +97,17 @@ services:
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
       - SPRING_PROFILES_ACTIVE=prod
       - SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS=PLAINTEXT://kafka:9092
+    ports:
+      - "8040:8040"
     restart: unless-stopped
+    healthcheck:
+      test: [ "CMD", "curl", "http://127.0.0.1:8040/actuator/health" ]
+      interval: 5s
+      timeout: 5s
+      retries: 50
 
   postgres_db:
     image: postgres:11.8
-    container_name: postgres_db
     environment:
       - POSTGRES_DB=compose-postgres
       - POSTGRES_USER=root
