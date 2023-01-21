@@ -33,18 +33,10 @@ spring:
         actionCreateEventConsumer-in-0:
           destination: action-create
 
-      kafka:
-        binder:
-          brokers:
-            - "127.0.0.1:9092"
-            - ${KAFKA_ADDR}
-          auto-add-partitions: true
-          auto-create-topics: true
-          replication-factor: 1
-          min-partition-count: 1
-          required-acks: 1
+      default-binder: rabbit
 
-      default-binder: kafka
+  rabbitmq:
+    host: rabbitmq
 
 logging:
   level:

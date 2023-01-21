@@ -1,4 +1,5 @@
 postgres_data
+rabbitmq
 
 .docker/volumes
 HELP.md
