@@ -18,14 +18,14 @@ public class DefaultActionTimeoutService implements ActionTimeoutService {
 
     @Override
     public List<IdReference> findAll(final long time) {
-        var entityList = actionTimeoutRepository.findAllByTimeoutLessThan(time);
+        var entityList = actionTimeoutRepository.findAllByTimeoutLessThanAndDeletedIsFalse(time);
         return entityList.stream().map(x -> new ActionDTO(x.getActionId())).collect(Collectors.toList());
     }
 
     @Override
     public void delete(final long actionId) {
         var entity = actionTimeoutRepository.mustFindById(actionId);
-        actionTimeoutRepository.delete(entity);
+        actionTimeoutRepository.save(entity.withDeleted(true));
     }
 
 }

@@ -28,6 +28,9 @@ public class ActionTimeoutEntity {
     @Column(name = "timeout")
     private long timeout;
 
+    @Column(name = "deleted")
+    private boolean deleted;
+
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;

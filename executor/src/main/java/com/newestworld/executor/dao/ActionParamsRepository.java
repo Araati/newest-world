@@ -7,6 +7,6 @@ import java.util.List;
 
 public interface ActionParamsRepository extends CrudRepository<ActionParamsEntity, Long> {
 
-    ActionParamsEntity findByActionId(long id);
-    List<ActionParamsEntity> findAllByActionId(long id);
+    List<ActionParamsEntity> findAllByActionId(final long id);
+    List<ActionParamsEntity> findAllByActionIdAndDeletedIsFalse(final long id);
 }

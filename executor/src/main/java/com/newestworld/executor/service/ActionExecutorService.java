@@ -28,10 +28,12 @@ public class ActionExecutorService {
 
     private final List<ActionExecutor> executors;
 
+    // TODO: 22.01.2023 Куча неиспользованных поисков параметров, последние три функции вообще не используются. Спросить у Нокса
+
     public void execute(final long id) {
 
         // TODO: 03.08.2022 Экзекутор НЕ ДОЛЖЕН общаться с БД
-        ActionEntity actionEntity = actionRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Action", id));
+        ActionEntity actionEntity = actionRepository.mustFindById(id);
         List<ActionParams> actionParams = actionParamsRepository.findAllByActionId(id)
                 .stream().map(ActionParamsDTO::new).collect(Collectors.toList());
 

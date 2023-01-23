@@ -28,6 +28,9 @@ public class FactoryEntity {
     @Column(name = "store")
     private long store;
 
+    @Column(name = "deleted")
+    private boolean deleted;
+
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;

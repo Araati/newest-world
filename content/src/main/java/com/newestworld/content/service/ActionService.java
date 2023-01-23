@@ -1,7 +1,6 @@
 package com.newestworld.content.service;
 
 import com.newestworld.commons.dto.ActionParams;
-import com.newestworld.commons.exception.ResourceNotFoundException;
 import com.newestworld.commons.model.Action;
 import com.newestworld.content.dao.ActionParamsRepository;
 import com.newestworld.content.dao.ActionRepository;
@@ -33,11 +32,13 @@ public class ActionService {
         ActionEntity actionEntity = new ActionEntity(request);
         actionRepository.save(actionEntity);
         List<ActionParams> actionParamsList = new ArrayList<>();
+
         for(int i = 0; i < request.getParams().size(); i++) {
             ActionParamsEntity actionParams = new ActionParamsEntity(actionEntity.getId(), request.getParams().get(i));
             actionParamsRepository.save(actionParams);
             actionParamsList.add(new ActionParamsDTO(actionParams));
         }
+
         ActionTimeoutEntity actionTimeoutEntity = new ActionTimeoutEntity(actionEntity.getId(), request);
         actionTimeoutRepository.save(actionTimeoutEntity);
         log.info("Action with {} id created", actionEntity.getId());
@@ -47,19 +48,18 @@ public class ActionService {
 
     // FIXME: 11.01.2023 Удаление в буквальном смысле локает бд, нужно либо сохранять со значением deleted=true, либо переходить на монгу
     public void delete(final long id) {
-        ActionEntity entity = actionRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Action", id));
-        actionRepository.delete(entity);
+        actionRepository.save(actionRepository.mustFindById(id).withDeleted(true));
 
-        actionParamsRepository.deleteAll(actionParamsRepository.findAllByActionId(id));
+        actionParamsRepository.saveAll(actionParamsRepository.findAllByActionId(id).stream().map(x -> x.withDeleted(true)).collect(Collectors.toList()));
 
-        actionTimeoutRepository.delete(actionTimeoutRepository.findByActionId(id));
+        actionTimeoutRepository.save(actionTimeoutRepository.mustFindByActionIdAndDeletedIsFalse(id).withDeleted(true));
         log.info("Action with {} id deleted", id);
     }
 
     public Action findById(final long id) {
-        ActionEntity entity = actionRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Action", id));
+        ActionEntity entity = actionRepository.mustFindByIdAndDeletedIsFalse(id);
         List<ActionParams> actionParamsList = actionParamsRepository.findAllByActionId(id).stream().map(ActionParamsDTO::new).collect(Collectors.toList());
-        ActionTimeoutEntity entity2 = actionTimeoutRepository.findByActionId(id);
+        ActionTimeoutEntity entity2 = actionTimeoutRepository.mustFindByActionId(id);
 
         return new ActionDTO(entity, actionParamsList, entity2);
     }

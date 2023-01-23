@@ -39,12 +39,12 @@ public class DefaultActionService implements ActionService {
 
     @Override
     public Optional<Action> findById(final long id) {
-        return actionRepository.findById(id).map(ActionDTO::new);
+        return actionRepository.findByIdAndDeletedIsFalse(id).map(ActionDTO::new);
     }
 
     @Override
     public ActionParameters findAllParamsByActionId(final long id) {
-        var list = actionParamsRepository.findAllByActionId(id).stream()
+        var list = actionParamsRepository.findAllByActionIdAndDeletedIsFalse(id).stream()
                 .map(x -> new ActionParameter(x.getActionId(), x.getName(), x.getValue()))
                 .collect(Collectors.toList());
 

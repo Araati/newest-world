@@ -1,6 +1,5 @@
 package com.newestworld.content.service;
 
-import com.newestworld.commons.exception.ResourceNotFoundException;
 import com.newestworld.content.dao.FactoryRepository;
 import com.newestworld.content.dto.Factory;
 import com.newestworld.content.dto.FactoryCreateDTO;
@@ -26,7 +25,7 @@ public class FactoryService {
     }
 
     public Factory update(final FactoryUpdateDTO request, final long id)   {
-        FactoryEntity entity = factoryRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Factory", id));
+        FactoryEntity entity = factoryRepository.mustFindById(id);
 
         if(request.getStore().isPresent())  {
             entity = entity.withStore(request.getStore().get()+entity.getStore());
@@ -42,12 +41,12 @@ public class FactoryService {
     }
 
     public void delete(final long id) {
-        FactoryEntity entity = factoryRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Factory", id));
-        factoryRepository.delete(entity);
+        FactoryEntity entity = factoryRepository.mustFindByIdAndDeletedIsFalse(id);
+        factoryRepository.save(entity.withDeleted(true));
         log.info("Factory with {} id deleted", entity.getId());
     }
 
     public Factory findById(final long id) {
-        return new FactoryDTO(factoryRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Factory", id)));
+        return new FactoryDTO(factoryRepository.mustFindByIdAndDeletedIsFalse(id));
     }
 }
