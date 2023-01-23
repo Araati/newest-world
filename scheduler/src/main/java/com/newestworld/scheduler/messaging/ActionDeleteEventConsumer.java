@@ -15,7 +15,6 @@ public class ActionDeleteEventConsumer implements Consumer<ActionDeleteEvent> {
 
     private final ActionTimeoutService service;
 
-    // TODO: 23.08.2022 Перенести логику создания/удаления таймаутов в шедулер. Пока не работает
     @Override
     public void accept(final ActionDeleteEvent event) {
         log.debug("Delete action timeout {}", event.getActionId());

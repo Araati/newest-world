@@ -57,7 +57,6 @@ public class ActionAdd implements ActionExecutor {
             actionCreateEventPublisher.send(new ActionCreateEvent(ActionType.ADD.getId(), createParams));
         }
 
-        // TODO: 05.08.2022 Этот экшен должен уметь пересоздаваться
         log.info("ActionAdd with {} id processed", action.getId());
     }
 
