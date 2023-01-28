@@ -23,7 +23,7 @@ spring:
   cloud:
     stream:
       function:
-        definition: actionDeleteEventConsumer;factoryUpdateEventConsumer;actionCreateEventConsumer;
+        definition: actionDeleteEventConsumer;factoryUpdateEventConsumer;actionCreateEventConsumer;actionDataRequestBatchEventConsumer;
 
       bindings:
         actionDeleteEventConsumer-in-0:
@@ -32,6 +32,10 @@ spring:
           destination: factory-update
         actionCreateEventConsumer-in-0:
           destination: action-create
+        actionDataRequestBatchEventConsumer-in-0:
+          destination: action-data-request
+        actionDataBatchEventProducer-out-0:
+          destination: action-data
 
       default-binder: rabbit
 
