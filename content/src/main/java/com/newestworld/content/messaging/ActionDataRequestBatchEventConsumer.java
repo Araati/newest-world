@@ -24,7 +24,7 @@ public class ActionDataRequestBatchEventConsumer implements Consumer<ActionDataR
     public void accept(ActionDataRequestBatchEvent event)  {
         log.debug("data request received for {} actions", event.getSize());
         // TODO: 28.01.2023 Нужно получить список экшенов
-        actionDataBatchEventPublisher.send(new ActionDataBatchEvent(actions));
+        //actionDataBatchEventPublisher.send(new ActionDataBatchEvent(actions));
     }
 
 }

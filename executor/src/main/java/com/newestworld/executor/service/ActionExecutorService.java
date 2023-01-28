@@ -1,14 +1,11 @@
 package com.newestworld.executor.service;
 
-import com.newestworld.commons.dto.ActionParams;
 import com.newestworld.commons.event.ActionTimeoutBatchEvent;
 import com.newestworld.commons.event.ActionTimeoutEvent;
-import com.newestworld.commons.exception.ResourceNotFoundException;
 import com.newestworld.commons.model.Action;
 import com.newestworld.executor.dao.ActionParamsRepository;
 import com.newestworld.executor.dao.ActionRepository;
 import com.newestworld.executor.dto.ActionDTO;
-import com.newestworld.executor.dto.ActionParamsDTO;
 import com.newestworld.executor.model.entity.ActionEntity;
 import com.newestworld.executor.model.entity.ActionParamsEntity;
 import com.newestworld.executor.strategy.ActionExecutor;
@@ -34,8 +31,6 @@ public class ActionExecutorService {
 
         // TODO: 03.08.2022 Экзекутор НЕ ДОЛЖЕН общаться с БД
         ActionEntity actionEntity = actionRepository.mustFindById(id);
-        List<ActionParams> actionParams = actionParamsRepository.findAllByActionId(id)
-                .stream().map(ActionParamsDTO::new).collect(Collectors.toList());
 
         Action action = new ActionDTO(actionEntity);
 

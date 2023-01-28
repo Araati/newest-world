@@ -1,13 +1,13 @@
 package com.newestworld.content.service;
 
-import com.newestworld.commons.dto.ActionParams;
 import com.newestworld.commons.model.Action;
+import com.newestworld.commons.model.ActionParameter;
+import com.newestworld.commons.model.ActionParameters;
 import com.newestworld.content.dao.ActionParamsRepository;
 import com.newestworld.content.dao.ActionRepository;
 import com.newestworld.content.dao.ActionTimeoutRepository;
 import com.newestworld.content.dto.ActionCreateDTO;
 import com.newestworld.content.dto.ActionDTO;
-import com.newestworld.content.dto.ActionParamsDTO;
 import com.newestworld.content.model.entity.ActionEntity;
 import com.newestworld.content.model.entity.ActionParamsEntity;
 import com.newestworld.content.model.entity.ActionTimeoutEntity;
@@ -31,22 +31,23 @@ public class ActionService {
     public Action create(final ActionCreateDTO request) {
         ActionEntity actionEntity = new ActionEntity(request);
         actionRepository.save(actionEntity);
-        List<ActionParams> actionParamsList = new ArrayList<>();
+        List<ActionParameter> actionParameterList = new ArrayList<>();
 
         for(int i = 0; i < request.getParams().size(); i++) {
             ActionParamsEntity actionParams = new ActionParamsEntity(actionEntity.getId(), request.getParams().get(i));
             actionParamsRepository.save(actionParams);
-            actionParamsList.add(new ActionParamsDTO(actionParams));
+            actionParameterList.add(new ActionParameter(actionParams.getActionId(), actionParams.getName(), actionParams.getValue()));
         }
+
+        ActionParameters actionParameters = new ActionParameters.Impl(actionParameterList);
 
         ActionTimeoutEntity actionTimeoutEntity = new ActionTimeoutEntity(actionEntity.getId(), request);
         actionTimeoutRepository.save(actionTimeoutEntity);
         log.info("Action with {} id created", actionEntity.getId());
-        return new ActionDTO(actionEntity, actionParamsList, actionTimeoutEntity);
+        return new ActionDTO(actionEntity, actionParameters, actionTimeoutEntity);
 
     }
 
-    // FIXME: 11.01.2023 Удаление в буквальном смысле локает бд, нужно либо сохранять со значением deleted=true, либо переходить на монгу
     public void delete(final long id) {
         actionRepository.save(actionRepository.mustFindById(id).withDeleted(true));
 
@@ -58,9 +59,18 @@ public class ActionService {
 
     public Action findById(final long id) {
         ActionEntity entity = actionRepository.mustFindByIdAndDeletedIsFalse(id);
-        List<ActionParams> actionParamsList = actionParamsRepository.findAllByActionId(id).stream().map(ActionParamsDTO::new).collect(Collectors.toList());
+
+        List<ActionParamsEntity> actionParamsEntities = actionParamsRepository.findAllByActionId(id);
+        List<ActionParameter> actionParameterList = new ArrayList<>();
+
+        for(int i = 0; i < actionParamsEntities.size(); i++)    {
+            ActionParamsEntity source = actionParamsEntities.get(i);
+            actionParameterList.add(new ActionParameter(source.getActionId(), source.getName(), source.getValue()));
+        }
+
+        ActionParameters actionParameters = new ActionParameters.Impl(actionParameterList);
         ActionTimeoutEntity entity2 = actionTimeoutRepository.mustFindByActionId(id);
 
-        return new ActionDTO(entity, actionParamsList, entity2);
+        return new ActionDTO(entity, actionParameters, entity2);
     }
 }
