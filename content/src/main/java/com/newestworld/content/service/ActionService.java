@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+// TODO: 28.01.2023 Возможно стоит разбить на три разных сервиса?
 @Slf4j
 @Service
 @RequiredArgsConstructor

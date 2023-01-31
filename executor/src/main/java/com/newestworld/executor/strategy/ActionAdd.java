@@ -6,7 +6,6 @@ import com.newestworld.commons.event.FactoryUpdateEvent;
 import com.newestworld.commons.model.Action;
 import com.newestworld.commons.model.ActionParameters;
 import com.newestworld.commons.model.ActionType;
-import com.newestworld.executor.service.ActionService;
 import com.newestworld.streams.publisher.EventPublisher;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,8 +18,6 @@ import java.util.HashMap;
 @RequiredArgsConstructor
 public class ActionAdd implements ActionExecutor {
 
-    private final ActionService service;
-
     private final EventPublisher<FactoryUpdateEvent> factoryUpdateEventPublisher;
     private final EventPublisher<ActionDeleteEvent> actionDeleteEventEventPublisher;
     private final EventPublisher<ActionCreateEvent> actionCreateEventPublisher;
@@ -28,14 +25,14 @@ public class ActionAdd implements ActionExecutor {
     @Override
     public void exec(final Action action) {
 
-        final ActionParameters params = service.findAllParamsByActionId(action.getId());
-        if (params.isEmpty()) {
+        final ActionParameters parameters = action.getParameters();
+        if (parameters.isEmpty()) {
             throw new IllegalArgumentException(String.format("Action parameters is not defined; action id %d", action.getId()));
         }
 
-        var target = params.mustGetByName("target");
-        var amount = params.mustGetByName("amount");
-        var repeat = params.mustGetByName("repeat");
+        var target = parameters.mustGetByName("target");
+        var amount = parameters.mustGetByName("amount");
+        var repeat = parameters.mustGetByName("repeat");
 
         factoryUpdateEventPublisher.send(
                 new FactoryUpdateEvent(Long.parseLong(target.getValue().toString()),

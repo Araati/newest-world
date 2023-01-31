@@ -19,8 +19,6 @@ import java.util.HashMap;
 @RequiredArgsConstructor
 public class ActionFactoryStart implements ActionExecutor    {
 
-    private final ActionService actionService;
-
     private final EventPublisher<FactoryUpdateEvent> factoryUpdateEventPublisher;
     private final EventPublisher<ActionDeleteEvent> actionDeleteEventPublisher;
     private final EventPublisher<ActionCreateEvent> actionCreateEventPublisher;
@@ -28,12 +26,12 @@ public class ActionFactoryStart implements ActionExecutor    {
     @Override
     public void exec(final Action action) {
 
-       final ActionParameters params = actionService.findAllParamsByActionId(action.getId());
-        if(params.isEmpty())    {
+       final ActionParameters parameters = action.getParameters();
+        if(parameters.isEmpty())    {
             throw new IllegalArgumentException(String.format("Action parameters is not defined; action id %d", action.getId()));
         }
 
-        var target = params.mustGetByName("target");
+        var target = parameters.mustGetByName("target");
 
         factoryUpdateEventPublisher.send(
                 new FactoryUpdateEvent(Long.parseLong(target.getValue().toString()),
