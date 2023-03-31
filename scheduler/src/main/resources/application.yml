@@ -23,7 +23,7 @@ spring:
   cloud:
     stream:
       function:
-        definition: actionTimeoutBatchEventProducer;actionDeleteEventConsumer
+        definition: actionDeleteEventConsumer;actionTimeoutCreateEventConsumer;
 
       bindings:
         actionTimeoutBatchEventProducer-out-0:
@@ -31,6 +31,9 @@ spring:
 
         actionDeleteEventConsumer-in-0:
           destination: action-delete
+
+        actionTimeoutCreateEventConsumer-in-0:
+          destination: action-timeout-create
 
       poller:
         fixed-delay: 2

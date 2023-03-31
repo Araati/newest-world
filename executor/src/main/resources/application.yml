@@ -14,8 +14,8 @@ spring:
         actionDataBatchEventConsumer-in-0:
           destination: action-data
 
-        actionDeletedEventProducer-out-0:
-          destination: action-deleted
+        actionDeleteEventProducer-out-0:
+          destination: action-delete
 
         factoryUpdateEventProducer-out-0:
           destination: factory-update

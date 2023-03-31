@@ -1,8 +1,12 @@
 package com.newestworld.scheduler.service.impl;
 
+import com.newestworld.commons.model.ActionTimeout;
 import com.newestworld.commons.model.IdReference;
 import com.newestworld.scheduler.dao.ActionTimeoutRepository;
 import com.newestworld.scheduler.dto.ActionDTO;
+import com.newestworld.scheduler.dto.ActionTimeoutCreateDTO;
+import com.newestworld.scheduler.dto.ActionTimeoutDTO;
+import com.newestworld.scheduler.model.entity.ActionTimeoutEntity;
 import com.newestworld.scheduler.service.ActionTimeoutService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,6 +19,13 @@ import java.util.stream.Collectors;
 public class DefaultActionTimeoutService implements ActionTimeoutService {
 
     private final ActionTimeoutRepository actionTimeoutRepository;
+
+    @Override
+    public ActionTimeout create(final ActionTimeoutCreateDTO request) {
+        ActionTimeoutEntity entity = new ActionTimeoutEntity(request);
+        actionTimeoutRepository.save(entity);
+        return new ActionTimeoutDTO(entity);
+    }
 
     @Override
     public List<IdReference> findAll(final long time) {

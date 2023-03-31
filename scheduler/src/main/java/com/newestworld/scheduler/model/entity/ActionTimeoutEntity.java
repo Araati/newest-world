@@ -1,5 +1,6 @@
 package com.newestworld.scheduler.model.entity;
 
+import com.newestworld.scheduler.dto.ActionTimeoutCreateDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -34,9 +35,8 @@ public class ActionTimeoutEntity {
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    public ActionTimeoutEntity(final long actionId, final long timeout)    {
-        this.actionId = actionId;
-        this.timeout = timeout;
+    public ActionTimeoutEntity(final ActionTimeoutCreateDTO request) {
+        this.actionId = request.getActionId();
+        this.timeout = request.getTimeout();
     }
-
 }

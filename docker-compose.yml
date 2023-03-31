@@ -25,6 +25,7 @@ services:
   #todo Регистратор не в состоянии подчищать за собой неработающие сервисы, чем захламляет консул
   registrator:
     image: gliderlabs/registrator:latest
+    restart: on-failure
     depends_on:
       - consul
     volumes:
@@ -87,11 +88,12 @@ services:
     build:
       context: scheduler
     depends_on:
+      - scheduler_postgres_db
       - executor
       - rabbitmq
       - consul
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres_db:5432/compose-postgres
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://scheduler_postgres_db:5432/compose-postgres
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=root
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
@@ -116,6 +118,23 @@ services:
       - "5432:5432"
     volumes:
       - ./postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U compose-postgres -d compose-postgres" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  scheduler_postgres_db:
+    image: postgres:11.8
+    environment:
+      - POSTGRES_DB=compose-postgres
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
+    ports:
+      - "5434:5432"
+    volumes:
+      - ./scheduler_postgres_data:/var/lib/postgresql/data
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -U compose-postgres -d compose-postgres" ]
       interval: 10s
