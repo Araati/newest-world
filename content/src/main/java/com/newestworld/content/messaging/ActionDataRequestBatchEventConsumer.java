@@ -1,9 +1,9 @@
 package com.newestworld.content.messaging;
 
-import com.newestworld.commons.event.ActionDataBatchEvent;
-import com.newestworld.commons.event.ActionDataEvent;
-import com.newestworld.commons.event.ActionDataRequestBatchEvent;
-import com.newestworld.commons.event.ActionDataRequestEvent;
+import com.newestworld.streams.event.ActionDataBatchEvent;
+import com.newestworld.streams.event.ActionDataEvent;
+import com.newestworld.streams.event.ActionDataRequestBatchEvent;
+import com.newestworld.streams.event.ActionDataRequestEvent;
 import com.newestworld.commons.model.Action;
 import com.newestworld.content.service.ActionService;
 import com.newestworld.streams.publisher.EventPublisher;

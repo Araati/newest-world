@@ -1,9 +1,9 @@
 package com.newestworld.executor.config;
 
-import com.newestworld.commons.event.ActionCreateEvent;
-import com.newestworld.commons.event.ActionDataRequestBatchEvent;
-import com.newestworld.commons.event.ActionDeleteEvent;
-import com.newestworld.commons.event.FactoryUpdateEvent;
+import com.newestworld.streams.event.ActionCreateEvent;
+import com.newestworld.streams.event.ActionDataRequestBatchEvent;
+import com.newestworld.streams.event.ActionDeleteEvent;
+import com.newestworld.streams.event.FactoryUpdateEvent;
 import com.newestworld.streams.publisher.AbstractEventPublisher;
 import com.newestworld.streams.publisher.EventPublisher;
 import lombok.RequiredArgsConstructor;

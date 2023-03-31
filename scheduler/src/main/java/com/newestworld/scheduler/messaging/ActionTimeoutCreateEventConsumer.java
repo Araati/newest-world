@@ -1,6 +1,6 @@
 package com.newestworld.scheduler.messaging;
 
-import com.newestworld.commons.event.ActionTimeoutCreateEvent;
+import com.newestworld.streams.event.ActionTimeoutCreateEvent;
 import com.newestworld.scheduler.dto.ActionTimeoutCreateDTO;
 import com.newestworld.scheduler.service.ActionTimeoutService;
 import lombok.RequiredArgsConstructor;

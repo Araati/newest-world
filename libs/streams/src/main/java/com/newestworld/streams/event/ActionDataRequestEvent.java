@@ -1,4 +1,4 @@
-package com.newestworld.commons.event;
+package com.newestworld.streams.event;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

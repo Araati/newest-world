@@ -1,7 +1,7 @@
 package com.newestworld.scheduler.messaging;
 
-import com.newestworld.commons.event.ActionTimeoutBatchEvent;
-import com.newestworld.commons.event.ActionTimeoutEvent;
+import com.newestworld.streams.event.ActionTimeoutBatchEvent;
+import com.newestworld.streams.event.ActionTimeoutEvent;
 import com.newestworld.commons.model.IdReference;
 import com.newestworld.scheduler.service.ActionTimeoutService;
 import lombok.RequiredArgsConstructor;

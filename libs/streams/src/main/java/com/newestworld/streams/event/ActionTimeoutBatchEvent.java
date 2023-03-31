@@ -1,4 +1,4 @@
-package com.newestworld.commons.event;
+package com.newestworld.streams.event;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -10,12 +10,11 @@ import java.util.Collection;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ActionDataBatchEvent {
+public class ActionTimeoutBatchEvent {
 
-    private Collection<ActionDataEvent> batch = new ArrayList<>();
+    private Collection<ActionTimeoutEvent> batch = new ArrayList<>();
 
-    public int getSize()    {
+    public int getSize() {
         return batch.size();
     }
-
 }

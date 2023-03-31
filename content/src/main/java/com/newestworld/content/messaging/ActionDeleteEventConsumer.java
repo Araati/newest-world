@@ -1,6 +1,6 @@
 package com.newestworld.content.messaging;
 
-import com.newestworld.commons.event.ActionDeleteEvent;
+import com.newestworld.streams.event.ActionDeleteEvent;
 import com.newestworld.content.service.ActionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

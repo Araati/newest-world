@@ -1,6 +1,6 @@
 package com.newestworld.scheduler.dto;
 
-import com.newestworld.commons.event.ActionTimeoutCreateEvent;
+import com.newestworld.streams.event.ActionTimeoutCreateEvent;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -1,6 +1,6 @@
 package com.newestworld.content.service;
 
-import com.newestworld.commons.event.ActionTimeoutCreateEvent;
+import com.newestworld.streams.event.ActionTimeoutCreateEvent;
 import com.newestworld.commons.model.Action;
 import com.newestworld.commons.model.ActionParameter;
 import com.newestworld.commons.model.ActionParameters;
@@ -10,7 +10,6 @@ import com.newestworld.content.dto.ActionCreateDTO;
 import com.newestworld.content.dto.ActionDTO;
 import com.newestworld.content.model.entity.ActionEntity;
 import com.newestworld.content.model.entity.ActionParamsEntity;
-import com.newestworld.streams.publisher.ActionTimeoutCreateEventPublisher;
 import com.newestworld.streams.publisher.EventPublisher;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

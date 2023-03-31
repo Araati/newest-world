@@ -1,8 +1,8 @@
 package com.newestworld.executor.strategy;
 
-import com.newestworld.commons.event.ActionCreateEvent;
-import com.newestworld.commons.event.ActionDeleteEvent;
-import com.newestworld.commons.event.FactoryUpdateEvent;
+import com.newestworld.streams.event.ActionCreateEvent;
+import com.newestworld.streams.event.ActionDeleteEvent;
+import com.newestworld.streams.event.FactoryUpdateEvent;
 import com.newestworld.commons.model.Action;
 import com.newestworld.commons.model.ActionParameters;
 import com.newestworld.commons.model.ActionType;

@@ -1,7 +1,7 @@
 package com.newestworld.content.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.newestworld.commons.event.ActionCreateEvent;
+import com.newestworld.streams.event.ActionCreateEvent;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

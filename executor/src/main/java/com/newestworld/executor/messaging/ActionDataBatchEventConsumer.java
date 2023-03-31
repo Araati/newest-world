@@ -1,6 +1,6 @@
 package com.newestworld.executor.messaging;
 
-import com.newestworld.commons.event.ActionDataBatchEvent;
+import com.newestworld.streams.event.ActionDataBatchEvent;
 import com.newestworld.commons.model.ActionParameters;
 import com.newestworld.executor.dto.ActionDTO;
 import com.newestworld.executor.service.ActionExecutorAggregator;

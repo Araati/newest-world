@@ -1,6 +1,6 @@
 package com.newestworld.scheduler.messaging;
 
-import com.newestworld.commons.event.ActionDeleteEvent;
+import com.newestworld.streams.event.ActionDeleteEvent;
 import com.newestworld.scheduler.service.ActionTimeoutService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

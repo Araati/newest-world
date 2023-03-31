@@ -1,4 +1,4 @@
-package com.newestworld.commons.event;
+package com.newestworld.streams.event;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;

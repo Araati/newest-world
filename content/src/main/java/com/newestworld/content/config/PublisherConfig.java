@@ -1,7 +1,7 @@
 package com.newestworld.content.config;
 
-import com.newestworld.commons.event.ActionDataBatchEvent;
-import com.newestworld.commons.event.ActionTimeoutCreateEvent;
+import com.newestworld.streams.event.ActionDataBatchEvent;
+import com.newestworld.streams.event.ActionTimeoutCreateEvent;
 import com.newestworld.streams.publisher.AbstractEventPublisher;
 import com.newestworld.streams.publisher.EventPublisher;
 import lombok.RequiredArgsConstructor;

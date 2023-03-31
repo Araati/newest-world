@@ -1,6 +1,6 @@
 package com.newestworld.streams.publisher;
 
-import com.newestworld.commons.event.ActionCreateEvent;
+import com.newestworld.streams.event.ActionCreateEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.stream.function.StreamBridge;

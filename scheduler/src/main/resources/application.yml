@@ -23,7 +23,7 @@ spring:
   cloud:
     stream:
       function:
-        definition: actionDeleteEventConsumer;actionTimeoutCreateEventConsumer;
+        definition: actionTimeoutBatchEventProducer;actionDeleteEventConsumer;actionTimeoutCreateEventConsumer;
 
       bindings:
         actionTimeoutBatchEventProducer-out-0:

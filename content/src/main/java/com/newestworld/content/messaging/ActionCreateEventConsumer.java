@@ -1,6 +1,6 @@
 package com.newestworld.content.messaging;
 
-import com.newestworld.commons.event.ActionCreateEvent;
+import com.newestworld.streams.event.ActionCreateEvent;
 import com.newestworld.content.dto.ActionCreateDTO;
 import com.newestworld.content.service.ActionService;
 import lombok.RequiredArgsConstructor;

@@ -1,6 +1,6 @@
 package com.newestworld.content.messaging;
 
-import com.newestworld.commons.event.FactoryUpdateEvent;
+import com.newestworld.streams.event.FactoryUpdateEvent;
 import com.newestworld.content.dto.FactoryUpdateDTO;
 import com.newestworld.content.service.FactoryService;
 import lombok.RequiredArgsConstructor;
