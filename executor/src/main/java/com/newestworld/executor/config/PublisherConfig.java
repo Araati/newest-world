@@ -19,8 +19,8 @@ public class PublisherConfig {
     private final StreamBridge bridge;
 
     @Bean
-    public EventPublisher<ActionDeleteEvent> actionDeleteEventEventPublisher() {
-        return new AbstractEventPublisher<>(bridge, "actionDeletedEventProducer-out-0");
+    public EventPublisher<ActionDeleteEvent> actionDeleteEventPublisher() {
+        return new AbstractEventPublisher<>(bridge, "actionDeleteEventProducer-out-0");
     }
 
     @Bean

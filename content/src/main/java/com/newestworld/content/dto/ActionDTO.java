@@ -4,7 +4,6 @@ import com.newestworld.commons.model.Action;
 import com.newestworld.commons.model.ActionParameters;
 import com.newestworld.commons.model.ActionType;
 import com.newestworld.content.model.entity.ActionEntity;
-import com.newestworld.content.model.entity.ActionTimeoutEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,10 +27,10 @@ public class ActionDTO implements Action {
 
     private LocalDateTime createdAt;
 
-    public ActionDTO(final ActionEntity source, final ActionParameters source1, final ActionTimeoutEntity source2)    {
+    public ActionDTO(final ActionEntity source, final ActionParameters source1, final long timeout)    {
         this.id = source.getId();
         this.type = ActionType.decode(source.getType());
-        this.timeout = source2.getTimeout();
+        this.timeout = timeout;
         this.parameters = source1;
         this.inProgress = source.isInProgress();
         this.createdAt = source.getCreatedAt();

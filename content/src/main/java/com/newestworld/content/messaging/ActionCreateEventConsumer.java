@@ -18,7 +18,7 @@ public class ActionCreateEventConsumer implements Consumer<ActionCreateEvent> {
 
     @Override
     public void accept(ActionCreateEvent event) {
-        log.debug("ActionDelete message received with type {}", event.getType());
+        log.debug("ActionCreate message received with type {}", event.getType());
         actionService.create(new ActionCreateDTO(event));
     }
 

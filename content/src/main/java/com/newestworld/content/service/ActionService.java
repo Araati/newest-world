@@ -1,16 +1,17 @@
 package com.newestworld.content.service;
 
+import com.newestworld.commons.event.ActionTimeoutCreateEvent;
 import com.newestworld.commons.model.Action;
 import com.newestworld.commons.model.ActionParameter;
 import com.newestworld.commons.model.ActionParameters;
 import com.newestworld.content.dao.ActionParamsRepository;
 import com.newestworld.content.dao.ActionRepository;
-import com.newestworld.content.dao.ActionTimeoutRepository;
 import com.newestworld.content.dto.ActionCreateDTO;
 import com.newestworld.content.dto.ActionDTO;
 import com.newestworld.content.model.entity.ActionEntity;
 import com.newestworld.content.model.entity.ActionParamsEntity;
-import com.newestworld.content.model.entity.ActionTimeoutEntity;
+import com.newestworld.streams.publisher.ActionTimeoutCreateEventPublisher;
+import com.newestworld.streams.publisher.EventPublisher;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -27,7 +28,11 @@ public class ActionService {
 
     private final ActionRepository actionRepository;
     private final ActionParamsRepository actionParamsRepository;
-    private final ActionTimeoutRepository actionTimeoutRepository;
+
+    private final EventPublisher<ActionTimeoutCreateEvent> actionTimeoutCreateEventPublisher;
+
+    // TODO: 30.03.2023 Timeout test value
+    private final long timeout = System.currentTimeMillis()+(5*1000);
 
     public Action create(final ActionCreateDTO request) {
         ActionEntity actionEntity = new ActionEntity(request);
@@ -42,10 +47,9 @@ public class ActionService {
 
         ActionParameters actionParameters = new ActionParameters.Impl(actionParameterList);
 
-        ActionTimeoutEntity actionTimeoutEntity = new ActionTimeoutEntity(actionEntity.getId(), request);
-        actionTimeoutRepository.save(actionTimeoutEntity);
+        actionTimeoutCreateEventPublisher.send(new ActionTimeoutCreateEvent(actionEntity.getId(), timeout));
         log.info("Action with {} id created", actionEntity.getId());
-        return new ActionDTO(actionEntity, actionParameters, actionTimeoutEntity);
+        return new ActionDTO(actionEntity, actionParameters, timeout);
 
     }
 
@@ -54,7 +58,6 @@ public class ActionService {
 
         actionParamsRepository.saveAll(actionParamsRepository.findAllByActionId(id).stream().map(x -> x.withDeleted(true)).collect(Collectors.toList()));
 
-        actionTimeoutRepository.save(actionTimeoutRepository.mustFindByActionIdAndDeletedIsFalse(id).withDeleted(true));
         log.info("Action with {} id deleted", id);
     }
 
@@ -70,8 +73,7 @@ public class ActionService {
         }
 
         ActionParameters actionParameters = new ActionParameters.Impl(actionParameterList);
-        ActionTimeoutEntity entity2 = actionTimeoutRepository.mustFindByActionId(id);
 
-        return new ActionDTO(entity, actionParameters, entity2);
+        return new ActionDTO(entity, actionParameters, timeout);
     }
 }

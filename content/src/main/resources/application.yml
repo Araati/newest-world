@@ -27,7 +27,7 @@ spring:
 
       bindings:
         actionDeleteEventConsumer-in-0:
-          destination: action-deleted
+          destination: action-delete
         factoryUpdateEventConsumer-in-0:
           destination: factory-update
         actionCreateEventConsumer-in-0:
@@ -36,6 +36,8 @@ spring:
           destination: action-data-request
         actionDataBatchEventProducer-out-0:
           destination: action-data
+        actionTimeoutCreateEventProducer-out-0:
+          destination: action-timeout-create
 
       default-binder: rabbit
 
