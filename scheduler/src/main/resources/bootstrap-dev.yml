@@ -2,13 +2,8 @@ server:
   port: 8040
 
 spring:
-  application:
-    name: scheduler
-
   cloud:
     consul:
-      host: consul
-      port: 8500
       discovery:
         instance-id: ${spring.application.name}_${random.int}
 
@@ -32,8 +27,3 @@ spring:
 
   rabbitmq:
     host: rabbitmq
-
-logging:
-  level:
-    com:
-      newestworld: debug

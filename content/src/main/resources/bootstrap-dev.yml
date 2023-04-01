@@ -2,13 +2,8 @@ server:
   port: 8080
 
 spring:
-  application:
-    name: content
-
   cloud:
     consul:
-      host: consul
-      port: 8500
       discovery:
         instance-id: ${spring.application.name}_${random.int}
 
@@ -34,8 +29,3 @@ spring:
 
   rabbitmq:
     host: rabbitmq
-
-logging:
-  level:
-    com:
-      newestworld: debug
