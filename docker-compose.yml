@@ -64,6 +64,7 @@ services:
       - consul
     environment:
       - SPRING_PROFILES_ACTIVE=dev
+      - SPRING_CLOUD_CONSUL_CONFIG_FORMAT=yaml
     ports:
       - "8020:8020"
     restart: unless-stopped
