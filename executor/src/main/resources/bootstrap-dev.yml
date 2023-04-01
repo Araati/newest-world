@@ -1,8 +1,14 @@
 spring:
-  profiles:
-    active: ${ENV}
+  application:
+    name: executor
 
   cloud:
+    consul:
+      host: consul
+      port: 8500
+      discovery:
+        instance-id: ${spring.application.name}_${random.int}
+
     stream:
       function:
         definition: actionTimeoutBatchEventConsumer;actionDataBatchEventConsumer;
@@ -10,19 +16,14 @@ spring:
       bindings:
         actionTimeoutBatchEventConsumer-in-0:
           destination: action-timeout
-
         actionDataBatchEventConsumer-in-0:
           destination: action-data
-
         actionDeleteEventProducer-out-0:
           destination: action-delete
-
         factoryUpdateEventProducer-out-0:
           destination: factory-update
-
         actionCreateEventProducer-out-0:
           destination: action-create
-
         actionDataRequestBatchEventProducer-out-0:
           destination: action-data-request
 
