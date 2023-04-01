@@ -1,4 +1,3 @@
-#todo Тут смешение двух конфигов. Нужно разделить на обычный и dev. В остальных сервисах аналогично
 spring:
   profiles:
     active: ${ENV}
@@ -11,4 +10,9 @@ spring:
       host: consul
       port: 8500
       discovery:
-        instance-id: ${spring.application.name}_${random.int}
+        enabled: false
+
+logging:
+  level:
+    com:
+      newestworld: debug

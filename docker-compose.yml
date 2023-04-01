@@ -82,12 +82,8 @@ services:
       - rabbitmq
       - consul
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://scheduler_postgres_db:5432/compose-postgres
-      - SPRING_DATASOURCE_USERNAME=root
-      - SPRING_DATASOURCE_PASSWORD=root
-      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
-      - SPRING_PROFILES_ACTIVE=prod
-      - SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS=PLAINTEXT://kafka:9092
+      - SPRING_PROFILES_ACTIVE=dev
+      - SPRING_CLOUD_CONSUL_CONFIG_FORMAT=yaml
     ports:
       - "8040:8040"
     restart: unless-stopped
