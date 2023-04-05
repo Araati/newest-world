@@ -2,6 +2,8 @@ version: "3"
 services:
 
   consul:
+    profiles:
+      - infra
     image: consul:latest
     hostname: consul
     restart: on-failure
@@ -24,6 +26,8 @@ services:
 
   #todo Регистратор не в состоянии подчищать за собой неработающие сервисы, чем захламляет консул
   registrator:
+    profiles:
+      - infra
     image: gliderlabs/registrator:latest
     restart: on-failure
     depends_on:
@@ -44,12 +48,8 @@ services:
       - rabbitmq
       - consul
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres_db:5432/compose-postgres
-      - SPRING_DATASOURCE_USERNAME=root
-      - SPRING_DATASOURCE_PASSWORD=root
-      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
-      - SPRING_PROFILES_ACTIVE=prod
-      - SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS=PLAINTEXT://kafka:9092
+      - SPRING_CLOUD_CONSUL_CONFIG_ENABLED=true
+      - SPRING_PROFILES_ACTIVE=dev
     ports:
       - "8080:8080"
     restart: unless-stopped
@@ -68,12 +68,8 @@ services:
       - rabbitmq
       - consul
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres_db:5432/compose-postgres
-      - SPRING_DATASOURCE_USERNAME=root
-      - SPRING_DATASOURCE_PASSWORD=root
-      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
-      - SPRING_PROFILES_ACTIVE=prod
-      - SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS=PLAINTEXT://kafka:9092
+      - SPRING_CLOUD_CONSUL_CONFIG_ENABLED=true
+      - SPRING_PROFILES_ACTIVE=dev
     ports:
       - "8020:8020"
     restart: unless-stopped
@@ -89,16 +85,11 @@ services:
       context: scheduler
     depends_on:
       - scheduler_postgres_db
-      - executor
       - rabbitmq
       - consul
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://scheduler_postgres_db:5432/compose-postgres
-      - SPRING_DATASOURCE_USERNAME=root
-      - SPRING_DATASOURCE_PASSWORD=root
-      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
-      - SPRING_PROFILES_ACTIVE=prod
-      - SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS=PLAINTEXT://kafka:9092
+      - SPRING_CLOUD_CONSUL_CONFIG_ENABLED=true
+      - SPRING_PROFILES_ACTIVE=dev
     ports:
       - "8040:8040"
     restart: unless-stopped
@@ -116,8 +107,6 @@ services:
       - POSTGRES_PASSWORD=root
     ports:
       - "5432:5432"
-    volumes:
-      - ./postgres_data:/var/lib/postgresql/data
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -U compose-postgres -d compose-postgres" ]
       interval: 10s
@@ -133,8 +122,6 @@ services:
       - POSTGRES_PASSWORD=root
     ports:
       - "5434:5432"
-    volumes:
-      - ./scheduler_postgres_data:/var/lib/postgresql/data
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -U compose-postgres -d compose-postgres" ]
       interval: 10s
@@ -143,6 +130,8 @@ services:
     restart: unless-stopped
 
   rabbitmq:
+    profiles:
+      - infra
     image: rabbitmq:3.11.6-management
     hostname: rabbitmq
     restart: on-failure

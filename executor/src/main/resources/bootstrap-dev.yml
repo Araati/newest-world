@@ -1,8 +1,12 @@
-spring:
-  profiles:
-    active: ${ENV}
+server:
+  port: 8020
 
+spring:
   cloud:
+    consul:
+      discovery:
+        instance-id: ${spring.application.name}_${random.int}
+
     stream:
       function:
         definition: actionTimeoutBatchEventConsumer;actionDataBatchEventConsumer;
@@ -10,19 +14,14 @@ spring:
       bindings:
         actionTimeoutBatchEventConsumer-in-0:
           destination: action-timeout
-
         actionDataBatchEventConsumer-in-0:
           destination: action-data
-
         actionDeleteEventProducer-out-0:
           destination: action-delete
-
         factoryUpdateEventProducer-out-0:
           destination: factory-update
-
         actionCreateEventProducer-out-0:
           destination: action-create
-
         actionDataRequestBatchEventProducer-out-0:
           destination: action-data-request
 
@@ -30,8 +29,3 @@ spring:
 
   rabbitmq:
     host: rabbitmq
-
-logging:
-  level:
-    com:
-      newestworld: debug

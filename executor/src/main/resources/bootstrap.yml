@@ -9,5 +9,13 @@ spring:
     consul:
       host: consul
       port: 8500
+      config:
+        format: yaml
+        enabled: false
       discovery:
-        instance-id: ${spring.application.name}_${random.int}
+        enabled: false
+
+logging:
+  level:
+    com:
+      newestworld: debug
