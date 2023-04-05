@@ -2,6 +2,8 @@ version: "3"
 services:
 
   consul:
+    profiles:
+      - infra
     image: consul:latest
     hostname: consul
     restart: on-failure
@@ -24,6 +26,8 @@ services:
 
   #todo Регистратор не в состоянии подчищать за собой неработающие сервисы, чем захламляет консул
   registrator:
+    profiles:
+      - infra
     image: gliderlabs/registrator:latest
     restart: on-failure
     depends_on:
@@ -44,8 +48,8 @@ services:
       - rabbitmq
       - consul
     environment:
+      - SPRING_CLOUD_CONSUL_CONFIG_ENABLED=true
       - SPRING_PROFILES_ACTIVE=dev
-      - SPRING_CLOUD_CONSUL_CONFIG_FORMAT=yaml
     ports:
       - "8080:8080"
     restart: unless-stopped
@@ -64,8 +68,8 @@ services:
       - rabbitmq
       - consul
     environment:
+      - SPRING_CLOUD_CONSUL_CONFIG_ENABLED=true
       - SPRING_PROFILES_ACTIVE=dev
-      - SPRING_CLOUD_CONSUL_CONFIG_FORMAT=yaml
     ports:
       - "8020:8020"
     restart: unless-stopped
@@ -84,8 +88,8 @@ services:
       - rabbitmq
       - consul
     environment:
+      - SPRING_CLOUD_CONSUL_CONFIG_ENABLED=true
       - SPRING_PROFILES_ACTIVE=dev
-      - SPRING_CLOUD_CONSUL_CONFIG_FORMAT=yaml
     ports:
       - "8040:8040"
     restart: unless-stopped
@@ -103,8 +107,6 @@ services:
       - POSTGRES_PASSWORD=root
     ports:
       - "5432:5432"
-    volumes:
-      - ./postgres_data:/var/lib/postgresql/data
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -U compose-postgres -d compose-postgres" ]
       interval: 10s
@@ -120,8 +122,6 @@ services:
       - POSTGRES_PASSWORD=root
     ports:
       - "5434:5432"
-    volumes:
-      - ./scheduler_postgres_data:/var/lib/postgresql/data
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -U compose-postgres -d compose-postgres" ]
       interval: 10s
@@ -130,6 +130,8 @@ services:
     restart: unless-stopped
 
   rabbitmq:
+    profiles:
+      - infra
     image: rabbitmq:3.11.6-management
     hostname: rabbitmq
     restart: on-failure

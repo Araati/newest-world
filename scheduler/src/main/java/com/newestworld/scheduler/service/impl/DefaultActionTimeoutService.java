@@ -35,7 +35,7 @@ public class DefaultActionTimeoutService implements ActionTimeoutService {
 
     @Override
     public void delete(final long actionId) {
-        var entity = actionTimeoutRepository.mustFindById(actionId);
+        var entity = actionTimeoutRepository.mustFindByActionId(actionId);
         actionTimeoutRepository.save(entity.withDeleted(true));
     }
 
