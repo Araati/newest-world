@@ -2,8 +2,6 @@ version: "3"
 services:
 
   consul:
-    profiles:
-      - infra
     image: consul:latest
     hostname: consul
     restart: on-failure
@@ -26,8 +24,6 @@ services:
 
   #todo Регистратор не в состоянии подчищать за собой неработающие сервисы, чем захламляет консул
   registrator:
-    profiles:
-      - infra
     image: gliderlabs/registrator:latest
     restart: on-failure
     depends_on:
@@ -130,8 +126,6 @@ services:
     restart: unless-stopped
 
   rabbitmq:
-    profiles:
-      - infra
     image: rabbitmq:3.11.6-management
     hostname: rabbitmq
     restart: on-failure

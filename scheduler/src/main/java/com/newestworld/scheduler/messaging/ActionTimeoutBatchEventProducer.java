@@ -21,7 +21,6 @@ public class ActionTimeoutBatchEventProducer implements Supplier<ActionTimeoutBa
 
     @Override
     public ActionTimeoutBatchEvent get() {
-        //todo: need to mark an action timeout like "sended" or "in-progress" to prevent duplicated event
         final List<IdReference> actionList = service.findAll(System.currentTimeMillis());
         final var eventList = actionList.stream().map(x -> new ActionTimeoutEvent(x.getId())).collect(Collectors.toList());
         if (eventList.isEmpty()) {
@@ -30,7 +29,7 @@ public class ActionTimeoutBatchEventProducer implements Supplier<ActionTimeoutBa
         }
 
         log.debug("{} actions has timeout", eventList.size());
-
+        service.markAllProcessing(actionList);
         return new ActionTimeoutBatchEvent(eventList);
     }
 }

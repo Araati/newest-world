@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface ActionTimeoutRepository extends CrudRepository<ActionTimeoutEntity, Long> {
 
-    List<ActionTimeoutEntity> findAllByTimeoutLessThanAndDeletedIsFalse(final long timeout);
+    List<ActionTimeoutEntity> findAllByTimeoutLessThanAndDeletedIsFalseAndProcessingIsFalse(final long timeout);
 
     default ActionTimeoutEntity mustFindByActionId(final long id) {
         return findById(id).orElseThrow(() -> new ResourceNotFoundException("ActionTimeout", id));

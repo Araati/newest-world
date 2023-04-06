@@ -14,4 +14,6 @@ public interface ActionTimeoutService {
     List<IdReference> findAll(final long time);
 
     void delete(final long actionId);
+
+    void markAllProcessing(final List<IdReference> list);
 }

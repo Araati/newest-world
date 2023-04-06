@@ -28,6 +28,9 @@ public class ActionTimeoutEntity {
     @Column(name = "timeout")
     private long timeout;
 
+    @Column(name = "processing")
+    private boolean processing;
+
     @Column(name = "deleted")
     private boolean deleted;
 

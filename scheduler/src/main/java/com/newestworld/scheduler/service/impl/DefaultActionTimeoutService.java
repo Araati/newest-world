@@ -29,7 +29,7 @@ public class DefaultActionTimeoutService implements ActionTimeoutService {
 
     @Override
     public List<IdReference> findAll(final long time) {
-        var entityList = actionTimeoutRepository.findAllByTimeoutLessThanAndDeletedIsFalse(time);
+        var entityList = actionTimeoutRepository.findAllByTimeoutLessThanAndDeletedIsFalseAndProcessingIsFalse(time);
         return entityList.stream().map(x -> new ActionDTO(x.getActionId())).collect(Collectors.toList());
     }
 
@@ -37,6 +37,11 @@ public class DefaultActionTimeoutService implements ActionTimeoutService {
     public void delete(final long actionId) {
         var entity = actionTimeoutRepository.mustFindByActionId(actionId);
         actionTimeoutRepository.save(entity.withDeleted(true));
+    }
+
+    public void markAllProcessing(final List<IdReference> list)    {
+        actionTimeoutRepository.saveAll(actionTimeoutRepository
+                .findAllById(list.stream().map(IdReference::getId).collect(Collectors.toList())));
     }
 
 }
