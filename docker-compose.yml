@@ -24,21 +24,6 @@ services:
     volumes:
       - ".docker/volumes/consul:/consul/data"
 
-  #todo Регистратор не в состоянии подчищать за собой неработающие сервисы, чем захламляет консул
-  registrator:
-    profiles:
-      - infra
-    image: gliderlabs/registrator:latest
-    restart: on-failure
-    depends_on:
-      - consul
-    volumes:
-      - "/var/run/docker.sock:/tmp/docker.sock"
-    command:
-      - "-cleanup=true"
-      - "-ip=${MY_IP}"
-      - "consul://consul:8500"
-
   content:
     profiles:
       - app
