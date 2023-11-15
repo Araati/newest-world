@@ -6,6 +6,9 @@ spring:
     consul:
       discovery:
         instance-id: ${spring.application.name}_${random.int}
+        heartbeat:
+          enabled: true
+          ttl: 10s
 
     stream:
       function:
