@@ -1,8 +1,7 @@
 package com.newestworld.content.messaging;
 
+import com.newestworld.content.service.CompoundActionService;
 import com.newestworld.streams.event.ActionCreateEvent;
-import com.newestworld.content.dto.ActionCreateDTO;
-import com.newestworld.content.service.ActionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -14,12 +13,12 @@ import java.util.function.Consumer;
 @RequiredArgsConstructor
 public class ActionCreateEventConsumer implements Consumer<ActionCreateEvent> {
 
-    private final ActionService actionService;
+    private final CompoundActionService compoundActionService;
 
     @Override
     public void accept(ActionCreateEvent event) {
         log.debug("ActionCreate message received with type {}", event.getType());
-        actionService.create(new ActionCreateDTO(event));
+        //actionService.create(new CompoundActionCreateDTO(event));
     }
 
 }

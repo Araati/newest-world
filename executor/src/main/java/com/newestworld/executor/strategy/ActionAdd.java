@@ -1,11 +1,11 @@
 package com.newestworld.executor.strategy;
 
+import com.newestworld.commons.model.ActionParameters;
+import com.newestworld.commons.model.ActionType;
+import com.newestworld.commons.model.BasicAction;
 import com.newestworld.streams.event.ActionCreateEvent;
 import com.newestworld.streams.event.ActionDeleteEvent;
 import com.newestworld.streams.event.FactoryUpdateEvent;
-import com.newestworld.commons.model.Action;
-import com.newestworld.commons.model.ActionParameters;
-import com.newestworld.commons.model.ActionType;
 import com.newestworld.streams.publisher.EventPublisher;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,11 +23,11 @@ public class ActionAdd implements ActionExecutor {
     private final EventPublisher<ActionCreateEvent> actionCreateEventPublisher;
 
     @Override
-    public void exec(final Action action) {
+    public void exec(final BasicAction basicAction) {
 
-        final ActionParameters parameters = action.getParameters();
+        final ActionParameters parameters = basicAction.getParameters();
         if (parameters.isEmpty()) {
-            throw new IllegalArgumentException(String.format("Action parameters is not defined; action id %d", action.getId()));
+            throw new IllegalArgumentException(String.format("BasicAction parameters is not defined; basicAction id %d", basicAction.getId()));
         }
 
         var target = parameters.mustGetByName("target");
@@ -40,7 +40,7 @@ public class ActionAdd implements ActionExecutor {
                         Long.parseLong(amount.getValue().toString()))
         );
 
-        actionDeleteEventEventPublisher.send(new ActionDeleteEvent(action.getId()));
+        actionDeleteEventEventPublisher.send(new ActionDeleteEvent(basicAction.getId()));
 
         if(Long.parseLong(repeat.getValue().toString()) == -1 || Long.parseLong(repeat.getValue().toString()) > 0)  {
             HashMap<String, String> createParams = new HashMap<>();
@@ -54,11 +54,11 @@ public class ActionAdd implements ActionExecutor {
             actionCreateEventPublisher.send(new ActionCreateEvent(ActionType.ADD.getId(), createParams));
         }
 
-        log.info("ActionAdd with {} id processed", action.getId());
+        log.info("ActionAdd with {} id processed", basicAction.getId());
     }
 
     @Override
-    public boolean support(final Action action) {
-        return action.getType() == ActionType.ADD;
+    public boolean support(final BasicAction basicAction) {
+        return basicAction.getType() == ActionType.ADD;
     }
 }

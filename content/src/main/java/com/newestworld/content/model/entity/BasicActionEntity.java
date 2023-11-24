@@ -1,6 +1,6 @@
 package com.newestworld.content.model.entity;
 
-import com.newestworld.content.dto.ActionParamsCreateDTO;
+import com.newestworld.content.dto.BasicActionCreateDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,21 +15,20 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @With
 @Entity
-@Table(name = "action_params")
-public class ActionParamsEntity {
+@Table(name = "basic_action")
+public class BasicActionEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @Column(name = "action_id")
     private long actionId;
 
-    @Column(name = "name")
-    private String name;
+    @Column(name = "type")
+    private int type;
 
-    @Column(name = "value")
-    private String value;
+    // TODO: 25.11.2023 boolean inProgress
 
     @Column(name = "deleted")
     private boolean deleted;
@@ -38,9 +37,8 @@ public class ActionParamsEntity {
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    public ActionParamsEntity(final long id, final ActionParamsCreateDTO source) {
-        this.actionId = id;
-        this.name = source.getName();
-        this.value = source.getValue();
+    public BasicActionEntity(final long actionId, final BasicActionCreateDTO source) {
+        this.actionId = actionId;
+        this.type = source.getType();
     }
 }

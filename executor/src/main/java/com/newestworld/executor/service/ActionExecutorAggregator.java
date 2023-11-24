@@ -1,6 +1,6 @@
 package com.newestworld.executor.service;
 
-import com.newestworld.commons.model.Action;
+import com.newestworld.commons.model.BasicAction;
 import com.newestworld.executor.strategy.ActionExecutor;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -18,16 +18,16 @@ public class ActionExecutorAggregator {
     private final List<ActionExecutor> executors;
 
     @SneakyThrows
-    public void execute(final Action action) {
-        var supported = executors.stream().filter(x -> x.support(action)).collect(Collectors.toList());
+    public void execute(final BasicAction basicAction) {
+        var supported = executors.stream().filter(x -> x.support(basicAction)).collect(Collectors.toList());
         if (supported.isEmpty()) {
-            log.warn("Action {} with type {} does not have executors", action.getId(), action.getType().name());
+            log.warn("BasicAction {} with type {} does not have executors", basicAction.getId(), basicAction.getType().name());
         }
 
-        supported.forEach(x -> x.exec(action));
+        supported.forEach(x -> x.exec(basicAction));
     }
 
-    public void execute(final List<Action> list) {
+    public void execute(final List<BasicAction> list) {
         list.forEach(this::execute);
     }
 }

@@ -1,11 +1,11 @@
 package com.newestworld.executor.strategy;
 
+import com.newestworld.commons.model.ActionParameters;
+import com.newestworld.commons.model.ActionType;
+import com.newestworld.commons.model.BasicAction;
 import com.newestworld.streams.event.ActionCreateEvent;
 import com.newestworld.streams.event.ActionDeleteEvent;
 import com.newestworld.streams.event.FactoryUpdateEvent;
-import com.newestworld.commons.model.Action;
-import com.newestworld.commons.model.ActionParameters;
-import com.newestworld.commons.model.ActionType;
 import com.newestworld.streams.publisher.EventPublisher;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,11 +23,11 @@ public class ActionFactoryStart implements ActionExecutor    {
     private final EventPublisher<ActionCreateEvent> actionCreateEventPublisher;
 
     @Override
-    public void exec(final Action action) {
+    public void exec(final BasicAction basicAction) {
 
-       final ActionParameters parameters = action.getParameters();
+       final ActionParameters parameters = basicAction.getParameters();
         if(parameters.isEmpty())    {
-            throw new IllegalArgumentException(String.format("Action parameters is not defined; action id %d", action.getId()));
+            throw new IllegalArgumentException(String.format("BasicAction parameters is not defined; basicAction id %d", basicAction.getId()));
         }
 
         var target = parameters.mustGetByName("target");
@@ -37,7 +37,7 @@ public class ActionFactoryStart implements ActionExecutor    {
                         true,
                         null));
 
-        actionDeleteEventPublisher.send(new ActionDeleteEvent(action.getId()));
+        actionDeleteEventPublisher.send(new ActionDeleteEvent(basicAction.getId()));
         HashMap<String, String> createParams = new HashMap<>();
         createParams.put("target", target.getValue().toString());
         // TODO: 11.01.2023 test values
@@ -46,11 +46,11 @@ public class ActionFactoryStart implements ActionExecutor    {
 
         actionCreateEventPublisher.send(new ActionCreateEvent(ActionType.ADD.getId(), createParams));
 
-        log.info("ActionFactoryStart with {} id processed", action.getId());
+        log.info("ActionFactoryStart with {} id processed", basicAction.getId());
     }
 
     @Override
-    public boolean support(final Action action) {
-        return action.getType() == ActionType.START;
+    public boolean support(final BasicAction basicAction) {
+        return basicAction.getType() == ActionType.START;
     }
 }

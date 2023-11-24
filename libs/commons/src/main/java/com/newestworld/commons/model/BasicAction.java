@@ -2,7 +2,7 @@ package com.newestworld.commons.model;
 
 import java.time.LocalDateTime;
 
-public interface Action {
+public interface BasicAction {
 
     long getId();
 

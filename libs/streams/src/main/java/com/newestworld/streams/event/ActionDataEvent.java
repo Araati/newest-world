@@ -2,18 +2,13 @@ package com.newestworld.streams.event;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonRawValue;
-import com.fasterxml.jackson.annotation.JsonValue;
-import com.newestworld.commons.model.Action;
 import com.newestworld.commons.model.ActionParameter;
-import com.newestworld.commons.model.ActionParameters;
 import com.newestworld.commons.model.ActionType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.util.HashMap;
 import java.util.List;
 
 @Getter

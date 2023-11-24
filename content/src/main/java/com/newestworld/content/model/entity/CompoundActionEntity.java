@@ -1,6 +1,6 @@
 package com.newestworld.content.model.entity;
 
-import com.newestworld.content.dto.ActionCreateDTO;
+import com.newestworld.content.dto.CompoundActionCreateDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,15 +15,15 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @With
 @Entity
-@Table(name = "action")
-public class ActionEntity {
+@Table(name = "compound_action")
+public class CompoundActionEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name = "type")
-    private int type;
+    @Column(name = "name")
+    private String name;
 
     @Column(name = "in_progress")
     private boolean inProgress;
@@ -35,9 +35,7 @@ public class ActionEntity {
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    // TODO: 28.04.2022 Связь с парамс и таймаутом один к одному 
-
-    public ActionEntity(final ActionCreateDTO source) {
-        this.type = source.getType();
+    public CompoundActionEntity(final CompoundActionCreateDTO source) {
+        this.name = source.getName();
     }
 }

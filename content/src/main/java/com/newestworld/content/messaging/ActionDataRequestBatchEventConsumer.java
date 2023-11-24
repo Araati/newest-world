@@ -1,11 +1,10 @@
 package com.newestworld.content.messaging;
 
+import com.newestworld.content.service.CompoundActionService;
 import com.newestworld.streams.event.ActionDataBatchEvent;
 import com.newestworld.streams.event.ActionDataEvent;
 import com.newestworld.streams.event.ActionDataRequestBatchEvent;
 import com.newestworld.streams.event.ActionDataRequestEvent;
-import com.newestworld.commons.model.Action;
-import com.newestworld.content.service.ActionService;
 import com.newestworld.streams.publisher.EventPublisher;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,7 +19,7 @@ import java.util.function.Consumer;
 @RequiredArgsConstructor
 public class ActionDataRequestBatchEventConsumer implements Consumer<ActionDataRequestBatchEvent> {
 
-    private final ActionService actionService;
+    private final CompoundActionService compoundActionService;
     private final EventPublisher<ActionDataBatchEvent> actionDataBatchEventPublisher;
 
     @Override
@@ -30,8 +29,8 @@ public class ActionDataRequestBatchEventConsumer implements Consumer<ActionDataR
         List<ActionDataEvent> dataEvents = new ArrayList<>();
 
         for (ActionDataRequestEvent request : requests) {
-            Action action = actionService.findById(request.getId());
-            dataEvents.add(new ActionDataEvent(action.getId(), action.getType(), action.getParameters().getAll(), action.getCreatedAt()));
+            //BasicAction basicAction = actionService.findById(request.getId());
+            //dataEvents.add(new ActionDataEvent(basicAction.getId(), basicAction.getType(), basicAction.getParameters().getAll(), basicAction.getCreatedAt()));
         }
 
         actionDataBatchEventPublisher.send(new ActionDataBatchEvent(dataEvents));
