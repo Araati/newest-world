@@ -23,14 +23,11 @@ public class CompoundActionStructureEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name = "name")
     private String name;
 
-    @Column(name = "input")
     @ElementCollection
     private List<String> input;
 
-    @Column(name = "deleted")
     private boolean deleted;
 
     @CreationTimestamp

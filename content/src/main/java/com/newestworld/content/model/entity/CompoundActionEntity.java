@@ -22,13 +22,11 @@ public class CompoundActionEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name = "name")
     private String name;
 
     @Column(name = "in_progress")
     private boolean inProgress;
 
-    @Column(name = "deleted")
     private boolean deleted;
 
     @CreationTimestamp

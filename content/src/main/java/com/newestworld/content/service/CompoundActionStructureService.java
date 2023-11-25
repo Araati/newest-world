@@ -7,6 +7,7 @@ import com.newestworld.commons.model.CompoundActionStructure;
 import com.newestworld.content.dao.ActionParamsRepository;
 import com.newestworld.content.dao.BasicActionRepository;
 import com.newestworld.content.dao.CompoundActionStructureRepository;
+import com.newestworld.content.dto.ActionParamsCreateDTO;
 import com.newestworld.content.dto.BasicActionDTO;
 import com.newestworld.content.dto.CompoundActionStructureCreateDTO;
 import com.newestworld.content.dto.CompoundActionStructureDTO;
@@ -34,57 +35,59 @@ public class CompoundActionStructureService {
         CompoundActionStructureEntity compoundActionStructureEntity = new CompoundActionStructureEntity(request);
         compoundActionStructureRepository.save(compoundActionStructureEntity);
 
-        List<Long> basicActionEntityIdsList = new ArrayList<>();
         List<BasicAction> basicActionDTOS = new ArrayList<>();
+
+        // TODO: 25.11.2023 Extract to BasicActionService
         for (int i = 0; i < request.getSteps().size(); i++) {
             BasicActionEntity basicActionEntity = new BasicActionEntity(compoundActionStructureEntity.getId(), request.getSteps().get(i));
             basicActionRepository.save(basicActionEntity);
-            basicActionEntityIdsList.add(basicActionEntity.getId());
+
             List<ActionParameter> actionParameters = new ArrayList<>();
-            for (int j = 0; j < request.getSteps().get(i).getParams().size(); j++) {
-                ActionParamsEntity actionParamsEntity = new ActionParamsEntity(basicActionEntity.getId(), request.getSteps().get(i).getParams().get(j));
+            List<ActionParamsCreateDTO> actionParamsCreateDTOS = request.getSteps().get(i).getParams();
+            for (ActionParamsCreateDTO actionParamsCreateDTO : actionParamsCreateDTOS) {
+                ActionParamsEntity actionParamsEntity = new ActionParamsEntity(basicActionEntity.getId(), actionParamsCreateDTO);
                 actionParamsRepository.save(actionParamsEntity);
                 actionParameters.add(new ActionParameter(actionParamsEntity.getActionId(), actionParamsEntity.getName(), actionParamsEntity.getValue()));
             }
+
             basicActionDTOS.add(new BasicActionDTO(basicActionEntity, new ActionParameters.Impl(actionParameters)));
         }
 
+        log.info("CompoundActionStructure with {} id created", compoundActionStructureEntity.getId());
         return new CompoundActionStructureDTO(compoundActionStructureEntity, basicActionDTOS);
     }
 
     public void delete(final long id) {
 
-        compoundActionStructureRepository.save(compoundActionStructureRepository.mustFindById(id).withDeleted(true));
+        compoundActionStructureRepository.save(compoundActionStructureRepository.mustFindByIdAndDeletedIsFalse(id).withDeleted(true));
 
+        // TODO: 25.11.2023 Extract to BasicActionService
         List<BasicActionEntity> basicActionEntities = basicActionRepository.findAllByActionIdAndDeletedIsFalse(id);
-
-        for (int i = 0; i < basicActionEntities.size(); i++)   {
-            basicActionRepository.save(basicActionEntities.get(i).withDeleted(true));
-            actionParamsRepository.saveAll(actionParamsRepository.findAllByActionId(basicActionEntities.get(i).getId()).stream().map(x -> x.withDeleted(true)).collect(Collectors.toList()));
+        for (BasicActionEntity basicActionEntity : basicActionEntities) {
+            basicActionRepository.save(basicActionEntity.withDeleted(true));
+            actionParamsRepository.saveAll(actionParamsRepository.findAllByActionIdAndDeletedIsFalse(basicActionEntity.getId()).stream().map(x -> x.withDeleted(true)).collect(Collectors.toList()));
         }
 
         log.info("CompoundActionStructure with {} id deleted", id);
-
     }
 
     public CompoundActionStructure findById(final long id) {
 
         CompoundActionStructureEntity entity = compoundActionStructureRepository.mustFindByIdAndDeletedIsFalse(id);
-        List<BasicActionEntity> basicActionEntities = basicActionRepository.findAllByActionId(id);
-        List<BasicAction> basicActions = new ArrayList<>();
 
-        for (int i = 0; i < basicActionEntities.size(); i++) {
-            List<ActionParamsEntity> actionParamsEntities = actionParamsRepository.findAllByActionId(id);
+        // TODO: 25.11.2023 Extract to BasicActionService
+        List<BasicActionEntity> basicActionEntities = basicActionRepository.findAllByActionIdAndDeletedIsFalse(id);
+        List<BasicAction> basicActions = new ArrayList<>();
+        for (BasicActionEntity basicActionEntity : basicActionEntities) {
+            List<ActionParamsEntity> actionParamsEntities = actionParamsRepository.findAllByActionIdAndDeletedIsFalse(id);
             List<ActionParameter> actionParameterList = new ArrayList<>();
-            for (int j = 0; j < actionParamsEntities.size(); j++) {
-                ActionParamsEntity source = actionParamsEntities.get(j);
+            for (ActionParamsEntity source : actionParamsEntities) {
                 actionParameterList.add(new ActionParameter(source.getActionId(), source.getName(), source.getValue()));
             }
             ActionParameters actionParameters = new ActionParameters.Impl(actionParameterList);
-            basicActions.add(new BasicActionDTO(basicActionEntities.get(i), actionParameters));
+            basicActions.add(new BasicActionDTO(basicActionEntity, actionParameters));
         }
 
         return new CompoundActionStructureDTO(entity, basicActions);
     }
-
 }

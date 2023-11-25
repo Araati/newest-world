@@ -12,9 +12,4 @@ public interface CompoundActionStructureRepository extends CrudRepository<Compou
     default CompoundActionStructureEntity mustFindByIdAndDeletedIsFalse(final long id)   {
         return findByIdAndDeletedIsFalse(id).orElseThrow(() -> new ResourceNotFoundException("CompoundActionStructure", id));
     }
-
-    default CompoundActionStructureEntity mustFindById(final long id)    {
-        return findById(id).orElseThrow(() -> new ResourceNotFoundException("CompoundActionStructure", id));
-    }
-
 }

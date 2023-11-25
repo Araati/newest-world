@@ -39,32 +39,34 @@ public class CompoundActionService {
     public CompoundAction create(final CompoundActionCreateDTO request) {
         CompoundActionEntity compoundActionEntity = new CompoundActionEntity(request);
         compoundActionRepository.save(compoundActionEntity);
-        List<ActionParameter> input = new ArrayList<>();
 
+        // TODO: 25.11.2023 Extract to ActionParamsService
+        List<ActionParameter> input = new ArrayList<>();
         for(int i = 0; i < request.getInput().size(); i++) {
             ActionParamsEntity actionParams = new ActionParamsEntity(compoundActionEntity.getId(), request.getInput().get(i));
             actionParamsRepository.save(actionParams);
             input.add(new ActionParameter(actionParams.getActionId(), actionParams.getName(), actionParams.getValue()));
         }
-
         ActionParameters actionParameters = new ActionParameters.Impl(input);
 
         //actionTimeoutCreateEventPublisher.send(new ActionTimeoutCreateEvent(compoundActionEntity.getId(), timeout));
-        //log.info("BasicAction with {} id created", compoundActionEntity.getId());
+        log.info("CompoundAction with {} id created", compoundActionEntity.getId());
         return new CompoundActionDTO(compoundActionEntity, actionParameters, timeout);
 
     }
 
     public void delete(final long id) {
-        compoundActionRepository.save(compoundActionRepository.mustFindById(id).withDeleted(true));
+        compoundActionRepository.save(compoundActionRepository.mustFindByIdAndDeletedIsFalse(id).withDeleted(true));
 
-        actionParamsRepository.saveAll(actionParamsRepository.findAllByActionId(id).stream().map(x -> x.withDeleted(true)).collect(Collectors.toList()));
+        // TODO: 25.11.2023 Extract to ActionParamsService
+        actionParamsRepository.saveAll(actionParamsRepository.findAllByActionIdAndDeletedIsFalse(id).stream()
+                .map(x -> x.withDeleted(true)).collect(Collectors.toList()));
 
+        // TODO: 25.11.2023 Extract to BasicActionService
         List<BasicActionEntity> basicActionEntities = basicActionRepository.findAllByActionIdAndDeletedIsFalse(id);
-
-        for (int i = 0; i < basicActionEntities.size(); i++)   {
-            basicActionRepository.save(basicActionEntities.get(i).withDeleted(true));
-            actionParamsRepository.saveAll(actionParamsRepository.findAllByActionId(basicActionEntities.get(i).getId()).stream().map(x -> x.withDeleted(true)).collect(Collectors.toList()));
+        for (BasicActionEntity basicActionEntity : basicActionEntities) {
+            basicActionRepository.save(basicActionEntity.withDeleted(true));
+            actionParamsRepository.saveAll(actionParamsRepository.findAllByActionIdAndDeletedIsFalse(basicActionEntity.getId()).stream().map(x -> x.withDeleted(true)).collect(Collectors.toList()));
         }
 
         log.info("CompoundAction with {} id deleted", id);
@@ -73,14 +75,12 @@ public class CompoundActionService {
     public CompoundAction findById(final long id) {
         CompoundActionEntity entity = compoundActionRepository.mustFindByIdAndDeletedIsFalse(id);
 
-        List<ActionParamsEntity> actionParamsEntities = actionParamsRepository.findAllByActionId(id);
+        // TODO: 25.11.2023 Extract to ActionParamsService
+        List<ActionParamsEntity> actionParamsEntities = actionParamsRepository.findAllByActionIdAndDeletedIsFalse(id);
         List<ActionParameter> actionParameterList = new ArrayList<>();
-
-        for(int i = 0; i < actionParamsEntities.size(); i++)    {
-            ActionParamsEntity source = actionParamsEntities.get(i);
+        for (ActionParamsEntity source : actionParamsEntities) {
             actionParameterList.add(new ActionParameter(source.getActionId(), source.getName(), source.getValue()));
         }
-
         ActionParameters actionParameters = new ActionParameters.Impl(actionParameterList);
 
         return new CompoundActionDTO(entity, actionParameters, timeout);

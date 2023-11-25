@@ -25,13 +25,10 @@ public class ActionParamsEntity {
     @Column(name = "action_id")
     private long actionId;
 
-    @Column(name = "name")
     private String name;
 
-    @Column(name = "value")
     private String value;
 
-    @Column(name = "deleted")
     private boolean deleted;
 
     @CreationTimestamp

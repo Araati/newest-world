@@ -25,12 +25,10 @@ public class BasicActionEntity {
     @Column(name = "action_id")
     private long actionId;
 
-    @Column(name = "type")
     private int type;
 
     // TODO: 25.11.2023 boolean inProgress
 
-    @Column(name = "deleted")
     private boolean deleted;
 
     @CreationTimestamp

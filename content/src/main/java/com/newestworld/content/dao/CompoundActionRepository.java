@@ -12,9 +12,4 @@ public interface CompoundActionRepository extends CrudRepository<CompoundActionE
     default CompoundActionEntity mustFindByIdAndDeletedIsFalse(final long id)   {
         return findByIdAndDeletedIsFalse(id).orElseThrow(() -> new ResourceNotFoundException("CompoundAction", id));
     }
-
-    default CompoundActionEntity mustFindById(final long id)    {
-        return findById(id).orElseThrow(() -> new ResourceNotFoundException("CompoundAction", id));
-    }
-
 }
