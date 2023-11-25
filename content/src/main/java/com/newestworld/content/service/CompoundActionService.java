@@ -1,15 +1,10 @@
 package com.newestworld.content.service;
 
-import com.newestworld.commons.model.ActionParameter;
 import com.newestworld.commons.model.ActionParameters;
 import com.newestworld.commons.model.CompoundAction;
-import com.newestworld.content.dao.ActionParamsRepository;
-import com.newestworld.content.dao.BasicActionRepository;
 import com.newestworld.content.dao.CompoundActionRepository;
 import com.newestworld.content.dto.CompoundActionCreateDTO;
 import com.newestworld.content.dto.CompoundActionDTO;
-import com.newestworld.content.model.entity.ActionParamsEntity;
-import com.newestworld.content.model.entity.BasicActionEntity;
 import com.newestworld.content.model.entity.CompoundActionEntity;
 import com.newestworld.streams.event.ActionTimeoutCreateEvent;
 import com.newestworld.streams.publisher.EventPublisher;
@@ -17,22 +12,17 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-
-// TODO: 28.01.2023 Возможно стоит разбить на три разных сервиса?
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class CompoundActionService {
 
     private final ActionParamsService actionParamsService;
+    private final BasicActionService basicActionService;
 
     private final CompoundActionRepository compoundActionRepository;
-    private final BasicActionRepository basicActionRepository;
-    private final ActionParamsRepository actionParamsRepository;
 
+    // FIXME: 25.11.2023 Restore messaging
     private final EventPublisher<ActionTimeoutCreateEvent> actionTimeoutCreateEventPublisher;
 
     // TODO: 30.03.2023 Timeout test value
@@ -51,14 +41,7 @@ public class CompoundActionService {
     public void delete(final long id) {
         compoundActionRepository.save(compoundActionRepository.mustFindByIdAndDeletedIsFalse(id).withDeleted(true));
         actionParamsService.delete(id);
-
-        // TODO: 25.11.2023 Extract to BasicActionService
-        List<BasicActionEntity> basicActionEntities = basicActionRepository.findAllByActionIdAndDeletedIsFalse(id);
-        for (BasicActionEntity basicActionEntity : basicActionEntities) {
-            basicActionRepository.save(basicActionEntity.withDeleted(true));
-            actionParamsRepository.saveAll(actionParamsRepository.findAllByActionIdAndDeletedIsFalse(basicActionEntity.getId()).stream().map(x -> x.withDeleted(true)).collect(Collectors.toList()));
-        }
-
+        basicActionService.deleteAll(id);
         log.info("CompoundAction with {} id deleted", id);
     }
 
