@@ -27,6 +27,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class CompoundActionService {
 
+    private final ActionParamsService actionParamsService;
+
     private final CompoundActionRepository compoundActionRepository;
     private final BasicActionRepository basicActionRepository;
     private final ActionParamsRepository actionParamsRepository;
@@ -39,16 +41,7 @@ public class CompoundActionService {
     public CompoundAction create(final CompoundActionCreateDTO request) {
         CompoundActionEntity compoundActionEntity = new CompoundActionEntity(request);
         compoundActionRepository.save(compoundActionEntity);
-
-        // TODO: 25.11.2023 Extract to ActionParamsService
-        List<ActionParameter> input = new ArrayList<>();
-        for(int i = 0; i < request.getInput().size(); i++) {
-            ActionParamsEntity actionParams = new ActionParamsEntity(compoundActionEntity.getId(), request.getInput().get(i));
-            actionParamsRepository.save(actionParams);
-            input.add(new ActionParameter(actionParams.getActionId(), actionParams.getName(), actionParams.getValue()));
-        }
-        ActionParameters actionParameters = new ActionParameters.Impl(input);
-
+        ActionParameters actionParameters = actionParamsService.create(compoundActionEntity.getId(), request.getInput());
         //actionTimeoutCreateEventPublisher.send(new ActionTimeoutCreateEvent(compoundActionEntity.getId(), timeout));
         log.info("CompoundAction with {} id created", compoundActionEntity.getId());
         return new CompoundActionDTO(compoundActionEntity, actionParameters, timeout);
@@ -57,10 +50,7 @@ public class CompoundActionService {
 
     public void delete(final long id) {
         compoundActionRepository.save(compoundActionRepository.mustFindByIdAndDeletedIsFalse(id).withDeleted(true));
-
-        // TODO: 25.11.2023 Extract to ActionParamsService
-        actionParamsRepository.saveAll(actionParamsRepository.findAllByActionIdAndDeletedIsFalse(id).stream()
-                .map(x -> x.withDeleted(true)).collect(Collectors.toList()));
+        actionParamsService.delete(id);
 
         // TODO: 25.11.2023 Extract to BasicActionService
         List<BasicActionEntity> basicActionEntities = basicActionRepository.findAllByActionIdAndDeletedIsFalse(id);
@@ -74,15 +64,7 @@ public class CompoundActionService {
 
     public CompoundAction findById(final long id) {
         CompoundActionEntity entity = compoundActionRepository.mustFindByIdAndDeletedIsFalse(id);
-
-        // TODO: 25.11.2023 Extract to ActionParamsService
-        List<ActionParamsEntity> actionParamsEntities = actionParamsRepository.findAllByActionIdAndDeletedIsFalse(id);
-        List<ActionParameter> actionParameterList = new ArrayList<>();
-        for (ActionParamsEntity source : actionParamsEntities) {
-            actionParameterList.add(new ActionParameter(source.getActionId(), source.getName(), source.getValue()));
-        }
-        ActionParameters actionParameters = new ActionParameters.Impl(actionParameterList);
-
+        ActionParameters actionParameters = actionParamsService.findById(id);
         return new CompoundActionDTO(entity, actionParameters, timeout);
     }
 }
