@@ -32,7 +32,7 @@ public class CompoundActionService {
         CompoundActionEntity compoundActionEntity = new CompoundActionEntity(request);
         compoundActionRepository.save(compoundActionEntity);
         ActionParameters actionParameters = actionParamsService.create(compoundActionEntity.getId(), request.getInput());
-        //actionTimeoutCreateEventPublisher.send(new ActionTimeoutCreateEvent(compoundActionEntity.getId(), timeout));
+        actionTimeoutCreateEventPublisher.send(new ActionTimeoutCreateEvent(compoundActionEntity.getId(), timeout));
         log.info("CompoundAction with {} id created", compoundActionEntity.getId());
         return new CompoundActionDTO(compoundActionEntity, actionParameters, timeout);
 

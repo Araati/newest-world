@@ -1,5 +1,6 @@
 package com.newestworld.content.messaging;
 
+import com.newestworld.commons.model.CompoundAction;
 import com.newestworld.content.service.CompoundActionService;
 import com.newestworld.streams.event.ActionDataBatchEvent;
 import com.newestworld.streams.event.ActionDataEvent;
@@ -23,14 +24,17 @@ public class ActionDataRequestBatchEventConsumer implements Consumer<ActionDataR
     private final EventPublisher<ActionDataBatchEvent> actionDataBatchEventPublisher;
 
     @Override
-    public void accept(ActionDataRequestBatchEvent event)  {
+    public void accept(final ActionDataRequestBatchEvent event)  {
         log.debug("data request received for {} actions", event.getSize());
         List<ActionDataRequestEvent> requests = new ArrayList<>(event.getBatch());
         List<ActionDataEvent> dataEvents = new ArrayList<>();
 
         for (ActionDataRequestEvent request : requests) {
-            //BasicAction basicAction = actionService.findById(request.getId());
-            //dataEvents.add(new ActionDataEvent(basicAction.getId(), basicAction.getType(), basicAction.getParameters().getAll(), basicAction.getCreatedAt()));
+            CompoundAction compoundAction = compoundActionService.findById(request.getId());
+            dataEvents.add(new ActionDataEvent(compoundAction.getId(), compoundAction.getName(),
+                    // TODO: 26.11.2023 Стоит ли передавать базовые действия? По идее стоит, но это идет в конфликт с интерфейсом...
+                    // ...пользователь не должен видеть каждый шаг экшена, а экзекутор должен
+                    compoundAction.getInput().getAll(), compoundAction.getCreatedAt()));
         }
 
         actionDataBatchEventPublisher.send(new ActionDataBatchEvent(dataEvents));

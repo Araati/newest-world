@@ -1,6 +1,6 @@
 package com.newestworld.executor.config;
 
-import com.newestworld.streams.event.ActionCreateEvent;
+import com.newestworld.streams.event.CompoundActionCreateEvent;
 import com.newestworld.streams.event.ActionDataRequestBatchEvent;
 import com.newestworld.streams.event.ActionDeleteEvent;
 import com.newestworld.streams.event.FactoryUpdateEvent;
@@ -29,7 +29,7 @@ public class PublisherConfig {
     }
 
     @Bean
-    public EventPublisher<ActionCreateEvent> actionCreateEventPublisher()   {
+    public EventPublisher<CompoundActionCreateEvent> actionCreateEventPublisher()   {
         return new AbstractEventPublisher<>(bridge, "actionCreateEventProducer-out-0");
     }
 

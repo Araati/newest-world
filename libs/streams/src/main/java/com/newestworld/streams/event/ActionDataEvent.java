@@ -13,11 +13,10 @@ import java.util.List;
 
 @Getter
 @NoArgsConstructor
-@AllArgsConstructor
 public class ActionDataEvent {
 
     private long id;
-    private ActionType type;
+    private String name;
 
     //Параметры передаются в списке, а не в ActionParameters, потому что иначе боль с десериализацией
     private List<ActionParameter> parameters;
@@ -25,11 +24,11 @@ public class ActionDataEvent {
 
     @JsonCreator
     public ActionDataEvent(long id,
-                           @JsonProperty(value = "type") final int type,
+                           @JsonProperty(value = "name") final String name,
                            @JsonProperty(value = "parameters") final List<ActionParameter> parameters,
                            final LocalDateTime createdAt) {
         this.id = id;
-        this.type = ActionType.decode(type);
+        this.name = name;
         this.parameters = parameters;
         this.createdAt = createdAt;
     }

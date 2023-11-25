@@ -9,10 +9,10 @@ import java.util.HashMap;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ActionCreateEvent {
+public class CompoundActionCreateEvent {
 
-    private int type;
+    private String name;
 
-    private HashMap<String, String> params;
+    private HashMap<String, String> input;
 
 }

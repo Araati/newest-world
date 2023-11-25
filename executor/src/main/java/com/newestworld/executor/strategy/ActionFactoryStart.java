@@ -3,7 +3,7 @@ package com.newestworld.executor.strategy;
 import com.newestworld.commons.model.ActionParameters;
 import com.newestworld.commons.model.ActionType;
 import com.newestworld.commons.model.BasicAction;
-import com.newestworld.streams.event.ActionCreateEvent;
+import com.newestworld.streams.event.CompoundActionCreateEvent;
 import com.newestworld.streams.event.ActionDeleteEvent;
 import com.newestworld.streams.event.FactoryUpdateEvent;
 import com.newestworld.streams.publisher.EventPublisher;
@@ -20,7 +20,7 @@ public class ActionFactoryStart implements ActionExecutor    {
 
     private final EventPublisher<FactoryUpdateEvent> factoryUpdateEventPublisher;
     private final EventPublisher<ActionDeleteEvent> actionDeleteEventPublisher;
-    private final EventPublisher<ActionCreateEvent> actionCreateEventPublisher;
+    private final EventPublisher<CompoundActionCreateEvent> actionCreateEventPublisher;
 
     @Override
     public void exec(final BasicAction basicAction) {
@@ -44,7 +44,7 @@ public class ActionFactoryStart implements ActionExecutor    {
         createParams.put("amount", "1000");
         createParams.put("repeat", "-1");
 
-        actionCreateEventPublisher.send(new ActionCreateEvent(ActionType.ADD.getId(), createParams));
+        actionCreateEventPublisher.send(new CompoundActionCreateEvent(ActionType.ADD.getId(), createParams));
 
         log.info("ActionFactoryStart with {} id processed", basicAction.getId());
     }

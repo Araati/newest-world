@@ -1,5 +1,6 @@
 package com.newestworld.content.messaging;
 
+import com.newestworld.content.dto.FactoryUpdateDTO;
 import com.newestworld.content.service.FactoryService;
 import com.newestworld.streams.event.FactoryUpdateEvent;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +19,7 @@ public class FactoryUpdateEventConsumer implements Consumer<FactoryUpdateEvent> 
     @Override
     public void accept(final FactoryUpdateEvent event)  {
         log.debug("FactoryUpdate message received for factory {}", event.getFactoryId());
-        //factoryService.update(new FactoryUpdateDTO(event), event.getFactoryId());
+        factoryService.update(new FactoryUpdateDTO(event), event.getFactoryId());
     }
 
 }

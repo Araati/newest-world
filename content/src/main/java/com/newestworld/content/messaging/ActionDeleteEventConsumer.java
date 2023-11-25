@@ -18,7 +18,7 @@ public class ActionDeleteEventConsumer implements Consumer<ActionDeleteEvent> {
     @Override
     public void accept(final ActionDeleteEvent event)  {
         log.debug("ActionDelete message received for action {}", event.getActionId());
-        //actionService.delete(event.getActionId());
+        compoundActionService.delete(event.getActionId());
     }
 
 }
