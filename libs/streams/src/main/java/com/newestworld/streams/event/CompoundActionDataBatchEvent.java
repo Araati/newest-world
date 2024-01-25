@@ -10,9 +10,9 @@ import java.util.Collection;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ActionDataBatchEvent {
+public class CompoundActionDataBatchEvent {
 
-    private Collection<ActionDataEvent> batch = new ArrayList<>();
+    private Collection<CompoundActionDataEvent> batch = new ArrayList<>();
 
     public int getSize()    {
         return batch.size();

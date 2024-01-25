@@ -1,11 +1,15 @@
 package com.newestworld.commons.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.newestworld.commons.exception.ResourceNotFoundException;
-import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+
 import java.util.List;
 import java.util.Optional;
 
+@JsonDeserialize(as = ActionParameters.Impl.class)
 public interface ActionParameters {
 
     List<ActionParameter> getAll();
@@ -26,14 +30,19 @@ public interface ActionParameters {
         return getSize() == 0;
     }
 
-    @AllArgsConstructor
     @NoArgsConstructor
     class Impl implements ActionParameters {
 
+        @JsonValue
         private List<ActionParameter> parameters;
 
         public List<ActionParameter> getAll() {
             return parameters;
+        }
+
+        @JsonCreator
+        public Impl(final List<ActionParameter> parameters) {
+            this.parameters = parameters;
         }
     }
 }

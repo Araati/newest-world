@@ -51,7 +51,8 @@ public class ActionAdd implements ActionExecutor {
             else
                 createParams.put("repeat", String.valueOf(Long.parseLong(repeat.getValue().toString())-1));
 
-            actionCreateEventPublisher.send(new CompoundActionCreateEvent(ActionType.ADD.getId(), createParams));
+            // FIXME: 28.11.2023 
+            //actionCreateEventPublisher.send(new CompoundActionCreateEvent(ActionType.ADD.getId(), createParams));
         }
 
         log.info("ActionAdd with {} id processed", basicAction.getId());

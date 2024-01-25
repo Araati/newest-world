@@ -44,7 +44,8 @@ public class ActionFactoryStart implements ActionExecutor    {
         createParams.put("amount", "1000");
         createParams.put("repeat", "-1");
 
-        actionCreateEventPublisher.send(new CompoundActionCreateEvent(ActionType.ADD.getId(), createParams));
+        // FIXME: 28.11.2023 
+        //actionCreateEventPublisher.send(new CompoundActionCreateEvent(ActionType.ADD.getId(), createParams));
 
         log.info("ActionFactoryStart with {} id processed", basicAction.getId());
     }

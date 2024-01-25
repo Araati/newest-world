@@ -1,6 +1,6 @@
 package com.newestworld.content.config;
 
-import com.newestworld.streams.event.ActionDataBatchEvent;
+import com.newestworld.streams.event.CompoundActionDataBatchEvent;
 import com.newestworld.streams.event.ActionTimeoutCreateEvent;
 import com.newestworld.streams.publisher.AbstractEventPublisher;
 import com.newestworld.streams.publisher.EventPublisher;
@@ -17,7 +17,7 @@ public class PublisherConfig {
     private final StreamBridge bridge;
 
     @Bean
-    public EventPublisher<ActionDataBatchEvent> actionDataBatchEventPublisher()   {
+    public EventPublisher<CompoundActionDataBatchEvent> actionDataBatchEventPublisher()   {
         return new AbstractEventPublisher<>(bridge, "actionDataBatchEventProducer-out-0");
     }
 
