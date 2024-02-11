@@ -18,6 +18,8 @@ public class CompoundActionStructureDTO implements CompoundActionStructure {
     private long id;
     
     private String name;
+
+    private List<String> input;
     
     private List<BasicAction> steps;
     
@@ -26,6 +28,7 @@ public class CompoundActionStructureDTO implements CompoundActionStructure {
     public CompoundActionStructureDTO(final CompoundActionStructureEntity source, final List<BasicAction> steps) {
         this.id = source.getId();
         this.name = source.getName();
+        this.input = source.getInput();
         this.steps = steps;
         this.createdAt = source.getCreatedAt();
     }

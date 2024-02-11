@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
 public class ActionParamsEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @Column(name = "action_id")

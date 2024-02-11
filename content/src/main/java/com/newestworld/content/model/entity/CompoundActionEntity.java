@@ -19,10 +19,12 @@ import java.time.LocalDateTime;
 public class CompoundActionEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private long id;
 
     private String name;
+
+    private long structureId;
 
     @Column(name = "in_progress")
     private boolean inProgress;
@@ -33,7 +35,8 @@ public class CompoundActionEntity {
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    public CompoundActionEntity(final CompoundActionCreateDTO source) {
+    public CompoundActionEntity(final CompoundActionCreateDTO source, final long structureId) {
         this.name = source.getName();
+        this.structureId = structureId;
     }
 }

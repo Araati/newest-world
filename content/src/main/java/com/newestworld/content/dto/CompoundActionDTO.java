@@ -18,6 +18,8 @@ public class CompoundActionDTO implements CompoundAction {
 
     private String name;
 
+    private long structureId;
+
     private long timeout;
 
     private ActionParameters input;
@@ -29,6 +31,7 @@ public class CompoundActionDTO implements CompoundAction {
     public CompoundActionDTO(final CompoundActionEntity source, final ActionParameters source1, final long timeout)    {
         this.id = source.getId();
         this.name = source.getName();
+        this.structureId = source.getStructureId();
         this.timeout = timeout;
         this.input = source1;
         this.inProgress = source.isInProgress();

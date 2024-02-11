@@ -19,11 +19,10 @@ import java.time.LocalDateTime;
 public class BasicActionEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private long id;
 
-    @Column(name = "action_id")
-    private long actionId;
+    private long structureId;
 
     private int type;
 
@@ -35,8 +34,8 @@ public class BasicActionEntity {
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    public BasicActionEntity(final long actionId, final BasicActionCreateDTO source) {
-        this.actionId = actionId;
+    public BasicActionEntity(final long structureId, final BasicActionCreateDTO source) {
+        this.structureId = structureId;
         this.type = source.getType();
     }
 }

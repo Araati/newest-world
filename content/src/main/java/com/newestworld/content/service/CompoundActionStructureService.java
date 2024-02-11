@@ -38,4 +38,10 @@ public class CompoundActionStructureService {
         return new CompoundActionStructureDTO(compoundActionStructureRepository.mustFindByIdAndDeletedIsFalse(id),
                 basicActionService.findAllById(id));
     }
+
+    public CompoundActionStructure findByName(final String name)    {
+        CompoundActionStructureEntity entity = compoundActionStructureRepository.mustFindByNameAndDeletedIsFalse(name);
+        return new CompoundActionStructureDTO(entity,
+                basicActionService.findAllById(entity.getId()));
+    }
 }

@@ -15,6 +15,6 @@ public class CompoundActionDataEvent {
 
     private ActionParameters input;
 
-    private List<BasicAction> basicActions;
+    private List<BasicActionEvent> basicActions;
 
 }

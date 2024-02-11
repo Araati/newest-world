@@ -2,12 +2,12 @@ package com.newestworld.content.messaging;
 
 import com.newestworld.commons.model.ActionParameters;
 import com.newestworld.commons.model.BasicAction;
+import com.newestworld.commons.model.CompoundActionStructure;
 import com.newestworld.content.service.ActionParamsService;
 import com.newestworld.content.service.BasicActionService;
-import com.newestworld.streams.event.CompoundActionDataBatchEvent;
-import com.newestworld.streams.event.CompoundActionDataEvent;
-import com.newestworld.streams.event.ActionDataRequestBatchEvent;
-import com.newestworld.streams.event.ActionDataRequestEvent;
+import com.newestworld.content.service.CompoundActionService;
+import com.newestworld.content.service.CompoundActionStructureService;
+import com.newestworld.streams.event.*;
 import com.newestworld.streams.publisher.EventPublisher;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +16,7 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Component
@@ -24,6 +25,8 @@ public class ActionDataRequestBatchEventConsumer implements Consumer<ActionDataR
 
     private final BasicActionService basicActionService;
     private final ActionParamsService actionParamsService;
+    private final CompoundActionService compoundActionService;
+    private final CompoundActionStructureService compoundActionStructureService;
     private final EventPublisher<CompoundActionDataBatchEvent> actionDataBatchEventPublisher;
 
     @Override
@@ -33,7 +36,9 @@ public class ActionDataRequestBatchEventConsumer implements Consumer<ActionDataR
         List<CompoundActionDataEvent> dataEvents = new ArrayList<>();
 
         for (ActionDataRequestEvent request : requests) {
-            List<BasicAction> basicActions = basicActionService.findAllById(request.getId());
+            CompoundActionStructure structure = compoundActionStructureService.findById(compoundActionService.findById(request.getId()).getStructureId());
+            List<BasicActionEvent> basicActions = basicActionService.findAllById(structure.getId())
+                    .stream().map(BasicActionEvent::new).collect(Collectors.toList());
             ActionParameters input = actionParamsService.findById(request.getId());
             dataEvents.add(new CompoundActionDataEvent(input, basicActions));
         }

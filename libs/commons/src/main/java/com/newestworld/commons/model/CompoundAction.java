@@ -8,6 +8,8 @@ public interface CompoundAction {
 
     String getName();
 
+    long getStructureId();
+
     ActionParameters getInput();
 
     LocalDateTime getCreatedAt();

@@ -26,14 +26,14 @@ public class BasicActionService {
         for (BasicActionCreateDTO basicActionCreateDTO : request) {
             BasicActionEntity basicActionEntity = new BasicActionEntity(actionId, basicActionCreateDTO);
             basicActionRepository.save(basicActionEntity);
-            ActionParameters actionParameters = actionParamsService.create(actionId, basicActionCreateDTO.getParams());
+            ActionParameters actionParameters = actionParamsService.create(basicActionEntity.getId(), basicActionCreateDTO.getParams());
             basicActionDTOS.add(new BasicActionDTO(basicActionEntity, actionParameters));
         }
         return basicActionDTOS;
     }
 
     public void deleteAll(final long actionId) {
-        List<BasicActionEntity> basicActionEntities = basicActionRepository.findAllByActionIdAndDeletedIsFalse(actionId);
+        List<BasicActionEntity> basicActionEntities = basicActionRepository.findAllByStructureIdAndDeletedIsFalse(actionId);
         for (BasicActionEntity basicActionEntity : basicActionEntities) {
             basicActionRepository.save(basicActionEntity.withDeleted(true));
             actionParamsService.delete(actionId);
@@ -41,7 +41,7 @@ public class BasicActionService {
     }
 
     public List<BasicAction> findAllById(final long actionId)  {
-        List<BasicActionEntity> basicActionEntities = basicActionRepository.findAllByActionIdAndDeletedIsFalse(actionId);
+        List<BasicActionEntity> basicActionEntities = basicActionRepository.findAllByStructureIdAndDeletedIsFalse(actionId);
         List<BasicAction> basicActions = new ArrayList<>();
         for (BasicActionEntity basicActionEntity : basicActionEntities) {
             basicActions.add(new BasicActionDTO(basicActionEntity, actionParamsService.findById(basicActionEntity.getId())));

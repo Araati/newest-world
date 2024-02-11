@@ -7,6 +7,6 @@ import java.util.List;
 
 public interface BasicActionRepository extends CrudRepository<BasicActionEntity, Long> {
 
-    List<BasicActionEntity> findAllByActionIdAndDeletedIsFalse(final long id);
+    List<BasicActionEntity> findAllByStructureIdAndDeletedIsFalse(final long id);
 
 }

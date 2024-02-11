@@ -1,16 +1,20 @@
 package com.newestworld.content.service;
 
-import com.newestworld.commons.model.ActionParameters;
-import com.newestworld.commons.model.CompoundAction;
+import com.newestworld.commons.exception.ValidationFailedException;
+import com.newestworld.commons.model.*;
 import com.newestworld.content.dao.CompoundActionRepository;
-import com.newestworld.content.dto.CompoundActionCreateDTO;
-import com.newestworld.content.dto.CompoundActionDTO;
+import com.newestworld.content.dto.*;
 import com.newestworld.content.model.entity.CompoundActionEntity;
 import com.newestworld.streams.event.ActionTimeoutCreateEvent;
 import com.newestworld.streams.publisher.EventPublisher;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -21,6 +25,7 @@ public class CompoundActionService {
     private final BasicActionService basicActionService;
 
     private final CompoundActionRepository compoundActionRepository;
+    private final CompoundActionStructureService compoundActionStructureService;
 
     // FIXME: 25.11.2023 Restore messaging
     private final EventPublisher<ActionTimeoutCreateEvent> actionTimeoutCreateEventPublisher;
@@ -29,10 +34,23 @@ public class CompoundActionService {
     private final long timeout = System.currentTimeMillis()+(5*1000);
 
     public CompoundAction create(final CompoundActionCreateDTO request) {
-        CompoundActionEntity compoundActionEntity = new CompoundActionEntity(request);
+
+        // Validation by structure
+        CompoundActionStructure structure = compoundActionStructureService.findByName(request.getName());
+        List<String> input = request.getInput().stream().map(ActionParamsCreateDTO::getName).collect(Collectors.toList());
+        List<String> expectedInputs = structure.getInput();
+        if (!new HashSet<>(input).containsAll(expectedInputs)) {
+            throw new ValidationFailedException();
+        }
+
+        // Saving compound
+        CompoundActionEntity compoundActionEntity = new CompoundActionEntity(request, structure.getId());
         compoundActionRepository.save(compoundActionEntity);
+
+        // Saving compound parameters
         ActionParameters actionParameters = actionParamsService.create(compoundActionEntity.getId(), request.getInput());
         actionTimeoutCreateEventPublisher.send(new ActionTimeoutCreateEvent(compoundActionEntity.getId(), timeout));
+
         log.info("CompoundAction with {} id created", compoundActionEntity.getId());
         return new CompoundActionDTO(compoundActionEntity, actionParameters, timeout);
 
