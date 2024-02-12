@@ -17,6 +17,8 @@ public class BasicActionDTO implements BasicAction {
 
     private long id;
 
+    private Long localPosition;
+
     private ActionType type;
 
     private ActionParameters parameters;
@@ -25,6 +27,7 @@ public class BasicActionDTO implements BasicAction {
 
     public BasicActionDTO(final BasicActionEntity source, final ActionParameters actionParameters)   {
         this.id = source.getId();
+        this.localPosition = source.getLocalPosition();
         this.type = ActionType.decode(source.getType());
         this.parameters = actionParameters;
         this.createdAt = source.getCreatedAt();

@@ -22,6 +22,8 @@ public class BasicActionEntity {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private long id;
 
+    private Long localPosition;
+
     private long structureId;
 
     private int type;
@@ -36,6 +38,7 @@ public class BasicActionEntity {
 
     public BasicActionEntity(final long structureId, final BasicActionCreateDTO source) {
         this.structureId = structureId;
+        this.localPosition = source.getLocalPosition();
         this.type = source.getType();
     }
 }

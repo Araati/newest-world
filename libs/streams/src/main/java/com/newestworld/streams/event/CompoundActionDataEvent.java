@@ -13,6 +13,8 @@ import java.util.List;
 @AllArgsConstructor
 public class CompoundActionDataEvent {
 
+    private Long actionId;
+
     private ActionParameters input;
 
     private List<BasicActionEvent> basicActions;

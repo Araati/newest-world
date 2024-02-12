@@ -17,9 +17,9 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public enum ActionType {
 
-    CREATE(1),
-    START(2),
-    ADD(3);
+    START(1),
+    END(2),
+    MODIFY(3);
 
 
 

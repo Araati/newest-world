@@ -40,7 +40,7 @@ public class ActionDataRequestBatchEventConsumer implements Consumer<ActionDataR
             List<BasicActionEvent> basicActions = basicActionService.findAllById(structure.getId())
                     .stream().map(BasicActionEvent::new).collect(Collectors.toList());
             ActionParameters input = actionParamsService.findById(request.getId());
-            dataEvents.add(new CompoundActionDataEvent(input, basicActions));
+            dataEvents.add(new CompoundActionDataEvent(request.getId(), input, basicActions));
         }
 
         actionDataBatchEventPublisher.send(new CompoundActionDataBatchEvent(dataEvents));

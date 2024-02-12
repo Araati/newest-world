@@ -1,7 +1,6 @@
 package com.newestworld.streams.event;
 
 import com.newestworld.commons.model.ActionParameters;
-import com.newestworld.commons.model.ActionType;
 import com.newestworld.commons.model.BasicAction;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -16,6 +15,8 @@ public class BasicActionEvent {
 
     private long id;
 
+    private Long localPosition;
+
     // Енамка не передается нормально, разбираться мне лень
     private int type;
 
@@ -25,6 +26,7 @@ public class BasicActionEvent {
 
     public BasicActionEvent(final BasicAction basicAction) {
         this.id = basicAction.getId();
+        this.localPosition = basicAction.getLocalPosition();
         this.type = basicAction.getType().getId();
         this.parameters = basicAction.getParameters();
         //this.createdAt = basicAction.getCreatedAt();
