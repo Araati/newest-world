@@ -31,6 +31,7 @@ public class CompoundActionStructureService {
     public void delete(final long id) {
         compoundActionStructureRepository.save(compoundActionStructureRepository.mustFindByIdAndDeletedIsFalse(id).withDeleted(true));
         basicActionService.deleteAll(id);
+        // todo: must delete all existing compound with this structureId
         log.info("CompoundActionStructure with {} id deleted", id);
     }
 
