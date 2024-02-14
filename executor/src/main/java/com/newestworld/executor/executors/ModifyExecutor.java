@@ -2,12 +2,13 @@ package com.newestworld.executor.executors;
 
 import com.newestworld.commons.model.ActionType;
 import com.newestworld.commons.model.BasicAction;
-import com.newestworld.streams.event.FactoryUpdateEvent;
+import com.newestworld.streams.event.AbstractObjectUpdateEvent;
 import com.newestworld.streams.publisher.EventPublisher;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -16,7 +17,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class ModifyExecutor implements ActionExecutor {
 
-    private final EventPublisher<FactoryUpdateEvent> factoryUpdateEventPublisher;
+    private final EventPublisher<AbstractObjectUpdateEvent> abstractObjectUpdateEventPublisher;
 
     @Override
     public String exec(final BasicAction current, final List<BasicAction> basicActions, Map<String, String> context) {
@@ -36,9 +37,9 @@ public class ModifyExecutor implements ActionExecutor {
             value = context.get(value);
         }
 
-        factoryUpdateEventPublisher.send(new FactoryUpdateEvent(Long.parseLong(target),
-                true,
-                Long.parseLong(value)));
+        Map<String, String> toUpdate = new HashMap<>();
+        toUpdate.put(field, value);
+        abstractObjectUpdateEventPublisher.send(new AbstractObjectUpdateEvent(Long.parseLong(target), toUpdate));
 
         return current.getParameters().mustGetByName("next").getValue().toString();
     }

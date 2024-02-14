@@ -3,7 +3,7 @@ package com.newestworld.executor.config;
 import com.newestworld.streams.event.CompoundActionCreateEvent;
 import com.newestworld.streams.event.ActionDataRequestBatchEvent;
 import com.newestworld.streams.event.ActionDeleteEvent;
-import com.newestworld.streams.event.FactoryUpdateEvent;
+import com.newestworld.streams.event.AbstractObjectUpdateEvent;
 import com.newestworld.streams.publisher.AbstractEventPublisher;
 import com.newestworld.streams.publisher.EventPublisher;
 import lombok.RequiredArgsConstructor;
@@ -24,8 +24,8 @@ public class PublisherConfig {
     }
 
     @Bean
-    public EventPublisher<FactoryUpdateEvent> factoryUpdateEventPublisher() {
-        return new AbstractEventPublisher<>(bridge, "factoryUpdateEventProducer-out-0");
+    public EventPublisher<AbstractObjectUpdateEvent> factoryUpdateEventPublisher() {
+        return new AbstractEventPublisher<>(bridge, "objectUpdateEventProducer-out-0");
     }
 
     @Bean

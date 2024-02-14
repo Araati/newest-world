@@ -13,13 +13,13 @@ spring:
 
     stream:
       function:
-        definition: actionDeleteEventConsumer;factoryUpdateEventConsumer;actionCreateEventConsumer;actionDataRequestBatchEventConsumer;
+        definition: actionDeleteEventConsumer;abstractObjectUpdateEventConsumer;actionCreateEventConsumer;actionDataRequestBatchEventConsumer;
 
       bindings:
         actionDeleteEventConsumer-in-0:
           destination: action-delete
-        factoryUpdateEventConsumer-in-0:
-          destination: factory-update
+        abstractObjectUpdateEventConsumer-in-0:
+          destination: object-update
         actionCreateEventConsumer-in-0:
           destination: action-create
         actionDataRequestBatchEventConsumer-in-0:
