@@ -37,6 +37,23 @@ public class AbstractObjectService {
         return new AbstractObjectDTO(entity);
     }
 
+    public AbstractObject update(final AbstractObjectUpdateDTO request) {
+
+        AbstractObjectEntity entity = repository.mustFindByIdAndDeletedIsFalse(request.getId());
+
+        // Check if to-update properties exist in entity
+        for (Map.Entry<String, String> pair : request.getProperties().entrySet())   {
+            if (!entity.getProperties().containsKey(pair.getKey()))
+                throw new ValidationFailedException();
+        }
+
+        Map<String, String> updatedProperties = entity.getProperties();
+        updatedProperties.putAll(request.getProperties());
+        entity = entity.withProperties(updatedProperties);
+        repository.save(entity);
+        return new AbstractObjectDTO(entity);
+    }
+
     public void delete(final long id) {
         repository.save(repository.mustFindByIdAndDeletedIsFalse(id).withDeleted(true));
         log.info("AbstractObject with {} id deleted", id);
