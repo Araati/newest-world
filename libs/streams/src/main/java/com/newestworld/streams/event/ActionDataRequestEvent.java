@@ -11,7 +11,7 @@ public class ActionDataRequestEvent {
 
     private long id;
 
-    public ActionDataRequestEvent(ActionTimeoutEvent actionTimeoutEvent) {
+    public ActionDataRequestEvent(final ActionTimeoutEvent actionTimeoutEvent) {
         this.id = actionTimeoutEvent.getId();
     }
 }

@@ -1,7 +1,7 @@
 package com.newestworld.content.messaging;
 
+import com.newestworld.content.facade.CompoundActionFacade;
 import com.newestworld.streams.event.ActionDeleteEvent;
-import com.newestworld.content.service.ActionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -13,12 +13,12 @@ import java.util.function.Consumer;
 @RequiredArgsConstructor
 public class ActionDeleteEventConsumer implements Consumer<ActionDeleteEvent> {
 
-    private final ActionService actionService;
+    private final CompoundActionFacade facade;
 
     @Override
     public void accept(final ActionDeleteEvent event)  {
         log.debug("ActionDelete message received for action {}", event.getActionId());
-        actionService.delete(event.getActionId());
+        facade.delete(event.getActionId());
     }
 
 }

@@ -19,19 +19,16 @@ import java.time.LocalDateTime;
 public class ActionParamsEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @Column(name = "action_id")
     private long actionId;
 
-    @Column(name = "name")
     private String name;
 
-    @Column(name = "value")
     private String value;
 
-    @Column(name = "deleted")
     private boolean deleted;
 
     @CreationTimestamp
@@ -43,5 +40,4 @@ public class ActionParamsEntity {
         this.name = source.getName();
         this.value = source.getValue();
     }
-
 }
