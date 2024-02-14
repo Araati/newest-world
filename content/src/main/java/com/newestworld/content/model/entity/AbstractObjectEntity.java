@@ -1,5 +1,6 @@
 package com.newestworld.content.model.entity;
 
+import com.newestworld.commons.model.AbstractObjectStructure;
 import com.newestworld.content.dto.AbstractObjectCreateDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,6 +10,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.Map;
 
 @Getter
@@ -36,9 +38,12 @@ public class AbstractObjectEntity {
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    public AbstractObjectEntity(final AbstractObjectCreateDTO request, final long structureId) {
-        this.structureId = structureId;
+    public AbstractObjectEntity(final AbstractObjectCreateDTO request, final AbstractObjectStructure structure) {
+        this.structureId = structure.getId();
         this.name = request.getName();
-        this.properties = request.getProperties();
+        Map<String, String> props = new HashMap<>();
+        props.putAll(structure.getProperties());
+        props.putAll(request.getProperties());
+        this.properties = props;
     }
 }

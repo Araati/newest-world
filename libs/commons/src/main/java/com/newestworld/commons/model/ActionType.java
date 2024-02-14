@@ -19,7 +19,8 @@ public enum ActionType {
 
     START(1),
     END(2),
-    MODIFY(3);
+    MODIFY(3),
+    CREATE_ABSTRACT_OBJECT(10);
 
 
 

@@ -20,7 +20,6 @@ public class AbstractObjectService {
     private final AbstractObjectRepository repository;
     private final AbstractObjectStructureService abstractObjectStructureService;
 
-    // fixme: not tested, because there's no basicAction for creating objects now
     public AbstractObject create(final AbstractObjectCreateDTO request) {
 
         // Validation by structure
@@ -31,10 +30,11 @@ public class AbstractObjectService {
                 throw new ValidationFailedException();
         }
 
-        AbstractObjectEntity entity = new AbstractObjectEntity(request, structure.getId());
+        AbstractObjectEntity entity = new AbstractObjectEntity(request, structure);
         repository.save(entity);
         log.info("AbstractObject with {} id created", entity.getId());
         return new AbstractObjectDTO(entity);
+
     }
 
     public AbstractObject update(final AbstractObjectUpdateDTO request) {

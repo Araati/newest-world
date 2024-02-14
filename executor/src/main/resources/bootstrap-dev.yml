@@ -21,8 +21,10 @@ spring:
           destination: action-data
         actionDeleteEventProducer-out-0:
           destination: action-delete
-        objectUpdateEventProducer-out-0:
-          destination: object-update
+        abstractObjectUpdateEventProducer-out-0:
+          destination: abstract_object-update
+        abstractObjectCreateEventProducer-out-0:
+          destination: abstract_object-create
         actionCreateEventProducer-out-0:
           destination: action-create
         actionDataRequestBatchEventProducer-out-0:
