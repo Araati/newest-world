@@ -11,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,7 +26,6 @@ public class CompoundActionService {
     private final CompoundActionRepository compoundActionRepository;
     private final CompoundActionStructureService compoundActionStructureService;
 
-    // FIXME: 25.11.2023 Restore messaging
     private final EventPublisher<ActionTimeoutCreateEvent> actionTimeoutCreateEventPublisher;
 
     // TODO: 30.03.2023 Timeout test value

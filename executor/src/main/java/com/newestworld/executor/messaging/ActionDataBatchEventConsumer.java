@@ -20,7 +20,7 @@ public class ActionDataBatchEventConsumer implements Consumer<CompoundActionData
 
     @Override
     public void accept(final CompoundActionDataBatchEvent event) {
-        log.debug("received {} actions for execution", event.getSize());
+        log.debug("Received {} actions for execution", event.getSize());
         for (CompoundActionDataEvent actionDataEvent : event.getBatch())   {
             aggregator.execute(actionDataEvent.getActionId(), actionDataEvent.getInput(), actionDataEvent.getBasicActions()
                     .stream().map(BasicActionDTO::new).collect(Collectors.toList()));

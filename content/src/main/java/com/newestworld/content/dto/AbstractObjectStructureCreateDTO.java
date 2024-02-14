@@ -16,6 +16,6 @@ public class AbstractObjectStructureCreateDTO {
     private String name;
 
     @JsonProperty(value = "properties", required = true)
-    Map<String, String> properties;
+    private Map<String, String> properties;
 
 }

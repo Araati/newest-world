@@ -28,8 +28,6 @@ public class BasicActionEntity {
 
     private int type;
 
-    // TODO: 25.11.2023 boolean inProgress
-
     private boolean deleted;
 
     @CreationTimestamp

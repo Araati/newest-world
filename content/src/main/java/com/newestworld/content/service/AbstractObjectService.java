@@ -51,6 +51,7 @@ public class AbstractObjectService {
         updatedProperties.putAll(request.getProperties());
         entity = entity.withProperties(updatedProperties);
         repository.save(entity);
+        log.info("AbstractObject with {} id updated", entity.getId());
         return new AbstractObjectDTO(entity);
     }
 

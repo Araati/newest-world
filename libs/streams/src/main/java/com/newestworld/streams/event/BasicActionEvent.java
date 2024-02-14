@@ -29,6 +29,6 @@ public class BasicActionEvent {
         this.localPosition = basicAction.getLocalPosition();
         this.type = basicAction.getType().getId();
         this.parameters = basicAction.getParameters();
-        //this.createdAt = basicAction.getCreatedAt();
+        this.createdAt = basicAction.getCreatedAt();
     }
 }

@@ -17,7 +17,7 @@ public class ActionTimeoutBatchEventConsumer implements Consumer<ActionTimeoutBa
 
     @Override
     public void accept(final ActionTimeoutBatchEvent event) {
-        log.debug("send data request for {} actions", event.getSize());
+        log.debug("Send data request for {} actions", event.getSize());
         actionDataRequestBatchEventPublisher.send(new ActionDataRequestBatchEvent(event));
     }
 }

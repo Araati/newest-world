@@ -20,7 +20,6 @@ public class AbstractObjectFacade {
     public AbstractObject update(final AbstractObjectUpdateDTO request) {
         return service.update(request);
     }
-    //todo: update
 
     public void delete(final long id) {
         service.delete(id);

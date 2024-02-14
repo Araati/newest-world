@@ -28,7 +28,6 @@ public class ModifyExecutor implements ActionExecutor {
 
         var field = current.getParameters().mustGetByName("field").getValue().toString();
         if (field.startsWith("$")) {
-            //fixme: not used because factory update is stupid
             field = context.get(field);
         }
 

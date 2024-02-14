@@ -7,7 +7,7 @@ import org.springframework.cloud.stream.function.StreamBridge;
 
 @Slf4j
 @RequiredArgsConstructor
-public class ActionCreateEventPublisher<T> implements EventPublisher<CompoundActionCreateEvent> {
+public class ActionCreateEventPublisher implements EventPublisher<CompoundActionCreateEvent> {
 
     private final StreamBridge publisher;
 
