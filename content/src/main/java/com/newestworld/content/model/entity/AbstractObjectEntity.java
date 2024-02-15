@@ -29,8 +29,9 @@ public class AbstractObjectEntity {
 
     private String name;
 
+    // Инициализация для того, чтобы не было пересечений с мапой в structure
     @ElementCollection(fetch = FetchType.EAGER)
-    private Map<String, String> properties;
+    private Map<String, String> properties = new HashMap<>();
 
     private boolean deleted;
 
@@ -41,9 +42,7 @@ public class AbstractObjectEntity {
     public AbstractObjectEntity(final AbstractObjectCreateDTO request, final AbstractObjectStructure structure) {
         this.structureId = structure.getId();
         this.name = request.getName();
-        Map<String, String> props = new HashMap<>();
-        props.putAll(structure.getProperties());
-        props.putAll(request.getProperties());
-        this.properties = props;
+        this.properties.putAll(structure.getProperties());
+        this.properties.putAll(request.getProperties());
     }
 }
