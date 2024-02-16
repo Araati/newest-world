@@ -40,6 +40,6 @@ public class ActionTimeoutEntity {
 
     public ActionTimeoutEntity(final ActionTimeoutCreateDTO request) {
         this.actionId = request.getActionId();
-        this.timeout = request.getTimeout();
+        this.timeout = request.getTimeout() + System.currentTimeMillis();
     }
 }
