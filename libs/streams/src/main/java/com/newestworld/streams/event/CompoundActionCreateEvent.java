@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.HashMap;
+import java.util.Map;
 
 @Getter
 @NoArgsConstructor
@@ -13,6 +13,6 @@ public class CompoundActionCreateEvent {
 
     private String name;
 
-    private HashMap<String, String> input;
+    private Map<String, String> input;
 
 }
