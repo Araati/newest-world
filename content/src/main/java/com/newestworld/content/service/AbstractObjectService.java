@@ -25,8 +25,8 @@ public class AbstractObjectService {
         // Validation by structure
         AbstractObjectStructure structure = abstractObjectStructureService.findByName(request.getName());
         for (Map.Entry<String, String> pair : structure.getProperties().entrySet()) {
-            if (pair.getValue().isEmpty() && (request.getProperties().get(pair.getValue()) == null
-                    || request.getProperties().get(pair.getValue()).isEmpty()))
+            if (pair.getValue().isEmpty() && (request.getProperties().get(pair.getKey()) == null
+                    || request.getProperties().get(pair.getKey()).isEmpty()))
                 throw new ValidationFailedException();
         }
 

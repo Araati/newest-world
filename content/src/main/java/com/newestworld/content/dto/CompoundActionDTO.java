@@ -24,8 +24,6 @@ public class CompoundActionDTO implements CompoundAction {
 
     private ActionParameters input;
 
-    private boolean inProgress;
-
     private LocalDateTime createdAt;
 
     public CompoundActionDTO(final CompoundActionEntity source, final ActionParameters source1, final long timeout)    {
@@ -34,7 +32,6 @@ public class CompoundActionDTO implements CompoundAction {
         this.structureId = source.getStructureId();
         this.timeout = timeout;
         this.input = source1;
-        this.inProgress = source.isInProgress();
         this.createdAt = source.getCreatedAt();
     }
 

@@ -26,9 +26,6 @@ public class CompoundActionEntity {
 
     private long structureId;
 
-    @Column(name = "in_progress")
-    private boolean inProgress;
-
     private boolean deleted;
 
     @CreationTimestamp
