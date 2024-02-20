@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ActionTimeoutEvent {
+public class ActionTimeoutEvent implements Event{
 
     private long id;
 

@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ActionDeleteEvent {
+public class ActionDeleteEvent implements Event {
 
     private long actionId;
 

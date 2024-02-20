@@ -10,7 +10,7 @@ import java.util.Collection;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class CompoundActionDataBatchEvent {
+public class CompoundActionDataBatchEvent implements Event {
 
     private Collection<CompoundActionDataEvent> batch = new ArrayList<>();
 

@@ -10,7 +10,7 @@ import java.util.Collection;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ActionTimeoutBatchEvent {
+public class ActionTimeoutBatchEvent implements Event{
 
     private Collection<ActionTimeoutEvent> batch = new ArrayList<>();
 

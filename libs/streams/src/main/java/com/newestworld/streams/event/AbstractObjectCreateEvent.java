@@ -9,7 +9,7 @@ import java.util.Map;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class AbstractObjectCreateEvent {
+public class AbstractObjectCreateEvent implements Event {
 
     private String name;
     private Map<String, String> properties;

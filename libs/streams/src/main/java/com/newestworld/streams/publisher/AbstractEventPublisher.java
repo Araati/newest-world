@@ -6,7 +6,7 @@ import org.springframework.cloud.stream.function.StreamBridge;
 
 @Slf4j
 @RequiredArgsConstructor
-public class AbstractEventPublisher<T> implements EventPublisher<T> {
+public abstract class AbstractEventPublisher<T> implements EventPublisher<T> {
 
     private final StreamBridge publisher;
     private final String topic;

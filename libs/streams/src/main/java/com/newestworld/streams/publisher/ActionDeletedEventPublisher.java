@@ -1,21 +1,19 @@
 package com.newestworld.streams.publisher;
 
 import com.newestworld.streams.event.ActionDeleteEvent;
-import lombok.RequiredArgsConstructor;
+import com.newestworld.streams.event.Event;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.stream.function.StreamBridge;
 
 @Slf4j
-@RequiredArgsConstructor
-public class ActionDeletedEventPublisher implements EventPublisher<ActionDeleteEvent> {
+public class ActionDeletedEventPublisher extends AbstractEventPublisher<ActionDeleteEvent> {
 
-    private final StreamBridge publisher;
-
-    private final String topic;
+    public ActionDeletedEventPublisher(final StreamBridge publisher, final String topic) {
+        super(publisher, topic);
+    }
 
     @Override
-    public void send(final ActionDeleteEvent event) {
-        log.debug("Send event {} to {} topic", event.getClass().getName(), topic);
-        publisher.send(topic, event);
+    public boolean support(final Event event) {
+        return event.getClass().isAssignableFrom(ActionDeleteEvent.class);
     }
 }

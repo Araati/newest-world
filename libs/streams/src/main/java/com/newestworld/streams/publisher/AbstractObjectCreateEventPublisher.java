@@ -1,21 +1,17 @@
 package com.newestworld.streams.publisher;
 
 import com.newestworld.streams.event.AbstractObjectCreateEvent;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import com.newestworld.streams.event.Event;
 import org.springframework.cloud.stream.function.StreamBridge;
 
-@Slf4j
-@RequiredArgsConstructor
-public class AbstractObjectCreateEventPublisher implements EventPublisher<AbstractObjectCreateEvent> {
+public class AbstractObjectCreateEventPublisher extends AbstractEventPublisher<AbstractObjectCreateEvent> {
 
-    private final StreamBridge publisher;
-    private final String topic;
-
-    @Override
-    public void send(final AbstractObjectCreateEvent event)  {
-        log.debug("Send event {} to {} topic", event.getClass().getName(), topic);
-        publisher.send(topic, event);
+    public AbstractObjectCreateEventPublisher(final StreamBridge publisher, final String topic) {
+        super(publisher, topic);
     }
 
+    @Override
+    public boolean support(final Event event) {
+        return event.getClass().isAssignableFrom(AbstractObjectCreateEvent.class);
+    }
 }

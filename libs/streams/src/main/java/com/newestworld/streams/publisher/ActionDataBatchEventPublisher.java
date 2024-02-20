@@ -1,21 +1,19 @@
 package com.newestworld.streams.publisher;
 
 import com.newestworld.streams.event.CompoundActionDataBatchEvent;
-import lombok.RequiredArgsConstructor;
+import com.newestworld.streams.event.Event;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.stream.function.StreamBridge;
 
 @Slf4j
-@RequiredArgsConstructor
-public class ActionDataBatchEventPublisher implements EventPublisher<CompoundActionDataBatchEvent> {
+public class ActionDataBatchEventPublisher extends AbstractEventPublisher<CompoundActionDataBatchEvent> {
 
-    private final StreamBridge publisher;
-    private final String topic;
-
-    @Override
-    public void send(final CompoundActionDataBatchEvent event) {
-        log.debug("Send event {} to {} topic", event.getClass(), topic);
-        publisher.send(topic, event);
+    public ActionDataBatchEventPublisher(final StreamBridge publisher, final String topic) {
+        super(publisher, topic);
     }
 
+    @Override
+    public boolean support(final Event event) {
+        return event.getClass().isAssignableFrom(CompoundActionDataBatchEvent.class);
+    }
 }
