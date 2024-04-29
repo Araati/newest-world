@@ -1,5 +1,6 @@
 package com.newestworld.scheduler.messaging;
 
+import com.newestworld.scheduler.dao.ActionTimeoutRepository;
 import com.newestworld.streams.event.ActionTimeoutBatchEvent;
 import com.newestworld.streams.event.ActionTimeoutEvent;
 import com.newestworld.commons.model.IdReference;
