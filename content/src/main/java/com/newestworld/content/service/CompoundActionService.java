@@ -29,7 +29,7 @@ public class CompoundActionService {
     private final EventPublisher<ActionTimeoutCreateEvent> actionTimeoutCreateEventPublisher;
 
     // TODO: 30.03.2023 Timeout test value
-    private final long timeout = System.currentTimeMillis()+(5*1000);
+    private final long timeout = 5*1000;
 
     public CompoundAction create(final CompoundActionCreateDTO request) {
 
