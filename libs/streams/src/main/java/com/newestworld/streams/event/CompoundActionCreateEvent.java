@@ -9,7 +9,7 @@ import java.util.Map;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class CompoundActionCreateEvent {
+public class CompoundActionCreateEvent implements Event {
 
     private String name;
 

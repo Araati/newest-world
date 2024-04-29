@@ -1,6 +1,12 @@
 package com.newestworld.executor.messaging;
 
+import com.newestworld.commons.model.ActionParameter;
+import com.newestworld.commons.model.ActionParameters;
+import com.newestworld.commons.model.ActionType;
+import com.newestworld.commons.model.BasicAction;
 import com.newestworld.executor.ExecutorApplication;
+import com.newestworld.executor.dto.BasicActionDTO;
+import com.newestworld.executor.service.ActionExecutorAggregator;
 import com.newestworld.streams.event.*;
 import com.newestworld.streams.publisher.EventPublisher;
 import org.junit.jupiter.api.Assertions;
@@ -14,8 +20,10 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.lang.reflect.Field;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -29,6 +37,8 @@ class MessagingTest {
     private ActionTimeoutBatchEventConsumer timeoutBatchEventConsumer;
     @Autowired
     private EventPublisher<ActionDataRequestBatchEvent> actionDataRequestBatchEventPublisher;
+    @Autowired
+    private ActionExecutorAggregator aggregator;
 
     @BeforeEach
     void setUp() throws IllegalAccessException {
@@ -59,7 +69,12 @@ class MessagingTest {
     // I will do it after I make executors send messages after full execution
     @Test
     void actionTimeoutBatchEventConsume()   {
+        ActionParameters parameters = new ActionParameters.Impl(List.of(new ActionParameter(1, "$target_id", 1),
+                new ActionParameter(1, "$amount", 1000)));
+        List<BasicAction> actions = new ArrayList<>(List.of(new BasicActionDTO(1, 1L, ActionType.START, new ActionParameters.Impl(List.of(new ActionParameter(1, "next", 2))), LocalDateTime.now()),
+                new BasicActionDTO(1, 2L, ActionType.END, new ActionParameters.Impl(new ArrayList<>(List.of(new ActionParameter(1, "amount", "$amount")))), LocalDateTime.now())));
 
+        aggregator.startExecution(new CompoundActionDataEvent(1L, parameters, actions.stream().map(BasicActionEvent::new).collect(Collectors.toList())));
     }
 
 }

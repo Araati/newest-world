@@ -1,15 +1,13 @@
 package com.newestworld.executor.executors;
 
 import com.newestworld.commons.model.BasicAction;
+import com.newestworld.executor.util.ExecutionContext;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
-import java.util.Map;
 
 @Component
 public interface ActionExecutor {
 
-    String exec(final BasicAction current, final List<BasicAction> basicActions, Map<String, String> context);
+    String exec(final ExecutionContext context);
 
     boolean support(final BasicAction basicAction);
 

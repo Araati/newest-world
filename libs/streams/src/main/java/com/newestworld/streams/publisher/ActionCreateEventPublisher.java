@@ -1,21 +1,19 @@
 package com.newestworld.streams.publisher;
 
 import com.newestworld.streams.event.CompoundActionCreateEvent;
-import lombok.RequiredArgsConstructor;
+import com.newestworld.streams.event.Event;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.stream.function.StreamBridge;
 
 @Slf4j
-@RequiredArgsConstructor
-public class ActionCreateEventPublisher implements EventPublisher<CompoundActionCreateEvent> {
+public class ActionCreateEventPublisher extends AbstractEventPublisher<CompoundActionCreateEvent> {
 
-    private final StreamBridge publisher;
-
-    private final String topic;
+    public ActionCreateEventPublisher(final StreamBridge publisher, final String topic) {
+        super(publisher, topic);
+    }
 
     @Override
-    public void send(final CompoundActionCreateEvent event)   {
-        log.debug("Send event {} to {} topic", event.getClass().getName(), topic);
-        publisher.send(topic, event);
+    public boolean support(final Event event) {
+        return event.getClass().isAssignableFrom(CompoundActionCreateEvent.class);
     }
 }

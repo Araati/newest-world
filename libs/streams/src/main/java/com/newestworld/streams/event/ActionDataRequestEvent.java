@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ActionDataRequestEvent {
+public class ActionDataRequestEvent implements Event{
 
     private long id;
 

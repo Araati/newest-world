@@ -22,8 +22,7 @@ public class ActionDataBatchEventConsumer implements Consumer<CompoundActionData
     public void accept(final CompoundActionDataBatchEvent event) {
         log.debug("Received {} actions for execution", event.getSize());
         for (CompoundActionDataEvent actionDataEvent : event.getBatch())   {
-            aggregator.execute(actionDataEvent.getActionId(), actionDataEvent.getInput(), actionDataEvent.getBasicActions()
-                    .stream().map(BasicActionDTO::new).collect(Collectors.toList()));
+            aggregator.startExecution(actionDataEvent);
         }
     }
 }

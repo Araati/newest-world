@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class BasicActionEvent {
+public class BasicActionEvent implements Event {
 
     private long id;
 

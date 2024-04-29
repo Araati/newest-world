@@ -9,7 +9,7 @@ import java.util.Map;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class AbstractObjectUpdateEvent {
+public class AbstractObjectUpdateEvent implements Event {
 
     private long id;
 

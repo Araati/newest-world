@@ -3,6 +3,8 @@ package com.newestworld.content.config;
 import com.newestworld.streams.event.CompoundActionDataBatchEvent;
 import com.newestworld.streams.event.ActionTimeoutCreateEvent;
 import com.newestworld.streams.publisher.AbstractEventPublisher;
+import com.newestworld.streams.publisher.ActionDataBatchEventPublisher;
+import com.newestworld.streams.publisher.ActionTimeoutCreateEventPublisher;
 import com.newestworld.streams.publisher.EventPublisher;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cloud.stream.function.StreamBridge;
@@ -18,11 +20,11 @@ public class PublisherConfig {
 
     @Bean
     public EventPublisher<CompoundActionDataBatchEvent> actionDataBatchEventPublisher()   {
-        return new AbstractEventPublisher<>(bridge, "actionDataBatchEventProducer-out-0");
+        return new ActionDataBatchEventPublisher(bridge, "actionDataBatchEventProducer-out-0");
     }
 
     @Bean
     public EventPublisher<ActionTimeoutCreateEvent> actionTimeoutCreateEventPublisher()    {
-        return new AbstractEventPublisher<>(bridge, "actionTimeoutCreateEventProducer-out-0");
+        return new ActionTimeoutCreateEventPublisher(bridge, "actionTimeoutCreateEventProducer-out-0");
     }
 }

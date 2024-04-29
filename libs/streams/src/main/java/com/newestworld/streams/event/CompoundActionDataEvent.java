@@ -10,7 +10,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class CompoundActionDataEvent {
+public class CompoundActionDataEvent implements Event {
 
     private Long actionId;
 

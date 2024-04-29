@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ActionDataRequestBatchEvent {
+public class ActionDataRequestBatchEvent implements Event {
 
     private Collection<ActionDataRequestEvent> batch = new ArrayList<>();
 
