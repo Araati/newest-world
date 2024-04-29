@@ -29,4 +29,4 @@ spring:
       default-binder: rabbit
 
   rabbitmq:
-    host: rabbitmq
+    host: ${RABBIT_MQ_HOST:localhost}

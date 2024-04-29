@@ -4,7 +4,7 @@ services:
   consul:
     profiles:
       - infra
-    image: consul:latest
+    image: consul:1.15
     hostname: consul
     restart: on-failure
     ports:
