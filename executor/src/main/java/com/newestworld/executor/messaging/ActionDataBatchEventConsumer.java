@@ -18,6 +18,7 @@ public class ActionDataBatchEventConsumer implements Consumer<CompoundActionData
 
     private final ActionExecutorAggregator aggregator;
 
+    //fixme Все экшены, кроме первого, прилетают пустые. Решить СРОЧНО.
     @Override
     public void accept(final CompoundActionDataBatchEvent event) {
         log.debug("Received {} actions for execution", event.getSize());

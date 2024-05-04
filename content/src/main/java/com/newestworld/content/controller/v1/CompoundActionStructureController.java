@@ -3,10 +3,9 @@ package com.newestworld.content.controller.v1;
 import com.newestworld.commons.model.CompoundActionStructure;
 import com.newestworld.content.dto.CompoundActionStructureCreateDTO;
 import com.newestworld.content.facade.CompoundActionStructureFacade;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/v1/compound_action/structure")

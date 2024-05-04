@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-export JAVA_HOME=/home/araati/.jdks/openjdk-16.0.2
-
 case $1 in
 --help|-h)
   help

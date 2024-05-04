@@ -1,13 +1,13 @@
 package com.newestworld.scheduler.model.entity;
 
 import com.newestworld.scheduler.dto.ActionTimeoutCreateDTO;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.With;
 import org.hibernate.annotations.CreationTimestamp;
 
-import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Getter

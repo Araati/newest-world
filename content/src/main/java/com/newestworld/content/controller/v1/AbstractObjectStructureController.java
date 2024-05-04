@@ -3,10 +3,9 @@ package com.newestworld.content.controller.v1;
 import com.newestworld.commons.model.AbstractObjectStructure;
 import com.newestworld.content.dto.AbstractObjectStructureCreateDTO;
 import com.newestworld.content.facade.AbstractObjectStructureFacade;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/v1/abstract_object/structure")

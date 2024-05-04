@@ -3,10 +3,9 @@ package com.newestworld.content.controller.v1;
 import com.newestworld.commons.model.CompoundAction;
 import com.newestworld.content.dto.CompoundActionCreateDTO;
 import com.newestworld.content.facade.CompoundActionFacade;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/v1/compound_action")

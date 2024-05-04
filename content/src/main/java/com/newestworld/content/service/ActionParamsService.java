@@ -38,7 +38,7 @@ public class ActionParamsService {
         List<ActionParamsEntity> actionParamsEntities = actionParamsRepository.findAllByActionIdAndDeletedIsFalse(actionId);
         List<ActionParameter> actionParameterList = new ArrayList<>();
         for (ActionParamsEntity source : actionParamsEntities) {
-            actionParameterList.add(new ActionParameter(source.getActionId(), source.getName(), source.getValue()));
+            actionParameterList.add(new ActionParameter(source.getActionId(), source.getName(), source.getData()));
         }
         return new ActionParameters.Impl(actionParameterList);
     }

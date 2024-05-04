@@ -1,13 +1,13 @@
 package com.newestworld.content.model.entity;
 
 import com.newestworld.content.dto.CompoundActionCreateDTO;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.With;
 import org.hibernate.annotations.CreationTimestamp;
 
-import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Getter

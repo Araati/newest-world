@@ -2,13 +2,13 @@ package com.newestworld.content.model.entity;
 
 import com.newestworld.commons.model.AbstractObjectStructure;
 import com.newestworld.content.dto.AbstractObjectCreateDTO;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.With;
 import org.hibernate.annotations.CreationTimestamp;
 
-import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;

@@ -1,13 +1,13 @@
 package com.newestworld.content.model.entity;
 
 import com.newestworld.content.dto.ActionParamsCreateDTO;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.With;
 import org.hibernate.annotations.CreationTimestamp;
 
-import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Getter
@@ -27,7 +27,7 @@ public class ActionParamsEntity {
 
     private String name;
 
-    private String value;
+    private String data;
 
     private boolean deleted;
 
@@ -38,6 +38,6 @@ public class ActionParamsEntity {
     public ActionParamsEntity(final long id, final ActionParamsCreateDTO source) {
         this.actionId = id;
         this.name = source.getName();
-        this.value = source.getValue();
+        this.data = source.getValue();
     }
 }

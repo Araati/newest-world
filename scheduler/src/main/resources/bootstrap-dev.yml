@@ -10,10 +10,9 @@ spring:
           enabled: true
           ttl: 10s
 
+    function:
+      definition: actionTimeoutBatchEventProducer;actionDeleteEventConsumer;actionTimeoutCreateEventConsumer;
     stream:
-      function:
-        definition: actionTimeoutBatchEventProducer;actionDeleteEventConsumer;actionTimeoutCreateEventConsumer;
-
       bindings:
         actionTimeoutBatchEventProducer-out-0:
           destination: action-timeout
@@ -21,12 +20,11 @@ spring:
           destination: action-delete
         actionTimeoutCreateEventConsumer-in-0:
           destination: action-timeout-create
-
-      poller:
-        fixed-delay: 2
-        time-unit: seconds
-
       default-binder: rabbit
+
+  integration:
+    poller:
+      fixed-delay: 2000
 
   rabbitmq:
     host: ${RABBIT_MQ_HOST:localhost}
