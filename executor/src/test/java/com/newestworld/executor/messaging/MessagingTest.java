@@ -65,16 +65,4 @@ class MessagingTest {
         Assertions.assertEquals(2, requestBatch.get(1).getId());
     }
 
-    // todo: perhaps I should make a separate test for each executor? Making test below seems like hard and useless work
-    // I will do it after I make executors send messages after full execution
-    @Test
-    void actionTimeoutBatchEventConsume()   {
-        ActionParameters parameters = new ActionParameters.Impl(List.of(new ActionParameter(1, "$target_id", 1),
-                new ActionParameter(1, "$amount", 1000)));
-        List<BasicAction> actions = new ArrayList<>(List.of(new BasicActionDTO(1, 1L, ActionType.START, new ActionParameters.Impl(List.of(new ActionParameter(1, "next", 2))), LocalDateTime.now()),
-                new BasicActionDTO(1, 2L, ActionType.END, new ActionParameters.Impl(new ArrayList<>(List.of(new ActionParameter(1, "amount", "$amount")))), LocalDateTime.now())));
-
-        aggregator.startExecution(new CompoundActionDataEvent(1L, parameters, actions.stream().map(BasicActionEvent::new).collect(Collectors.toList())));
-    }
-
 }
