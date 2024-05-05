@@ -31,6 +31,7 @@ services:
     build:
         context: content
     depends_on:
+      - validator
       - postgres_db
       - rabbitmq
       - consul
@@ -95,6 +96,30 @@ services:
     restart: unless-stopped
     healthcheck:
       test: [ "CMD", "curl", "http://127.0.0.1:8040/actuator/health" ]
+      interval: 5s
+      timeout: 5s
+      retries: 50
+
+  validator:
+    profiles:
+      - app
+    image: validator:latest
+    build:
+      context: validator
+    depends_on:
+      - rabbitmq
+      - consul
+    environment:
+      - SPRING_CLOUD_CONSUL_CONFIG_ENABLED=true
+      - SPRING_PROFILES_ACTIVE=dev
+      - SPRING_CLOUD_CONSUL_HOST=consul
+      - SPRING_CLOUD_CONSUL_PORT=8500
+      - SPRING_RABBITMQ_HOST=rabbitmq
+    ports:
+      - "8060:8060"
+    restart: unless-stopped
+    healthcheck:
+      test: [ "CMD", "curl", "http://127.0.0.1:8060/actuator/health" ]
       interval: 5s
       timeout: 5s
       retries: 50

@@ -1,0 +1,21 @@
+spring:
+  profiles:
+    active: ${ENV}
+
+  application:
+    name: validator
+
+  cloud:
+    consul:
+      host: ${CONSUL_HOST:localhost}
+      port: ${CONSUL_PORT:8500}
+      config:
+        format: yaml
+        enabled: false
+      discovery:
+        enabled: false
+
+logging:
+  level:
+    com:
+      newestworld: debug

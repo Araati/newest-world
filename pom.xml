@@ -20,6 +20,7 @@
 		<module>content</module>
 		<module>scheduler</module>
 		<module>executor</module>
+		<module>validator</module>
 	</modules>
 
 	<properties>
