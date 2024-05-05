@@ -57,7 +57,6 @@ public class CompoundActionService {
     public void delete(final long id) {
         compoundActionRepository.save(compoundActionRepository.mustFindByIdAndDeletedIsFalse(id).withDeleted(true));
         actionParamsService.delete(id);
-        basicActionService.deleteAll(id);
         log.info("CompoundAction with {} id deleted", id);
     }
 
