@@ -2,9 +2,6 @@ server:
   port: 8080
 
 spring:
-  jpa:
-    defer-datasource-initialization: true
-
   cloud:
     consul:
       discovery:
@@ -14,7 +11,7 @@ spring:
           ttl: 10s
 
     function:
-      definition: abstractObjectCreateEventConsumer;abstractObjectUpdateEventConsumer;actionCreateEventConsumer;actionDeleteEventConsumer;actionDataRequestBatchEventConsumer;
+      definition: abstractObjectCreateEventConsumer;abstractObjectUpdateEventConsumer;actionCreateEventConsumer;actionDeleteEventConsumer;actionDataRequestBatchEventConsumer
     stream:
       bindings:
         actionDeleteEventConsumer-in-0:

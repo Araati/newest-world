@@ -11,7 +11,7 @@ spring:
           ttl: 10s
 
     function:
-      definition: actionTimeoutBatchEventConsumer;actionDataBatchEventConsumer;
+      definition: actionTimeoutBatchEventConsumer;actionDataBatchEventConsumer
     stream:
       bindings:
         actionTimeoutBatchEventConsumer-in-0:

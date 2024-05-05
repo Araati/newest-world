@@ -11,7 +11,7 @@ spring:
           ttl: 10s
 
     function:
-      definition: actionTimeoutBatchEventProducer;actionDeleteEventConsumer;actionTimeoutCreateEventConsumer;
+      definition: actionTimeoutBatchEventProducer;actionDeleteEventConsumer;actionTimeoutCreateEventConsumer
     stream:
       bindings:
         actionTimeoutBatchEventProducer-out-0:
