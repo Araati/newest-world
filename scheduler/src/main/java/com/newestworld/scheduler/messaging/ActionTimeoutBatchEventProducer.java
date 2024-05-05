@@ -1,7 +1,6 @@
 package com.newestworld.scheduler.messaging;
 
-import com.newestworld.scheduler.dao.ActionTimeoutRepository;
-import com.newestworld.streams.event.ActionTimeoutBatchEvent;
+import com.newestworld.streams.event.batch.ActionTimeoutBatchEvent;
 import com.newestworld.streams.event.ActionTimeoutEvent;
 import com.newestworld.commons.model.IdReference;
 import com.newestworld.scheduler.service.ActionTimeoutService;
@@ -11,7 +10,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Component

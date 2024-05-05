@@ -1,5 +1,7 @@
-package com.newestworld.streams.event;
+package com.newestworld.streams.event.batch;
 
+import com.newestworld.streams.event.CompoundActionDataEvent;
+import com.newestworld.streams.event.Event;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

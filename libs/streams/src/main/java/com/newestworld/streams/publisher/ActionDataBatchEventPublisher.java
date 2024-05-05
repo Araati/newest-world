@@ -1,6 +1,6 @@
 package com.newestworld.streams.publisher;
 
-import com.newestworld.streams.event.CompoundActionDataBatchEvent;
+import com.newestworld.streams.event.batch.CompoundActionDataBatchEvent;
 import com.newestworld.streams.event.Event;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.stream.function.StreamBridge;

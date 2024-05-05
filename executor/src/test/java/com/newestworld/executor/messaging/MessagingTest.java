@@ -1,13 +1,10 @@
 package com.newestworld.executor.messaging;
 
-import com.newestworld.commons.model.ActionParameter;
-import com.newestworld.commons.model.ActionParameters;
-import com.newestworld.commons.model.ActionType;
-import com.newestworld.commons.model.BasicAction;
 import com.newestworld.executor.ExecutorApplication;
-import com.newestworld.executor.dto.BasicActionDTO;
 import com.newestworld.executor.service.ActionExecutorAggregator;
 import com.newestworld.streams.event.*;
+import com.newestworld.streams.event.batch.ActionDataRequestBatchEvent;
+import com.newestworld.streams.event.batch.ActionTimeoutBatchEvent;
 import com.newestworld.streams.publisher.EventPublisher;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,10 +17,8 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.lang.reflect.Field;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;

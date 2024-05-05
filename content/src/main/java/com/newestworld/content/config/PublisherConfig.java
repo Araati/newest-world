@@ -1,8 +1,7 @@
 package com.newestworld.content.config;
 
-import com.newestworld.streams.event.CompoundActionDataBatchEvent;
+import com.newestworld.streams.event.batch.CompoundActionDataBatchEvent;
 import com.newestworld.streams.event.ActionTimeoutCreateEvent;
-import com.newestworld.streams.publisher.AbstractEventPublisher;
 import com.newestworld.streams.publisher.ActionDataBatchEventPublisher;
 import com.newestworld.streams.publisher.ActionTimeoutCreateEventPublisher;
 import com.newestworld.streams.publisher.EventPublisher;

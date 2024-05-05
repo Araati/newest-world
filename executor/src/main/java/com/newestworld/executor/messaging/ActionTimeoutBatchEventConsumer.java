@@ -1,7 +1,7 @@
 package com.newestworld.executor.messaging;
 
-import com.newestworld.streams.event.ActionDataRequestBatchEvent;
-import com.newestworld.streams.event.ActionTimeoutBatchEvent;
+import com.newestworld.streams.event.batch.ActionDataRequestBatchEvent;
+import com.newestworld.streams.event.batch.ActionTimeoutBatchEvent;
 import com.newestworld.streams.publisher.EventPublisher;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

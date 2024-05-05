@@ -1,6 +1,7 @@
 package com.newestworld.executor.config;
 
 import com.newestworld.streams.event.*;
+import com.newestworld.streams.event.batch.ActionDataRequestBatchEvent;
 import com.newestworld.streams.publisher.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cloud.stream.function.StreamBridge;

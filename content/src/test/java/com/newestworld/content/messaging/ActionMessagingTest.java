@@ -11,6 +11,8 @@ import com.newestworld.content.dto.CompoundActionStructureCreateDTO;
 import com.newestworld.content.service.CompoundActionService;
 import com.newestworld.content.service.CompoundActionStructureService;
 import com.newestworld.streams.event.*;
+import com.newestworld.streams.event.batch.ActionDataRequestBatchEvent;
+import com.newestworld.streams.event.batch.CompoundActionDataBatchEvent;
 import com.newestworld.streams.publisher.EventPublisher;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
