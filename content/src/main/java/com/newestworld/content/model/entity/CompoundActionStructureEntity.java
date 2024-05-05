@@ -20,7 +20,7 @@ import java.util.List;
 public class CompoundActionStructureEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "action")
     private long id;
 
     @Column(unique = true)

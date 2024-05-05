@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
 public class BasicActionEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "action")
     private long id;
 
     private Long localPosition;

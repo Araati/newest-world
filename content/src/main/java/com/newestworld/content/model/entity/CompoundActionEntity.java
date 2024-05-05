@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
 public class CompoundActionEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "action")
     private long id;
 
     private String name;
