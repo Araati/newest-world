@@ -23,14 +23,13 @@ public class ActionTimeoutBatchEventProducer implements Supplier<ActionTimeoutBa
     @Override
     public ActionTimeoutBatchEvent get() {
         final List<IdReference> actionList = service.findAll(System.currentTimeMillis());
-        final var eventList = actionList.stream().map(x -> new ActionTimeoutEvent(x.getId())).collect(Collectors.toList());
+        final var eventList = actionList.stream().map(x -> new ActionTimeoutEvent(x.getId())).toList();
         if (eventList.isEmpty()) {
             log.debug("no timeout actions");
             return null;
         }
 
         log.debug("{} actions has timeout", eventList.size());
-        //fixme it appears that sometimes sending timeouts is faster than deleting, causing the executor to stutter
         service.markAllProcessing(actionList);
         return new ActionTimeoutBatchEvent(eventList);
     }

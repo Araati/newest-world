@@ -15,4 +15,6 @@ public interface ActionTimeoutRepository extends CrudRepository<ActionTimeoutEnt
     default ActionTimeoutEntity mustFindByActionId(final long id) {
         return findByActionId(id).orElseThrow(() -> new ResourceNotFoundException("ActionTimeout", id));
     }
+
+    List<ActionTimeoutEntity> findAllByActionIdIn(final List<Long> actionIds);
 }
