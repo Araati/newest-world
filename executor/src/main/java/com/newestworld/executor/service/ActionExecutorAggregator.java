@@ -20,11 +20,13 @@ import java.util.stream.Collectors;
 public class ActionExecutorAggregator {
 
     private final List<ActionExecutor> executors;
-    private final ExecutionContext context;
+    private ExecutionContext context;
 
     public void startExecution(final CompoundActionDataEvent event) {
         List<BasicAction> steps = event.getBasicActions()
                 .stream().map(BasicActionDTO::new).collect(Collectors.toList());
+
+        context = new ExecutionContext();
         context.addGlobalParameters(event.getInput());
         context.updateGlobalVariable("compound_id", event.getActionId().toString());
 
