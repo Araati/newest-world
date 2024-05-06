@@ -1,7 +1,6 @@
 package com.newestworld.commons.model;
 
 import java.time.LocalDateTime;
-import java.util.Map;
 
 public interface AbstractObject {
 
@@ -11,7 +10,7 @@ public interface AbstractObject {
 
     String getName();
 
-    Map<String, String> getParameters();
+    ModelParameters getParameters();
 
     LocalDateTime getCreatedAt();
 
