@@ -1,8 +1,8 @@
 package com.newestworld.executor.service;
 
 import com.newestworld.commons.model.ActionType;
-import com.newestworld.commons.model.BasicAction;
-import com.newestworld.executor.dto.BasicActionDTO;
+import com.newestworld.commons.model.Node;
+import com.newestworld.executor.dto.NodeDTO;
 import com.newestworld.executor.executors.ActionExecutor;
 import com.newestworld.executor.util.ExecutionContext;
 import com.newestworld.streams.event.CompoundActionDataEvent;
@@ -23,38 +23,38 @@ public class ActionExecutorAggregator {
     private ExecutionContext context;
 
     public void startExecution(final CompoundActionDataEvent event) {
-        List<BasicAction> steps = event.getBasicActions()
-                .stream().map(BasicActionDTO::new).collect(Collectors.toList());
+        List<Node> steps = event.getNodes()
+                .stream().map(NodeDTO::new).collect(Collectors.toList());
 
         context = new ExecutionContext();
         context.addGlobalParameters(event.getInput());
         context.updateGlobalVariable("compound_id", event.getActionId().toString());
 
-        //todo create more suitable exception for missing BasicAction
-        BasicAction start = steps.stream().filter(x -> x.getType().equals(ActionType.START)).findFirst().orElseThrow(
+        //todo create more suitable exception for missing Node
+        Node start = steps.stream().filter(x -> x.getType().equals(ActionType.START)).findFirst().orElseThrow(
                 () -> new RuntimeException(String.format("StartAction is missing in CompoundAction %s", event.getActionId())));
         steps.remove(start);
         execute(start, steps);
     }
 
     @SneakyThrows
-    private void execute(final BasicAction current, final List<BasicAction> basicActions) {
+    private void execute(final Node current, final List<Node> nodes) {
         var supported = executors.stream().filter(x -> x.support(current)).findFirst();
         if (supported.isEmpty()) {
-            log.warn("BasicAction {} with type {} does not have executors", current.getId(), current.getType().name());
+            log.warn("Node {} with type {} does not have executors", current.getId(), current.getType().name());
         } else {
-            basicActions.remove(current);
+            nodes.remove(current);
 
             context.createLocalScope(current.getParameters());
             String next = supported.get().exec(context);
 
             if (!next.isEmpty())    {
-                var nextAction = basicActions.stream()
+                var nextAction = nodes.stream()
                         .filter(x -> next.equals(x.getLocalPosition().toString())).findFirst();
-                //todo create more suitable exception for missing BasicAction
-                execute(nextAction.orElseThrow(() -> new RuntimeException(String.format("BasicAction missing in CompoundAction %s",
+                //todo create more suitable exception for missing Node
+                execute(nextAction.orElseThrow(() -> new RuntimeException(String.format("Node missing in CompoundAction %s",
                                 Long.parseLong(context.getLocalVariable("compound_id").toString())))),
-                        basicActions);
+                        nodes);
             }
         }
     }

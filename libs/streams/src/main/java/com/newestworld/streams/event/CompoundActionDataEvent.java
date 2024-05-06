@@ -16,6 +16,6 @@ public class CompoundActionDataEvent implements Event {
 
     private ModelParameters input;
 
-    private List<BasicActionEvent> basicActions;
+    private List<NodeEvent> nodes;
 
 }

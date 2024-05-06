@@ -1,7 +1,7 @@
 package com.newestworld.streams.event;
 
 import com.newestworld.commons.model.ModelParameters;
-import com.newestworld.commons.model.BasicAction;
+import com.newestworld.commons.model.Node;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class BasicActionEvent implements Event {
+public class NodeEvent implements Event {
 
     private long id;
 
@@ -24,11 +24,11 @@ public class BasicActionEvent implements Event {
 
     private LocalDateTime createdAt;
 
-    public BasicActionEvent(final BasicAction basicAction) {
-        this.id = basicAction.getId();
-        this.localPosition = basicAction.getLocalPosition();
-        this.type = basicAction.getType().getId();
-        this.parameters = basicAction.getParameters();
-        this.createdAt = basicAction.getCreatedAt();
+    public NodeEvent(final Node node) {
+        this.id = node.getId();
+        this.localPosition = node.getLocalPosition();
+        this.type = node.getType().getId();
+        this.parameters = node.getParameters();
+        this.createdAt = node.getCreatedAt();
     }
 }

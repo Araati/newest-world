@@ -1,7 +1,7 @@
 package com.newestworld.executor.executors;
 
 import com.newestworld.commons.model.ActionType;
-import com.newestworld.commons.model.BasicAction;
+import com.newestworld.commons.model.Node;
 import com.newestworld.executor.util.ExecutionContext;
 import com.newestworld.streams.event.AbstractObjectUpdateEvent;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +31,7 @@ public class ModifyExecutor implements ActionExecutor {
     }
 
     @Override
-    public boolean support(final BasicAction basicAction) {
-        return basicAction.getType() == ActionType.MODIFY;
+    public boolean support(final Node node) {
+        return node.getType() == ActionType.MODIFY;
     }
 }

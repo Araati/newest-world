@@ -1,6 +1,6 @@
 package com.newestworld.content.model.entity;
 
-import com.newestworld.content.dto.BasicActionCreateDTO;
+import com.newestworld.content.dto.NodeCreateDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,8 +15,8 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @With
 @Entity
-@Table(name = "basic_action")
-public class BasicActionEntity {
+@Table(name = "node")
+public class NodeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "action")
@@ -34,7 +34,7 @@ public class BasicActionEntity {
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    public BasicActionEntity(final long structureId, final BasicActionCreateDTO source) {
+    public NodeEntity(final long structureId, final NodeCreateDTO source) {
         this.structureId = structureId;
         this.localPosition = source.getLocalPosition();
         this.type = source.getType();

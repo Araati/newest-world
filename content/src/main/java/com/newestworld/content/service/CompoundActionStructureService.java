@@ -1,6 +1,6 @@
 package com.newestworld.content.service;
 
-import com.newestworld.commons.model.BasicAction;
+import com.newestworld.commons.model.Node;
 import com.newestworld.commons.model.CompoundActionStructure;
 import com.newestworld.commons.model.ModelParameters;
 import com.newestworld.content.dao.CompoundActionStructureRepository;
@@ -18,21 +18,21 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CompoundActionStructureService {
 
-    private final BasicActionService basicActionService;
+    private final NodeService nodeService;
     private final ModelParameterService modelParameterService;
     private final CompoundActionStructureRepository compoundActionStructureRepository;
 
     public CompoundActionStructure create(final CompoundActionStructureCreateDTO request) {
         CompoundActionStructureEntity compoundActionStructureEntity = new CompoundActionStructureEntity(request);
         compoundActionStructureRepository.save(compoundActionStructureEntity);
-        List<BasicAction> basicActionDTOS = basicActionService.createAll(compoundActionStructureEntity.getId(), request.getSteps());
+        List<Node> nodeDTOS = nodeService.createAll(compoundActionStructureEntity.getId(), request.getSteps());
         log.info("CompoundActionStructure with {} id created", compoundActionStructureEntity.getId());
-        return new CompoundActionStructureDTO(compoundActionStructureEntity, request.getParameters(), basicActionDTOS);
+        return new CompoundActionStructureDTO(compoundActionStructureEntity, request.getParameters(), nodeDTOS);
     }
 
     public void delete(final long id) {
         compoundActionStructureRepository.save(compoundActionStructureRepository.mustFindByIdAndDeletedIsFalse(id).withDeleted(true));
-        basicActionService.deleteAll(id);
+        nodeService.deleteAll(id);
         // todo: must delete all existing compound with this structureId
         log.info("CompoundActionStructure with {} id deleted", id);
     }
@@ -42,7 +42,7 @@ public class CompoundActionStructureService {
         return new CompoundActionStructureDTO(
                 compoundActionStructureRepository.mustFindByIdAndDeletedIsFalse(id),
                 parameters,
-                basicActionService.findAllById(id)
+                nodeService.findAllById(id)
         );
     }
 
@@ -52,7 +52,7 @@ public class CompoundActionStructureService {
         return new CompoundActionStructureDTO(
                 entity,
                 parameters,
-                basicActionService.findAllById(entity.getId())
+                nodeService.findAllById(entity.getId())
         );
     }
 }

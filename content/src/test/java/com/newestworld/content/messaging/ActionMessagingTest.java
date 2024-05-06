@@ -5,7 +5,7 @@ import com.newestworld.commons.model.ActionType;
 import com.newestworld.commons.model.CompoundAction;
 import com.newestworld.content.ContentApplication;
 import com.newestworld.content.dto.ModelParameterCreateDTO;
-import com.newestworld.content.dto.BasicActionCreateDTO;
+import com.newestworld.content.dto.NodeCreateDTO;
 import com.newestworld.content.dto.CompoundActionCreateDTO;
 import com.newestworld.content.dto.CompoundActionStructureCreateDTO;
 import com.newestworld.content.service.CompoundActionService;
@@ -107,14 +107,14 @@ class ActionMessagingTest {
         Assertions.assertEquals("1", argument.getInput().mustGetByName("$targetId").getData().toString());
         Assertions.assertEquals("1000", argument.getInput().mustGetByName("$amount").getData().toString());
 
-        // verify basic start
-        var startTest = argument.getBasicActions().get(0);
+        // verify start node
+        var startTest = argument.getNodes().get(0);
         Assertions.assertEquals(startTest.getType(), ActionType.START.getId());
         Assertions.assertEquals(1, (long) startTest.getLocalPosition());
         Assertions.assertEquals("2", startTest.getParameters().mustGetByName("next").getData().toString());
 
-        // verify basic end
-        var endTest = argument.getBasicActions().get(1);
+        // verify end node
+        var endTest = argument.getNodes().get(1);
         Assertions.assertEquals(endTest.getType(), ActionType.END.getId());
         Assertions.assertEquals(2, (long) endTest.getLocalPosition());
         Assertions.assertTrue(endTest.getParameters().isEmpty());
@@ -136,8 +136,8 @@ class ActionMessagingTest {
     private void createTestCompound()   {
         String name = "test";
         List<String> input = List.of("$targetId", "$amount");
-        var start = new BasicActionCreateDTO(ActionType.START.getId(), 1L, List.of(new ModelParameterCreateDTO("next", "2")));
-        var end = new BasicActionCreateDTO(ActionType.END.getId(), 2L, List.of());
+        var start = new NodeCreateDTO(ActionType.START.getId(), 1L, List.of(new ModelParameterCreateDTO("next", "2")));
+        var end = new NodeCreateDTO(ActionType.END.getId(), 2L, List.of());
         actionStructureService.create(new CompoundActionStructureCreateDTO(name, input, List.of(start, end)));
     }
 

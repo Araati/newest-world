@@ -11,7 +11,7 @@ public interface CompoundActionStructure {
 
     ModelParameters getParameters();
 
-    List<BasicAction> getSteps();
+    List<Node> getSteps();
 
     LocalDateTime getCreatedAt();
 

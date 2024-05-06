@@ -1,6 +1,5 @@
 package com.newestworld.content.service;
 
-import com.newestworld.commons.exception.ValidationFailedException;
 import com.newestworld.commons.model.*;
 import com.newestworld.content.dao.CompoundActionRepository;
 import com.newestworld.content.dto.*;
@@ -11,17 +10,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.stream.Collectors;
-
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class CompoundActionService {
 
     private final ModelParameterService modelParameterService;
-    private final BasicActionService basicActionService;
+    private final NodeService nodeService;
 
     private final CompoundActionRepository compoundActionRepository;
     private final CompoundActionStructureService compoundActionStructureService;

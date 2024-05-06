@@ -2,8 +2,8 @@ package com.newestworld.content.dto;
 
 import com.newestworld.commons.model.ModelParameters;
 import com.newestworld.commons.model.ActionType;
-import com.newestworld.commons.model.BasicAction;
-import com.newestworld.content.model.entity.BasicActionEntity;
+import com.newestworld.commons.model.Node;
+import com.newestworld.content.model.entity.NodeEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class BasicActionDTO implements BasicAction {
+public class NodeDTO implements Node {
 
     private long id;
 
@@ -25,7 +25,7 @@ public class BasicActionDTO implements BasicAction {
 
     private LocalDateTime createdAt;
 
-    public BasicActionDTO(final BasicActionEntity source, final ModelParameters modelParameters)   {
+    public NodeDTO(final NodeEntity source, final ModelParameters modelParameters)   {
         this.id = source.getId();
         this.localPosition = source.getLocalPosition();
         this.type = ActionType.decode(source.getType());

@@ -10,7 +10,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class BasicActionCreateDTO {
+public class NodeCreateDTO {
 
     @JsonProperty(value = "type", required = true)
     private int type;

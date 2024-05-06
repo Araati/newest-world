@@ -132,8 +132,8 @@ class CompoundActionApiTest {
     private void createTestCompound()   {
         String name = "test";
         List<String> input = List.of("$targetId", "$amount");
-        var start = new BasicActionCreateDTO(ActionType.START.getId(), 1L, List.of(new ModelParameterCreateDTO("next", "2")));
-        var end = new BasicActionCreateDTO(ActionType.END.getId(), 2L, List.of());
+        var start = new NodeCreateDTO(ActionType.START.getId(), 1L, List.of(new ModelParameterCreateDTO("next", "2")));
+        var end = new NodeCreateDTO(ActionType.END.getId(), 2L, List.of());
         actionStructureService.create(new CompoundActionStructureCreateDTO(name, input, List.of(start, end)));
     }
 

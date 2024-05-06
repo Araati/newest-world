@@ -5,7 +5,7 @@ import com.newestworld.commons.model.CompoundActionStructure;
 import com.newestworld.content.facade.CompoundActionFacade;
 import com.newestworld.content.facade.CompoundActionStructureFacade;
 import com.newestworld.content.service.ModelParameterService;
-import com.newestworld.content.service.BasicActionService;
+import com.newestworld.content.service.NodeService;
 import com.newestworld.streams.event.*;
 import com.newestworld.streams.event.batch.ActionDataRequestBatchEvent;
 import com.newestworld.streams.event.batch.CompoundActionDataBatchEvent;
@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ActionDataRequestBatchEventConsumer implements Consumer<ActionDataRequestBatchEvent> {
 
-    private final BasicActionService basicActionService;
+    private final NodeService nodeService;
     private final ModelParameterService modelParameterService;
     private final CompoundActionFacade compoundActionFacade;
     private final CompoundActionStructureFacade compoundActionStructureFacade;
@@ -38,10 +38,10 @@ public class ActionDataRequestBatchEventConsumer implements Consumer<ActionDataR
 
         for (ActionDataRequestEvent request : requests) {
             CompoundActionStructure structure = compoundActionStructureFacade.findById(compoundActionFacade.findById(request.getId()).getStructureId());
-            List<BasicActionEvent> basicActions = basicActionService.findAllById(structure.getId())
-                    .stream().map(BasicActionEvent::new).collect(Collectors.toList());
+            List<NodeEvent> nodes = nodeService.findAllById(structure.getId())
+                    .stream().map(NodeEvent::new).collect(Collectors.toList());
             ModelParameters input = modelParameterService.findById(request.getId());
-            dataEvents.add(new CompoundActionDataEvent(request.getId(), input, basicActions));
+            dataEvents.add(new CompoundActionDataEvent(request.getId(), input, nodes));
         }
 
         actionDataBatchEventPublisher.send(new CompoundActionDataBatchEvent(dataEvents));

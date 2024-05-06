@@ -19,6 +19,6 @@ public class CompoundActionStructureCreateDTO {
     private ModelParameters parameters;
 
     @JsonProperty(value = "steps", required = true)
-    private List<BasicActionCreateDTO> steps;
+    private List<NodeCreateDTO> steps;
 
 }

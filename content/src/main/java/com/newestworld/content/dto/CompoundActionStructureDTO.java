@@ -1,6 +1,6 @@
 package com.newestworld.content.dto;
 
-import com.newestworld.commons.model.BasicAction;
+import com.newestworld.commons.model.Node;
 import com.newestworld.commons.model.CompoundActionStructure;
 import com.newestworld.commons.model.ModelParameters;
 import com.newestworld.content.model.entity.CompoundActionStructureEntity;
@@ -22,11 +22,11 @@ public class CompoundActionStructureDTO implements CompoundActionStructure {
 
     private ModelParameters parameters;
     
-    private List<BasicAction> steps;
+    private List<Node> steps;
     
     private LocalDateTime createdAt;
     
-    public CompoundActionStructureDTO(final CompoundActionStructureEntity source, final ModelParameters parameters, final List<BasicAction> steps) {
+    public CompoundActionStructureDTO(final CompoundActionStructureEntity source, final ModelParameters parameters, final List<Node> steps) {
         this.id = source.getId();
         this.name = source.getName();
         this.parameters = parameters;
