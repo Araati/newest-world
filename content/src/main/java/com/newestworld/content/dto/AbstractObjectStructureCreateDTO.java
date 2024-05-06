@@ -17,6 +17,6 @@ public class AbstractObjectStructureCreateDTO {
     private String name;
 
     @JsonProperty(required = true)
-    private ModelParameters parameters;
+    private List<ModelParameterCreateDTO> parameters;
 
 }
