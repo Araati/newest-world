@@ -17,6 +17,7 @@ public class AbstractObjectStructureService {
 
     private final AbstractObjectStructureRepository repository;
     private final ModelParameterService modelParameterService;
+    private final AbstractObjectService abstractObjectService;
 
     public AbstractObjectStructure create(final AbstractObjectStructureCreateDTO request) {
         AbstractObjectStructureEntity entity = new AbstractObjectStructureEntity(request);
@@ -31,7 +32,8 @@ public class AbstractObjectStructureService {
 
     public void delete(final long id) {
         repository.save(repository.mustFindByIdAndDeletedIsFalse(id).withDeleted(true));
-        // todo: must delete all existing object with this structureId
+        modelParameterService.delete(id);
+        abstractObjectService.deleteAllByStructureId(id);
         log.info("AbstractObjectStructure with {} id deleted", id);
     }
 

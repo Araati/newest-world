@@ -5,12 +5,15 @@ import com.newestworld.commons.model.AbstractObject;
 import com.newestworld.commons.model.AbstractObjectStructure;
 import com.newestworld.commons.model.ModelParameters;
 import com.newestworld.content.dao.AbstractObjectRepository;
+import com.newestworld.content.dao.AbstractObjectStructureRepository;
 import com.newestworld.content.dto.*;
 import com.newestworld.content.model.entity.AbstractObjectEntity;
+import com.newestworld.content.model.entity.AbstractObjectStructureEntity;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -20,12 +23,15 @@ public class AbstractObjectService {
 
     private final AbstractObjectRepository repository;
     private final ModelParameterService modelParameterService;
-    private final AbstractObjectStructureService abstractObjectStructureService;
+    private final AbstractObjectStructureRepository abstractObjectStructureRepository;
 
     public AbstractObject create(final AbstractObjectCreateDTO request) {
 
         // Validation by structure
-        AbstractObjectStructure structure = abstractObjectStructureService.findByName(request.getName());
+        AbstractObjectStructureEntity structureEntity = abstractObjectStructureRepository.mustFindByNameAndDeletedIsFalse(request.getName());
+        AbstractObjectStructure structure = new AbstractObjectStructureDTO(structureEntity,
+                modelParameterService.findById(structureEntity.getId())
+        );
         //fixme validation
         /*
         for (StructureProperty property : structure.getProperties()) {
@@ -73,6 +79,14 @@ public class AbstractObjectService {
     public void delete(final long id) {
         repository.save(repository.mustFindByIdAndDeletedIsFalse(id).withDeleted(true));
         log.info("AbstractObject with {} id deleted", id);
+    }
+
+    public void deleteAllByStructureId(final long id)   {
+        List<AbstractObjectEntity> abstractObjectEntities = repository.findAllByStructureIdAndDeletedIsFalse(id).stream().map(x -> x.withDeleted(true)).toList();
+        repository.saveAll(abstractObjectEntities);
+        for (AbstractObjectEntity abstractObjectEntity : abstractObjectEntities) {
+            log.info("AbstractObject with {} id deleted", abstractObjectEntity.getId());
+        }
     }
 
     public AbstractObject findById(final long id) {
