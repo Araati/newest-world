@@ -6,7 +6,7 @@ public interface Node {
 
     long getId();
 
-    Long getLocalPosition();
+    Long getOrder();
 
     ActionType getType();
 

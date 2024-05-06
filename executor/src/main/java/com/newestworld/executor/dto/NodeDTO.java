@@ -17,7 +17,7 @@ public class NodeDTO implements Node {
 
     private long id;
 
-    private Long localPosition;
+    private Long order;
 
     private ActionType type;
 
@@ -27,7 +27,7 @@ public class NodeDTO implements Node {
 
     public NodeDTO(final NodeEvent nodeEvent) {
         this.id = nodeEvent.getId();
-        this.localPosition = nodeEvent.getLocalPosition();
+        this.order = nodeEvent.getOrder();
         this.type = ActionType.decode(nodeEvent.getType());
         this.parameters = nodeEvent.getParameters();
         this.createdAt = nodeEvent.getCreatedAt();

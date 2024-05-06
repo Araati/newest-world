@@ -50,7 +50,7 @@ public class ActionExecutorAggregator {
 
             if (!next.isEmpty())    {
                 var nextAction = nodes.stream()
-                        .filter(x -> next.equals(x.getLocalPosition().toString())).findFirst();
+                        .filter(x -> next.equals(x.getOrder().toString())).findFirst();
                 //todo create more suitable exception for missing Node
                 execute(nextAction.orElseThrow(() -> new RuntimeException(String.format("Node missing in CompoundAction %s",
                                 Long.parseLong(context.getLocalVariable("compound_id").toString())))),

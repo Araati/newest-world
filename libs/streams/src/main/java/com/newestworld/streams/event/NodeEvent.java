@@ -15,7 +15,7 @@ public class NodeEvent implements Event {
 
     private long id;
 
-    private Long localPosition;
+    private Long order;
 
     // Енамка не передается нормально, разбираться мне лень
     private int type;
@@ -26,7 +26,7 @@ public class NodeEvent implements Event {
 
     public NodeEvent(final Node node) {
         this.id = node.getId();
-        this.localPosition = node.getLocalPosition();
+        this.order = node.getOrder();
         this.type = node.getType().getId();
         this.parameters = node.getParameters();
         this.createdAt = node.getCreatedAt();

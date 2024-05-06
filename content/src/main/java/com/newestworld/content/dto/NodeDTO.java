@@ -17,7 +17,7 @@ public class NodeDTO implements Node {
 
     private long id;
 
-    private Long localPosition;
+    private Long order;
 
     private ActionType type;
 
@@ -27,7 +27,7 @@ public class NodeDTO implements Node {
 
     public NodeDTO(final NodeEntity source, final ModelParameters modelParameters)   {
         this.id = source.getId();
-        this.localPosition = source.getLocalPosition();
+        this.order = source.getOrder();
         this.type = ActionType.decode(source.getType());
         this.parameters = modelParameters;
         this.createdAt = source.getCreatedAt();
