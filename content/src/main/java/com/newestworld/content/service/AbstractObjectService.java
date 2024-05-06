@@ -78,12 +78,14 @@ public class AbstractObjectService {
 
     public void delete(final long id) {
         repository.save(repository.mustFindByIdAndDeletedIsFalse(id).withDeleted(true));
+        modelParameterService.delete(id);
         log.info("AbstractObject with {} id deleted", id);
     }
 
     public void deleteAllByStructureId(final long id)   {
         List<AbstractObjectEntity> abstractObjectEntities = repository.findAllByStructureIdAndDeletedIsFalse(id).stream().map(x -> x.withDeleted(true)).toList();
         repository.saveAll(abstractObjectEntities);
+        modelParameterService.deleteAll(abstractObjectEntities.stream().map(AbstractObjectEntity::getId).toList());
         for (AbstractObjectEntity abstractObjectEntity : abstractObjectEntities) {
             log.info("AbstractObject with {} id deleted", abstractObjectEntity.getId());
         }

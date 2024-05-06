@@ -41,6 +41,11 @@ public class ModelParameterService {
                 .map(x -> x.withDeleted(true)).collect(Collectors.toList()));
     }
 
+    public void deleteAll(final List<Long> ids) {
+        modelParameterRepository.saveAll(modelParameterRepository.findAllByModelIdInAndDeletedIsFalse(ids).stream()
+                .map(x -> x.withDeleted(true)).toList());
+    }
+
     public ModelParameters findById(final long modelId)   {
         List<ModelParameterEntity> actionParamsEntities = modelParameterRepository.findAllByModelIdAndDeletedIsFalse(modelId);
         List<ModelParameter> modelParameterList = new ArrayList<>();

@@ -8,5 +8,6 @@ import java.util.List;
 public interface ModelParameterRepository extends CrudRepository<ModelParameterEntity, Long> {
 
     List<ModelParameterEntity> findAllByModelIdAndDeletedIsFalse(final long id);
+    List<ModelParameterEntity> findAllByModelIdInAndDeletedIsFalse(final List<Long> ids);
 
 }
