@@ -15,12 +15,13 @@ import org.springframework.stereotype.Service;
 public class AbstractObjectStructureService {
 
     private final AbstractObjectStructureRepository repository;
+    private final ModelParameterService modelParameterService;
 
     public AbstractObjectStructure create(final AbstractObjectStructureCreateDTO request) {
         AbstractObjectStructureEntity entity = new AbstractObjectStructureEntity(request);
         repository.save(entity);
         log.info("AbstractObjectStructure with {} id created", entity.getId());
-        return new AbstractObjectStructureDTO(entity);
+        return new AbstractObjectStructureDTO(entity, request.getParameters());
     }
 
     public void delete(final long id) {
@@ -30,12 +31,18 @@ public class AbstractObjectStructureService {
     }
 
     public AbstractObjectStructure findById(final long id) {
-        return new AbstractObjectStructureDTO(repository.mustFindByIdAndDeletedIsFalse(id));
+        return new AbstractObjectStructureDTO(
+                repository.mustFindByIdAndDeletedIsFalse(id),
+                modelParameterService.findById(id)
+                );
     }
 
     public AbstractObjectStructure findByName(final String name)    {
         AbstractObjectStructureEntity entity = repository.mustFindByNameAndDeletedIsFalse(name);
-        return new AbstractObjectStructureDTO(entity);
+        return new AbstractObjectStructureDTO(
+                entity,
+                modelParameterService.findById(entity.getId())
+                );
     }
 
 }

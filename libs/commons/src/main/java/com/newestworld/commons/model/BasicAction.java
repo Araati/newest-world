@@ -10,7 +10,7 @@ public interface BasicAction {
 
     ActionType getType();
 
-    ActionParameters getParameters();
+    ModelParameters getParameters();
 
     LocalDateTime getCreatedAt();
 

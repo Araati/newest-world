@@ -1,6 +1,6 @@
 package com.newestworld.streams.event;
 
-import com.newestworld.commons.model.ActionParameters;
+import com.newestworld.commons.model.ModelParameters;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,7 +14,7 @@ public class CompoundActionDataEvent implements Event {
 
     private Long actionId;
 
-    private ActionParameters input;
+    private ModelParameters input;
 
     private List<BasicActionEvent> basicActions;
 

@@ -19,7 +19,7 @@ public class ActionCreateEventConsumer implements Consumer<CompoundActionCreateE
     @Override
     public void accept(final CompoundActionCreateEvent event) {
         log.debug("CompoundActionCreate message received with name {}", event.getName());
-        facade.create(new CompoundActionCreateDTO(event));
+        facade.create(new CompoundActionCreateDTO(event.getName(), event.getInput()));
     }
 
 }

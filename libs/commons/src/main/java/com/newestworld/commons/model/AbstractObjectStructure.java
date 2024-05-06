@@ -10,7 +10,7 @@ public interface AbstractObjectStructure {
 
     String getName();
 
-    List<StructureProperty> getProperties();
+    ModelParameters getParameters();
 
     LocalDateTime getCreatedAt();
 

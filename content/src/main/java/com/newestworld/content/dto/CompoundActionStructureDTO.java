@@ -2,7 +2,7 @@ package com.newestworld.content.dto;
 
 import com.newestworld.commons.model.BasicAction;
 import com.newestworld.commons.model.CompoundActionStructure;
-import com.newestworld.commons.model.StructureProperty;
+import com.newestworld.commons.model.ModelParameters;
 import com.newestworld.content.model.entity.CompoundActionStructureEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -20,16 +20,16 @@ public class CompoundActionStructureDTO implements CompoundActionStructure {
     
     private String name;
 
-    private List<StructureProperty> properties;
+    private ModelParameters parameters;
     
     private List<BasicAction> steps;
     
     private LocalDateTime createdAt;
     
-    public CompoundActionStructureDTO(final CompoundActionStructureEntity source, final List<BasicAction> steps) {
+    public CompoundActionStructureDTO(final CompoundActionStructureEntity source, final ModelParameters parameters, final List<BasicAction> steps) {
         this.id = source.getId();
         this.name = source.getName();
-        this.properties = source.getProperties();
+        this.parameters = parameters;
         this.steps = steps;
         this.createdAt = source.getCreatedAt();
     }

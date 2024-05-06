@@ -1,6 +1,6 @@
 package com.newestworld.content.model.entity;
 
-import com.newestworld.content.dto.ActionParamsCreateDTO;
+import com.newestworld.content.dto.ModelParameterCreateDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,19 +15,27 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @With
 @Entity
-@Table(name = "action_params")
-public class ActionParamsEntity {
+@Table(name = "model_parameter")
+public class ModelParameterEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name = "action_id")
-    private long actionId;
+    private long modelId;
 
     private String name;
 
-    private String data;
+    private boolean required;
+
+    private String value;
+
+    private String type;
+
+    private String init;
+
+    private Long min;
+    private Long max;
 
     private boolean deleted;
 
@@ -35,9 +43,9 @@ public class ActionParamsEntity {
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    public ActionParamsEntity(final long id, final ActionParamsCreateDTO source) {
-        this.actionId = id;
+    public ModelParameterEntity(final long id, final ModelParameterCreateDTO source) {
+        this.modelId = id;
         this.name = source.getName();
-        this.data = source.getValue();
+        this.value = source.getValue();
     }
 }

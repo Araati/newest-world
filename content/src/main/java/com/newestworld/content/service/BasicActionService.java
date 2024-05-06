@@ -1,6 +1,6 @@
 package com.newestworld.content.service;
 
-import com.newestworld.commons.model.ActionParameters;
+import com.newestworld.commons.model.ModelParameters;
 import com.newestworld.commons.model.BasicAction;
 import com.newestworld.content.dao.BasicActionRepository;
 import com.newestworld.content.dto.BasicActionCreateDTO;
@@ -18,7 +18,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BasicActionService {
 
-    private final ActionParamsService actionParamsService;
+    private final ModelParameterService modelParameterService;
     private final BasicActionRepository basicActionRepository;
 
     public List<BasicAction> createAll(final long actionId, final List<BasicActionCreateDTO> request) {
@@ -26,8 +26,8 @@ public class BasicActionService {
         for (BasicActionCreateDTO basicActionCreateDTO : request) {
             BasicActionEntity basicActionEntity = new BasicActionEntity(actionId, basicActionCreateDTO);
             basicActionRepository.save(basicActionEntity);
-            ActionParameters actionParameters = actionParamsService.create(basicActionEntity.getId(), basicActionCreateDTO.getParams());
-            basicActionDTOS.add(new BasicActionDTO(basicActionEntity, actionParameters));
+            ModelParameters modelParameters = modelParameterService.create(basicActionEntity.getId(), basicActionCreateDTO.getParams());
+            basicActionDTOS.add(new BasicActionDTO(basicActionEntity, modelParameters));
         }
         return basicActionDTOS;
     }
@@ -36,7 +36,7 @@ public class BasicActionService {
         List<BasicActionEntity> basicActionEntities = basicActionRepository.findAllByStructureIdAndDeletedIsFalse(actionId);
         for (BasicActionEntity basicActionEntity : basicActionEntities) {
             basicActionRepository.save(basicActionEntity.withDeleted(true));
-            actionParamsService.delete(actionId);
+            modelParameterService.delete(actionId);
         }
     }
 
@@ -44,7 +44,7 @@ public class BasicActionService {
         List<BasicActionEntity> basicActionEntities = basicActionRepository.findAllByStructureIdAndDeletedIsFalse(actionId);
         List<BasicAction> basicActions = new ArrayList<>();
         for (BasicActionEntity basicActionEntity : basicActionEntities) {
-            basicActions.add(new BasicActionDTO(basicActionEntity, actionParamsService.findById(basicActionEntity.getId())));
+            basicActions.add(new BasicActionDTO(basicActionEntity, modelParameterService.findById(basicActionEntity.getId())));
         }
         return basicActions;
     }

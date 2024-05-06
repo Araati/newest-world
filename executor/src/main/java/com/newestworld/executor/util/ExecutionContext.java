@@ -1,11 +1,10 @@
 package com.newestworld.executor.util;
 
-import com.newestworld.commons.model.ActionParameter;
-import com.newestworld.commons.model.ActionParameters;
+import com.newestworld.commons.model.ModelParameter;
+import com.newestworld.commons.model.ModelParameters;
 import com.newestworld.streams.event.Event;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,19 +23,19 @@ public class ExecutionContext {
         events.add(event);
     }
 
-    public void addGlobalParameters(final ActionParameters parameters)    {
+    public void addGlobalParameters(final ModelParameters parameters)    {
         if (parameters.getAll() != null) {
-            for (ActionParameter parameter : parameters.getAll()) {
+            for (ModelParameter parameter : parameters.getAll()) {
                 global.put(parameter.getName(), parameter.getValue().toString());
             }
         }
     }
 
-    public void createLocalScope(final ActionParameters parameters)    {
+    public void createLocalScope(final ModelParameters parameters)    {
         local.clear();
         local.putAll(global);
         if (parameters.getAll() != null) {
-            for (ActionParameter parameter : parameters.getAll()) {
+            for (ModelParameter parameter : parameters.getAll()) {
                 if (parameter.getValue().toString().startsWith("$"))    {
                     local.put(parameter.getName(), global.get(parameter.getValue().toString()));
                 } else {

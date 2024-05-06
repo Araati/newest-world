@@ -1,10 +1,10 @@
 package com.newestworld.content.messaging;
 
-import com.newestworld.commons.model.ActionParameters;
+import com.newestworld.commons.model.ModelParameters;
 import com.newestworld.commons.model.CompoundActionStructure;
 import com.newestworld.content.facade.CompoundActionFacade;
 import com.newestworld.content.facade.CompoundActionStructureFacade;
-import com.newestworld.content.service.ActionParamsService;
+import com.newestworld.content.service.ModelParameterService;
 import com.newestworld.content.service.BasicActionService;
 import com.newestworld.streams.event.*;
 import com.newestworld.streams.event.batch.ActionDataRequestBatchEvent;
@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 public class ActionDataRequestBatchEventConsumer implements Consumer<ActionDataRequestBatchEvent> {
 
     private final BasicActionService basicActionService;
-    private final ActionParamsService actionParamsService;
+    private final ModelParameterService modelParameterService;
     private final CompoundActionFacade compoundActionFacade;
     private final CompoundActionStructureFacade compoundActionStructureFacade;
     private final EventPublisher<CompoundActionDataBatchEvent> actionDataBatchEventPublisher;
@@ -40,7 +40,7 @@ public class ActionDataRequestBatchEventConsumer implements Consumer<ActionDataR
             CompoundActionStructure structure = compoundActionStructureFacade.findById(compoundActionFacade.findById(request.getId()).getStructureId());
             List<BasicActionEvent> basicActions = basicActionService.findAllById(structure.getId())
                     .stream().map(BasicActionEvent::new).collect(Collectors.toList());
-            ActionParameters input = actionParamsService.findById(request.getId());
+            ModelParameters input = modelParameterService.findById(request.getId());
             dataEvents.add(new CompoundActionDataEvent(request.getId(), input, basicActions));
         }
 

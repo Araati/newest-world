@@ -19,6 +19,6 @@ public class BasicActionCreateDTO {
     private Long localPosition;
 
     @JsonProperty(value = "params")
-    private List<ActionParamsCreateDTO> params;
+    private List<ModelParameterCreateDTO> params;
 
 }

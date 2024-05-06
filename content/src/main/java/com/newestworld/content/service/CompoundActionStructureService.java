@@ -2,6 +2,7 @@ package com.newestworld.content.service;
 
 import com.newestworld.commons.model.BasicAction;
 import com.newestworld.commons.model.CompoundActionStructure;
+import com.newestworld.commons.model.ModelParameters;
 import com.newestworld.content.dao.CompoundActionStructureRepository;
 import com.newestworld.content.dto.CompoundActionStructureCreateDTO;
 import com.newestworld.content.dto.CompoundActionStructureDTO;
@@ -18,6 +19,7 @@ import java.util.List;
 public class CompoundActionStructureService {
 
     private final BasicActionService basicActionService;
+    private final ModelParameterService modelParameterService;
     private final CompoundActionStructureRepository compoundActionStructureRepository;
 
     public CompoundActionStructure create(final CompoundActionStructureCreateDTO request) {
@@ -25,7 +27,7 @@ public class CompoundActionStructureService {
         compoundActionStructureRepository.save(compoundActionStructureEntity);
         List<BasicAction> basicActionDTOS = basicActionService.createAll(compoundActionStructureEntity.getId(), request.getSteps());
         log.info("CompoundActionStructure with {} id created", compoundActionStructureEntity.getId());
-        return new CompoundActionStructureDTO(compoundActionStructureEntity, basicActionDTOS);
+        return new CompoundActionStructureDTO(compoundActionStructureEntity, request.getParameters(), basicActionDTOS);
     }
 
     public void delete(final long id) {
@@ -36,13 +38,21 @@ public class CompoundActionStructureService {
     }
 
     public CompoundActionStructure findById(final long id) {
-        return new CompoundActionStructureDTO(compoundActionStructureRepository.mustFindByIdAndDeletedIsFalse(id),
-                basicActionService.findAllById(id));
+        ModelParameters parameters = modelParameterService.findById(id);
+        return new CompoundActionStructureDTO(
+                compoundActionStructureRepository.mustFindByIdAndDeletedIsFalse(id),
+                parameters,
+                basicActionService.findAllById(id)
+        );
     }
 
     public CompoundActionStructure findByName(final String name)    {
         CompoundActionStructureEntity entity = compoundActionStructureRepository.mustFindByNameAndDeletedIsFalse(name);
-        return new CompoundActionStructureDTO(entity,
-                basicActionService.findAllById(entity.getId()));
+        ModelParameters parameters = modelParameterService.findById(entity.getId());
+        return new CompoundActionStructureDTO(
+                entity,
+                parameters,
+                basicActionService.findAllById(entity.getId())
+        );
     }
 }

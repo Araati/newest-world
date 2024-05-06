@@ -1,6 +1,6 @@
 package com.newestworld.streams.event;
 
-import com.newestworld.commons.model.ActionParameters;
+import com.newestworld.commons.model.ModelParameters;
 import com.newestworld.commons.model.BasicAction;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -20,7 +20,7 @@ public class BasicActionEvent implements Event {
     // Енамка не передается нормально, разбираться мне лень
     private int type;
 
-    private ActionParameters parameters;
+    private ModelParameters parameters;
 
     private LocalDateTime createdAt;
 

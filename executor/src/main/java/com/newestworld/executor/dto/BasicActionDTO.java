@@ -1,6 +1,6 @@
 package com.newestworld.executor.dto;
 
-import com.newestworld.commons.model.ActionParameters;
+import com.newestworld.commons.model.ModelParameters;
 import com.newestworld.commons.model.ActionType;
 import com.newestworld.commons.model.BasicAction;
 import com.newestworld.streams.event.BasicActionEvent;
@@ -21,7 +21,7 @@ public class BasicActionDTO implements BasicAction {
 
     private ActionType type;
 
-    private ActionParameters parameters;
+    private ModelParameters parameters;
 
     private LocalDateTime createdAt;
 

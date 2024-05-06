@@ -8,12 +8,23 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ActionParamsCreateDTO {
+public class ModelParameterCreateDTO {
 
-    @JsonProperty(value = "name", required = true)
+    @JsonProperty(required = true)
     private String name;
 
-    @JsonProperty(value = "value", required = true)
+    @JsonProperty(required = true)
+    private boolean required;
+
     private String value;
+
+    @JsonProperty(required = true)
+    private String type;
+
+    private String init;
+
+    private Long min;
+
+    private Long max;
 
 }

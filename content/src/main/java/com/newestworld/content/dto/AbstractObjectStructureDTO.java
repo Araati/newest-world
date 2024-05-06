@@ -1,8 +1,8 @@
 package com.newestworld.content.dto;
 
 import com.newestworld.commons.model.AbstractObjectStructure;
+import com.newestworld.commons.model.ModelParameters;
 import com.newestworld.content.model.entity.AbstractObjectStructureEntity;
-import com.newestworld.commons.model.StructureProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,14 +19,14 @@ public class AbstractObjectStructureDTO implements AbstractObjectStructure {
 
     private String name;
 
-    private List<StructureProperty> properties;
+    private ModelParameters parameters;
 
     private LocalDateTime createdAt;
 
-    public AbstractObjectStructureDTO(final AbstractObjectStructureEntity source) {
+    public AbstractObjectStructureDTO(final AbstractObjectStructureEntity source, final ModelParameters parameters) {
         this.id = source.getId();
         this.name = source.getName();
-        this.properties = source.getProperties();
+        this.parameters = parameters;
         this.createdAt = source.getCreatedAt();
     }
 }

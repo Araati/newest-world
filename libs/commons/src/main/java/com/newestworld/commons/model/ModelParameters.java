@@ -9,17 +9,17 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 import java.util.Optional;
 
-@JsonDeserialize(as = ActionParameters.Impl.class)
-public interface ActionParameters {
+@JsonDeserialize(as = ModelParameters.Impl.class)
+public interface ModelParameters {
 
-    List<ActionParameter> getAll();
+    List<ModelParameter> getAll();
 
-    default Optional<ActionParameter> getByName(final String name) {
+    default Optional<ModelParameter> getByName(final String name) {
         return getAll().stream().filter(x -> x.getName().equals(name)).findFirst();
     }
 
-    default ActionParameter mustGetByName(final String name) {
-        return getByName(name).orElseThrow(() -> new ResourceNotFoundException("Action parameter", name));
+    default ModelParameter mustGetByName(final String name) {
+        return getByName(name).orElseThrow(() -> new ResourceNotFoundException("Model parameter", name));
     }
 
     default int getSize() {
@@ -31,17 +31,17 @@ public interface ActionParameters {
     }
 
     @NoArgsConstructor
-    class Impl implements ActionParameters {
+    class Impl implements ModelParameters {
 
         @JsonValue
-        private List<ActionParameter> parameters;
+        private List<ModelParameter> parameters;
 
-        public List<ActionParameter> getAll() {
+        public List<ModelParameter> getAll() {
             return parameters;
         }
 
         @JsonCreator
-        public Impl(final List<ActionParameter> parameters) {
+        public Impl(final List<ModelParameter> parameters) {
             this.parameters = parameters;
         }
     }

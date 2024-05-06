@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class CompoundActionService {
 
-    private final ActionParamsService actionParamsService;
+    private final ModelParameterService modelParameterService;
     private final BasicActionService basicActionService;
 
     private final CompoundActionRepository compoundActionRepository;
@@ -35,34 +35,38 @@ public class CompoundActionService {
 
         // Validation by structure
         CompoundActionStructure structure = compoundActionStructureService.findByName(request.getName());
-        List<String> input = request.getInput().stream().map(ActionParamsCreateDTO::getName).collect(Collectors.toList());
+        //fixme validation
+        /*
+        List<String> input = request.getInput().stream().map(ModelParameterCreateDTO::getName).collect(Collectors.toList());
         List<StructureProperty> expectedInputs = structure.getProperties();
         if (!new HashSet<>(input).containsAll(expectedInputs.stream().map(StructureProperty::getName).toList())) {
             throw new ValidationFailedException();
-        }
+        }*/
 
         // Saving compound
         CompoundActionEntity compoundActionEntity = new CompoundActionEntity(request, structure.getId());
         compoundActionRepository.save(compoundActionEntity);
 
         // Saving compound parameters
-        ActionParameters actionParameters = actionParamsService.create(compoundActionEntity.getId(), request.getInput());
+        //fixme insert values from createDTO into modelParams from structure and save them
+        ModelParameters modelParameters = null;
+        //ModelParameters modelParameters = modelParameterService.create(compoundActionEntity.getId(), request.getInput());
         actionTimeoutCreateEventPublisher.send(new ActionTimeoutCreateEvent(compoundActionEntity.getId(), timeout));
 
         log.info("CompoundAction with {} id created", compoundActionEntity.getId());
-        return new CompoundActionDTO(compoundActionEntity, actionParameters, timeout);
+        return new CompoundActionDTO(compoundActionEntity, modelParameters, timeout);
 
     }
 
     public void delete(final long id) {
         compoundActionRepository.save(compoundActionRepository.mustFindByIdAndDeletedIsFalse(id).withDeleted(true));
-        actionParamsService.delete(id);
+        modelParameterService.delete(id);
         log.info("CompoundAction with {} id deleted", id);
     }
 
     public CompoundAction findById(final long id) {
         CompoundActionEntity entity = compoundActionRepository.mustFindByIdAndDeletedIsFalse(id);
-        ActionParameters actionParameters = actionParamsService.findById(id);
-        return new CompoundActionDTO(entity, actionParameters, timeout);
+        ModelParameters modelParameters = modelParameterService.findById(id);
+        return new CompoundActionDTO(entity, modelParameters, timeout);
     }
 }

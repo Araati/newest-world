@@ -4,7 +4,7 @@ import com.newestworld.commons.exception.ResourceNotFoundException;
 import com.newestworld.commons.model.ActionType;
 import com.newestworld.commons.model.CompoundAction;
 import com.newestworld.content.ContentApplication;
-import com.newestworld.content.dto.ActionParamsCreateDTO;
+import com.newestworld.content.dto.ModelParameterCreateDTO;
 import com.newestworld.content.dto.BasicActionCreateDTO;
 import com.newestworld.content.dto.CompoundActionCreateDTO;
 import com.newestworld.content.dto.CompoundActionStructureCreateDTO;
@@ -92,8 +92,8 @@ class ActionMessagingTest {
 
         createTestCompound();
 
-        compoundActionService.create(new CompoundActionCreateDTO("test", List.of(new ActionParamsCreateDTO("$targetId", "1"),
-                new ActionParamsCreateDTO("$amount", "1000"))));
+        compoundActionService.create(new CompoundActionCreateDTO("test", List.of(new ModelParameterCreateDTO("$targetId", "1"),
+                new ModelParameterCreateDTO("$amount", "1000"))));
 
         dataRequestBatchEventConsumer.accept(new ActionDataRequestBatchEvent(new HashSet<>(List.of(new ActionDataRequestEvent(3)))));
 
@@ -136,7 +136,7 @@ class ActionMessagingTest {
     private void createTestCompound()   {
         String name = "test";
         List<String> input = List.of("$targetId", "$amount");
-        var start = new BasicActionCreateDTO(ActionType.START.getId(), 1L, List.of(new ActionParamsCreateDTO("next", "2")));
+        var start = new BasicActionCreateDTO(ActionType.START.getId(), 1L, List.of(new ModelParameterCreateDTO("next", "2")));
         var end = new BasicActionCreateDTO(ActionType.END.getId(), 2L, List.of());
         actionStructureService.create(new CompoundActionStructureCreateDTO(name, input, List.of(start, end)));
     }

@@ -1,6 +1,6 @@
 package com.newestworld.content.dto;
 
-import com.newestworld.commons.model.ActionParameters;
+import com.newestworld.commons.model.ModelParameters;
 import com.newestworld.commons.model.ActionType;
 import com.newestworld.commons.model.BasicAction;
 import com.newestworld.content.model.entity.BasicActionEntity;
@@ -21,15 +21,15 @@ public class BasicActionDTO implements BasicAction {
 
     private ActionType type;
 
-    private ActionParameters parameters;
+    private ModelParameters parameters;
 
     private LocalDateTime createdAt;
 
-    public BasicActionDTO(final BasicActionEntity source, final ActionParameters actionParameters)   {
+    public BasicActionDTO(final BasicActionEntity source, final ModelParameters modelParameters)   {
         this.id = source.getId();
         this.localPosition = source.getLocalPosition();
         this.type = ActionType.decode(source.getType());
-        this.parameters = actionParameters;
+        this.parameters = modelParameters;
         this.createdAt = source.getCreatedAt();
     }
 }

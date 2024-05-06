@@ -3,7 +3,7 @@ package com.newestworld.content.controller.v1;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
 import com.newestworld.commons.exception.ResourceNotFoundException;
-import com.newestworld.commons.model.ActionParameter;
+import com.newestworld.commons.model.ModelParameter;
 import com.newestworld.commons.model.ActionType;
 import com.newestworld.content.ContentApplication;
 import com.newestworld.content.dto.*;
@@ -70,15 +70,15 @@ class CompoundActionApiTest {
     @Test
     void create() throws Exception {
         createTestCompound();
-        List<ActionParameter> input = List.of(new ActionParameter(3, "$targetId", "1"),
-                new ActionParameter(3, "$amount", "1000"));
+        List<ModelParameter> input = List.of(new ModelParameter(3, "$targetId", "1"),
+                new ModelParameter(3, "$amount", "1000"));
 
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.post("/v1/compound_action")
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .characterEncoding("UTF-8")
-                .content(mapper.writeValueAsString(new CompoundActionCreateDTO("test", List.of(new ActionParamsCreateDTO("$targetId", "1"),
-                        new ActionParamsCreateDTO("$amount", "1000")))));
+                .content(mapper.writeValueAsString(new CompoundActionCreateDTO("test", List.of(new ModelParameterCreateDTO("$targetId", "1"),
+                        new ModelParameterCreateDTO("$amount", "1000")))));
 
         mvc.perform(requestBuilder)
                 .andDo(print())
@@ -97,8 +97,8 @@ class CompoundActionApiTest {
     @Test
     void delete() throws Exception {
         createTestCompound();
-        compoundActionService.create(new CompoundActionCreateDTO("test", List.of(new ActionParamsCreateDTO("$targetId", "1"),
-                new ActionParamsCreateDTO("$amount", "1000"))));
+        compoundActionService.create(new CompoundActionCreateDTO("test", List.of(new ModelParameterCreateDTO("$targetId", "1"),
+                new ModelParameterCreateDTO("$amount", "1000"))));
 
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.delete("/v1/compound_action/3");
 
@@ -111,10 +111,10 @@ class CompoundActionApiTest {
     @Test
     void findById() throws Exception {
         createTestCompound();
-        List<ActionParameter> input = List.of(new ActionParameter(3, "$targetId", "1"),
-                new ActionParameter(3, "$amount", "1000"));
-        compoundActionService.create(new CompoundActionCreateDTO("test", List.of(new ActionParamsCreateDTO("$targetId", "1"),
-                new ActionParamsCreateDTO("$amount", "1000"))));
+        List<ModelParameter> input = List.of(new ModelParameter(3, "$targetId", "1"),
+                new ModelParameter(3, "$amount", "1000"));
+        compoundActionService.create(new CompoundActionCreateDTO("test", List.of(new ModelParameterCreateDTO("$targetId", "1"),
+                new ModelParameterCreateDTO("$amount", "1000"))));
 
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/v1/compound_action/3");
 
@@ -132,7 +132,7 @@ class CompoundActionApiTest {
     private void createTestCompound()   {
         String name = "test";
         List<String> input = List.of("$targetId", "$amount");
-        var start = new BasicActionCreateDTO(ActionType.START.getId(), 1L, List.of(new ActionParamsCreateDTO("next", "2")));
+        var start = new BasicActionCreateDTO(ActionType.START.getId(), 1L, List.of(new ModelParameterCreateDTO("next", "2")));
         var end = new BasicActionCreateDTO(ActionType.END.getId(), 2L, List.of());
         actionStructureService.create(new CompoundActionStructureCreateDTO(name, input, List.of(start, end)));
     }

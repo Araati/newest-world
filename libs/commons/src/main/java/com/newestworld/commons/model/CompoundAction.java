@@ -10,7 +10,7 @@ public interface CompoundAction {
 
     long getStructureId();
 
-    ActionParameters getInput();
+    ModelParameters getParameters();
 
     LocalDateTime getCreatedAt();
 
