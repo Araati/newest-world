@@ -22,7 +22,7 @@ public class NodeEntity {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private long id;
 
-    private Long order;
+    private Long position;
 
     private long structureId;
 
@@ -36,7 +36,7 @@ public class NodeEntity {
 
     public NodeEntity(final long structureId, final NodeCreateDTO source) {
         this.structureId = structureId;
-        this.order = source.getOrder();
+        this.position = source.getPosition();
         this.type = source.getType();
     }
 }

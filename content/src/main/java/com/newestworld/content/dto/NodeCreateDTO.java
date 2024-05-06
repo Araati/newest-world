@@ -15,8 +15,8 @@ public class NodeCreateDTO {
     @JsonProperty(value = "type", required = true)
     private int type;
 
-    @JsonProperty(value = "order", required = true)
-    private Long order;
+    @JsonProperty(value = "position", required = true)
+    private Long position;
 
     @JsonProperty(value = "params")
     private List<ModelParameterCreateDTO> params;

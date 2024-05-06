@@ -110,13 +110,13 @@ class ActionMessagingTest {
         // verify start node
         var startTest = argument.getNodes().get(0);
         Assertions.assertEquals(startTest.getType(), ActionType.START.getId());
-        Assertions.assertEquals(1, (long) startTest.getOrder());
+        Assertions.assertEquals(1, (long) startTest.getPosition());
         Assertions.assertEquals("2", startTest.getParameters().mustGetByName("next").getData().toString());
 
         // verify end node
         var endTest = argument.getNodes().get(1);
         Assertions.assertEquals(endTest.getType(), ActionType.END.getId());
-        Assertions.assertEquals(2, (long) endTest.getOrder());
+        Assertions.assertEquals(2, (long) endTest.getPosition());
         Assertions.assertTrue(endTest.getParameters().isEmpty());
     }
 
