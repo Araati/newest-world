@@ -5,7 +5,7 @@ import com.newestworld.commons.model.Node;
 import com.newestworld.executor.dto.NodeDTO;
 import com.newestworld.executor.executors.ActionExecutor;
 import com.newestworld.executor.util.ExecutionContext;
-import com.newestworld.streams.event.CompoundActionDataEvent;
+import com.newestworld.streams.event.ActionDataEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -22,17 +22,17 @@ public class ActionExecutorAggregator {
     private final List<ActionExecutor> executors;
     private ExecutionContext context;
 
-    public void startExecution(final CompoundActionDataEvent event) {
+    public void startExecution(final ActionDataEvent event) {
         List<Node> steps = event.getNodes()
                 .stream().map(NodeDTO::new).collect(Collectors.toList());
 
         context = new ExecutionContext();
         context.addGlobalParameters(event.getInput());
-        context.updateGlobalVariable("compound_id", event.getActionId().toString());
+        context.updateGlobalVariable("action_id", event.getActionId().toString());
 
         //todo create more suitable exception for missing Node
         Node start = steps.stream().filter(x -> x.getType().equals(ActionType.START)).findFirst().orElseThrow(
-                () -> new RuntimeException(String.format("StartAction is missing in CompoundAction %s", event.getActionId())));
+                () -> new RuntimeException(String.format("StartAction is missing in Action %s", event.getActionId())));
         steps.remove(start);
         execute(start, steps);
     }
@@ -52,8 +52,8 @@ public class ActionExecutorAggregator {
                 var nextAction = nodes.stream()
                         .filter(x -> next.equals(x.getOrder().toString())).findFirst();
                 //todo create more suitable exception for missing Node
-                execute(nextAction.orElseThrow(() -> new RuntimeException(String.format("Node missing in CompoundAction %s",
-                                Long.parseLong(context.getLocalVariable("compound_id").toString())))),
+                execute(nextAction.orElseThrow(() -> new RuntimeException(String.format("Node missing in Action %s",
+                                Long.parseLong(context.getLocalVariable("action_id").toString())))),
                         nodes);
             }
         }

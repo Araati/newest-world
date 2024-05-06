@@ -2,17 +2,17 @@ package com.newestworld.content.messaging;
 
 import com.newestworld.commons.exception.ResourceNotFoundException;
 import com.newestworld.commons.model.ActionType;
-import com.newestworld.commons.model.CompoundAction;
+import com.newestworld.commons.model.Action;
 import com.newestworld.content.ContentApplication;
 import com.newestworld.content.dto.ModelParameterCreateDTO;
 import com.newestworld.content.dto.NodeCreateDTO;
-import com.newestworld.content.dto.CompoundActionCreateDTO;
-import com.newestworld.content.dto.CompoundActionStructureCreateDTO;
-import com.newestworld.content.service.CompoundActionService;
-import com.newestworld.content.service.CompoundActionStructureService;
+import com.newestworld.content.dto.ActionCreateDTO;
+import com.newestworld.content.dto.ActionStructureCreateDTO;
+import com.newestworld.content.service.ActionService;
+import com.newestworld.content.service.ActionStructureService;
 import com.newestworld.streams.event.*;
 import com.newestworld.streams.event.batch.ActionDataRequestBatchEvent;
-import com.newestworld.streams.event.batch.CompoundActionDataBatchEvent;
+import com.newestworld.streams.event.batch.ActionDataBatchEvent;
 import com.newestworld.streams.publisher.EventPublisher;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -35,9 +35,9 @@ import static org.mockito.Mockito.*;
 class ActionMessagingTest {
 
     @Autowired
-    private CompoundActionStructureService actionStructureService;
+    private ActionStructureService actionStructureService;
     @Autowired
-    private CompoundActionService compoundActionService;
+    private ActionService actionService;
 
     @Autowired
     private ActionCreateEventConsumer createEventConsumer;
@@ -49,34 +49,34 @@ class ActionMessagingTest {
     @Autowired
     private EventPublisher<ActionTimeoutCreateEvent> actionTimeoutCreateEventPublisher;
     @Autowired
-    private EventPublisher<CompoundActionDataBatchEvent> actionDataBatchEventPublisher;
+    private EventPublisher<ActionDataBatchEvent> actionDataBatchEventPublisher;
 
     @BeforeEach
     void setUp() throws IllegalAccessException {
         actionTimeoutCreateEventPublisher = mock(EventPublisher.class);
         Field field = ReflectionUtils
-                .findFields(CompoundActionService.class, f -> f.getName().equals("actionTimeoutCreateEventPublisher"),
+                .findFields(ActionService.class, f -> f.getName().equals("actionTimeoutCreateEventPublisher"),
                         ReflectionUtils.HierarchyTraversalMode.TOP_DOWN)
                 .get(0);
 
         field.setAccessible(true);
-        field.set(compoundActionService, actionTimeoutCreateEventPublisher);
+        field.set(actionService, actionTimeoutCreateEventPublisher);
     }
     @Test
     void actionCreateEventConsume() {
 
-        createTestCompound();
+        createTestAction();
 
         Map<String, String> properties = new HashMap<>();
         properties.put("$targetId", "1");
         properties.put("$amount", "1000");
-        createEventConsumer.accept(new CompoundActionCreateEvent("test", properties));
+        createEventConsumer.accept(new ActionCreateEvent("test", properties));
 
-        CompoundAction compoundAction = compoundActionService.findById(3);
-        Assertions.assertSame("test", compoundAction.getName());
-        Assertions.assertEquals(1, compoundAction.getStructureId());
-        Assertions.assertEquals("1", compoundAction.getInput().mustGetByName("$targetId").getValue());
-        Assertions.assertEquals("1000", compoundAction.getInput().mustGetByName("$amount").getValue().toString());
+        Action action = actionService.findById(3);
+        Assertions.assertSame("test", action.getName());
+        Assertions.assertEquals(1, action.getStructureId());
+        Assertions.assertEquals("1", action.getInput().mustGetByName("$targetId").getValue());
+        Assertions.assertEquals("1000", action.getInput().mustGetByName("$amount").getValue().toString());
     }
 
     @Test
@@ -90,15 +90,15 @@ class ActionMessagingTest {
         field.setAccessible(true);
         field.set(dataRequestBatchEventConsumer, actionDataBatchEventPublisher);
 
-        createTestCompound();
+        createTestAction();
 
-        compoundActionService.create(new CompoundActionCreateDTO("test", List.of(new ModelParameterCreateDTO("$targetId", "1"),
+        actionService.create(new ActionCreateDTO("test", List.of(new ModelParameterCreateDTO("$targetId", "1"),
                 new ModelParameterCreateDTO("$amount", "1000"))));
 
         dataRequestBatchEventConsumer.accept(new ActionDataRequestBatchEvent(new HashSet<>(List.of(new ActionDataRequestEvent(3)))));
 
         // get batch received by mocked publisher
-        final ArgumentCaptor<CompoundActionDataBatchEvent> captor = ArgumentCaptor.forClass(CompoundActionDataBatchEvent.class);
+        final ArgumentCaptor<ActionDataBatchEvent> captor = ArgumentCaptor.forClass(ActionDataBatchEvent.class);
         verify(actionDataBatchEventPublisher).send(captor.capture());
 
         // verify action and inputs
@@ -122,23 +122,23 @@ class ActionMessagingTest {
 
     @Test
     void actionDeleteEventConsume() {
-        createTestCompound();
+        createTestAction();
         Map<String, String> properties = new HashMap<>();
         properties.put("$targetId", "1");
         properties.put("$amount", "1000");
-        compoundActionService.create(new CompoundActionCreateDTO(new CompoundActionCreateEvent("test", properties)));
+        actionService.create(new ActionCreateDTO(new ActionCreateEvent("test", properties)));
 
-        Assertions.assertDoesNotThrow(() -> compoundActionService.findById(3));
+        Assertions.assertDoesNotThrow(() -> actionService.findById(3));
         actionDeleteEventConsumer.accept(new ActionDeleteEvent(3));
-        Assertions.assertThrows(ResourceNotFoundException.class, () -> compoundActionService.findById(3));
+        Assertions.assertThrows(ResourceNotFoundException.class, () -> actionService.findById(3));
     }
 
-    private void createTestCompound()   {
+    private void createTestAction()   {
         String name = "test";
         List<String> input = List.of("$targetId", "$amount");
         var start = new NodeCreateDTO(ActionType.START.getId(), 1L, List.of(new ModelParameterCreateDTO("next", "2")));
         var end = new NodeCreateDTO(ActionType.END.getId(), 2L, List.of());
-        actionStructureService.create(new CompoundActionStructureCreateDTO(name, input, List.of(start, end)));
+        actionStructureService.create(new ActionStructureCreateDTO(name, input, List.of(start, end)));
     }
 
 }

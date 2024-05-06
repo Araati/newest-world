@@ -3,7 +3,7 @@ package com.newestworld.executor.executors;
 import com.newestworld.commons.model.ActionType;
 import com.newestworld.commons.model.Node;
 import com.newestworld.executor.util.ExecutionContext;
-import com.newestworld.streams.event.CompoundActionCreateEvent;
+import com.newestworld.streams.event.ActionCreateEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -13,7 +13,7 @@ import java.util.HashMap;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class CreateCompoundActionExecutor implements ActionExecutor {
+public class CreateActionExecutor implements ActionExecutor {
 
     @Override
     public String exec(final ExecutionContext context)  {
@@ -27,12 +27,12 @@ public class CreateCompoundActionExecutor implements ActionExecutor {
                 properties.put(pair.getKey(), pair.getValue());
             }
         }
-        context.addEvent(new CompoundActionCreateEvent(name.toString(), properties));
+        context.addEvent(new ActionCreateEvent(name.toString(), properties));
         return context.getLocalVariable("next").toString();
     }
 
     @Override
     public boolean support(final Node node)    {
-        return node.getType() == ActionType.CREATE_COMPOUND_ACTION;
+        return node.getType() == ActionType.CREATE_ACTION;
     }
 }

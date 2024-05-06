@@ -1,8 +1,8 @@
 package com.newestworld.content.dto;
 
 import com.newestworld.commons.model.ModelParameters;
-import com.newestworld.commons.model.CompoundAction;
-import com.newestworld.content.model.entity.CompoundActionEntity;
+import com.newestworld.commons.model.Action;
+import com.newestworld.content.model.entity.ActionEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class CompoundActionDTO implements CompoundAction {
+public class ActionDTO implements Action {
 
     private long id;
 
@@ -26,7 +26,7 @@ public class CompoundActionDTO implements CompoundAction {
 
     private LocalDateTime createdAt;
 
-    public CompoundActionDTO(final CompoundActionEntity source, final ModelParameters source1, final long timeout)    {
+    public ActionDTO(final ActionEntity source, final ModelParameters source1, final long timeout)    {
         this.id = source.getId();
         this.name = source.getName();
         this.structureId = source.getStructureId();

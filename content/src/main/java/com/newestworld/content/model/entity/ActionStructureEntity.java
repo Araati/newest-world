@@ -1,6 +1,6 @@
 package com.newestworld.content.model.entity;
 
-import com.newestworld.content.dto.CompoundActionCreateDTO;
+import com.newestworld.content.dto.ActionStructureCreateDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,16 +15,15 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @With
 @Entity
-@Table(name = "compound_action")
-public class CompoundActionEntity {
+@Table(name = "action_structure")
+public class ActionStructureEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "action")
     private long id;
 
+    @Column(unique = true)
     private String name;
-
-    private long structureId;
 
     private boolean deleted;
 
@@ -32,8 +31,7 @@ public class CompoundActionEntity {
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    public CompoundActionEntity(final CompoundActionCreateDTO source, final long structureId) {
-        this.name = source.getName();
-        this.structureId = structureId;
+    public ActionStructureEntity(final ActionStructureCreateDTO request) {
+        this.name = request.getName();
     }
 }

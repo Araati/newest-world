@@ -1,9 +1,9 @@
 package com.newestworld.content.dto;
 
 import com.newestworld.commons.model.Node;
-import com.newestworld.commons.model.CompoundActionStructure;
+import com.newestworld.commons.model.ActionStructure;
 import com.newestworld.commons.model.ModelParameters;
-import com.newestworld.content.model.entity.CompoundActionStructureEntity;
+import com.newestworld.content.model.entity.ActionStructureEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,7 +14,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class CompoundActionStructureDTO implements CompoundActionStructure {
+public class ActionStructureDTO implements ActionStructure {
     
     private long id;
     
@@ -26,7 +26,7 @@ public class CompoundActionStructureDTO implements CompoundActionStructure {
     
     private LocalDateTime createdAt;
     
-    public CompoundActionStructureDTO(final CompoundActionStructureEntity source, final ModelParameters parameters, final List<Node> steps) {
+    public ActionStructureDTO(final ActionStructureEntity source, final ModelParameters parameters, final List<Node> steps) {
         this.id = source.getId();
         this.name = source.getName();
         this.parameters = parameters;

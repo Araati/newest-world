@@ -31,7 +31,7 @@ public class PublisherConfig {
     }
 
     @Bean
-    public EventPublisher<CompoundActionCreateEvent> actionCreateEventPublisher()   {
+    public EventPublisher<ActionCreateEvent> actionCreateEventPublisher()   {
         return new ActionCreateEventPublisher(bridge, "actionCreateEventProducer-out-0");
     }
 

@@ -3,7 +3,7 @@ package com.newestworld.commons.model;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public interface CompoundActionStructure {
+public interface ActionStructure {
 
     long getId();
 

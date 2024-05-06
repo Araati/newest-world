@@ -4,7 +4,7 @@ import com.newestworld.commons.model.ModelParameter;
 import com.newestworld.commons.model.ModelParameters;
 import com.newestworld.executor.ExecutorApplication;
 import com.newestworld.executor.util.ExecutionContext;
-import com.newestworld.streams.event.CompoundActionCreateEvent;
+import com.newestworld.streams.event.ActionCreateEvent;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -16,7 +16,7 @@ import java.util.List;
 @SpringBootTest(classes = ExecutorApplication.class, properties = {"spring.profiles.active=test"})
 @ActiveProfiles("test")
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
-class CreateCompoundActionExecutorTest {
+class CreateActionExecutorTest {
 
     @Test
     void execute()  {
@@ -27,9 +27,9 @@ class CreateCompoundActionExecutorTest {
         ExecutionContext context = new ExecutionContext();
         context.createLocalScope(parameters);
 
-        ActionExecutor executor = new CreateCompoundActionExecutor();
+        ActionExecutor executor = new CreateActionExecutor();
         String next = executor.exec(context);
-        CompoundActionCreateEvent event = (CompoundActionCreateEvent) context.getEvents().get(0);
+        ActionCreateEvent event = (ActionCreateEvent) context.getEvents().get(0);
 
         Assertions.assertEquals("2", next);
         Assertions.assertEquals("factory", event.getName());
