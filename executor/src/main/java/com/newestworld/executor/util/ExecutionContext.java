@@ -26,7 +26,7 @@ public class ExecutionContext {
     public void addGlobalParameters(final ModelParameters parameters)    {
         if (parameters.getAll() != null) {
             for (ModelParameter parameter : parameters.getAll()) {
-                global.put(parameter.getName(), parameter.getValue().toString());
+                global.put(parameter.getName(), parameter.getData().toString());
             }
         }
     }
@@ -36,10 +36,10 @@ public class ExecutionContext {
         local.putAll(global);
         if (parameters.getAll() != null) {
             for (ModelParameter parameter : parameters.getAll()) {
-                if (parameter.getValue().toString().startsWith("$"))    {
-                    local.put(parameter.getName(), global.get(parameter.getValue().toString()));
+                if (parameter.getData().toString().startsWith("$"))    {
+                    local.put(parameter.getName(), global.get(parameter.getData().toString()));
                 } else {
-                    local.put(parameter.getName(), parameter.getValue().toString());
+                    local.put(parameter.getName(), parameter.getData().toString());
                 }
             }
         }

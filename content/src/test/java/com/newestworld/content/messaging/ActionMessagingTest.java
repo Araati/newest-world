@@ -104,14 +104,14 @@ class ActionMessagingTest {
         // verify action and inputs
         var argument = captor.getValue().getBatch().stream().findFirst().get();
         Assertions.assertEquals(3, (long) argument.getActionId());
-        Assertions.assertEquals("1", argument.getInput().mustGetByName("$targetId").getValue().toString());
-        Assertions.assertEquals("1000", argument.getInput().mustGetByName("$amount").getValue().toString());
+        Assertions.assertEquals("1", argument.getInput().mustGetByName("$targetId").getData().toString());
+        Assertions.assertEquals("1000", argument.getInput().mustGetByName("$amount").getData().toString());
 
         // verify basic start
         var startTest = argument.getBasicActions().get(0);
         Assertions.assertEquals(startTest.getType(), ActionType.START.getId());
         Assertions.assertEquals(1, (long) startTest.getLocalPosition());
-        Assertions.assertEquals("2", startTest.getParameters().mustGetByName("next").getValue().toString());
+        Assertions.assertEquals("2", startTest.getParameters().mustGetByName("next").getData().toString());
 
         // verify basic end
         var endTest = argument.getBasicActions().get(1);

@@ -16,7 +16,7 @@ public class ModelParameterCreateDTO {
     @JsonProperty(required = true)
     private boolean required;
 
-    private String value;
+    private String data;
 
     @JsonProperty(required = true)
     private String type;

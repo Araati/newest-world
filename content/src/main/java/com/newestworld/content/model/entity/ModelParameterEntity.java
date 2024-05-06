@@ -28,7 +28,7 @@ public class ModelParameterEntity {
 
     private boolean required;
 
-    private String value;
+    private String data;
 
     private String type;
 
@@ -46,6 +46,6 @@ public class ModelParameterEntity {
     public ModelParameterEntity(final long id, final ModelParameterCreateDTO source) {
         this.modelId = id;
         this.name = source.getName();
-        this.value = source.getValue();
+        this.data = source.getData();
     }
 }

@@ -14,7 +14,7 @@ public class ModelParameter {
     private long modelId;
     private String name;
     private boolean required;
-    private String value;
+    private String data;
     private String type;
     private String init;
     private Long min;
