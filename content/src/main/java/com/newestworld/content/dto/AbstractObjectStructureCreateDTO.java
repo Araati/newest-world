@@ -1,11 +1,12 @@
 package com.newestworld.content.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.newestworld.commons.model.StructureProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.Map;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor
@@ -16,6 +17,6 @@ public class AbstractObjectStructureCreateDTO {
     private String name;
 
     @JsonProperty(value = "properties", required = true)
-    private Map<String, String> properties;
+    private List<StructureProperty> properties;
 
 }

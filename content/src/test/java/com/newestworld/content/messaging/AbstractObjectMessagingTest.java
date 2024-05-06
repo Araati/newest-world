@@ -51,7 +51,7 @@ class AbstractObjectMessagingTest {
 
         Assertions.assertSame(entity.getName(), name);
         Assertions.assertEquals(1, entity.getStructureId());
-        Assertions.assertEquals(entity.getProperties(), properties);
+        Assertions.assertEquals(entity.getParameters(), properties);
     }
 
     @Test
@@ -70,7 +70,7 @@ class AbstractObjectMessagingTest {
         properties.put("test2", "newValue");
         updateEventConsumer.accept(new AbstractObjectUpdateEvent(1, properties));
         var entity = objectRepository.mustFindByIdAndDeletedIsFalse(1);
-        Assertions.assertEquals(entity.getProperties(), properties);
+        Assertions.assertEquals(entity.getParameters(), properties);
 
         // Update validation check
         properties.put("test3", "validationException");

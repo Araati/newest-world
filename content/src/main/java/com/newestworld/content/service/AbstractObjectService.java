@@ -3,6 +3,7 @@ package com.newestworld.content.service;
 import com.newestworld.commons.exception.ValidationFailedException;
 import com.newestworld.commons.model.AbstractObject;
 import com.newestworld.commons.model.AbstractObjectStructure;
+import com.newestworld.commons.model.StructureProperty;
 import com.newestworld.content.dao.AbstractObjectRepository;
 import com.newestworld.content.dto.*;
 import com.newestworld.content.model.entity.AbstractObjectEntity;
@@ -24,9 +25,9 @@ public class AbstractObjectService {
 
         // Validation by structure
         AbstractObjectStructure structure = abstractObjectStructureService.findByName(request.getName());
-        for (Map.Entry<String, String> pair : structure.getProperties().entrySet()) {
-            if (pair.getValue().isEmpty() && (request.getProperties().get(pair.getKey()) == null
-                    || request.getProperties().get(pair.getKey()).isEmpty()))
+        for (StructureProperty property : structure.getProperties()) {
+            if (property.getInit().isEmpty() && (request.getProperties().get(property.getName()) == null
+                    || request.getProperties().get(property.getName()).isEmpty()))
                 throw new ValidationFailedException();
         }
 
@@ -43,13 +44,13 @@ public class AbstractObjectService {
 
         // Check if to-update properties exist in entity
         for (Map.Entry<String, String> pair : request.getProperties().entrySet())   {
-            if (!entity.getProperties().containsKey(pair.getKey()))
+            if (!entity.getParameters().containsKey(pair.getKey()))
                 throw new ValidationFailedException();
         }
 
-        Map<String, String> updatedProperties = entity.getProperties();
+        Map<String, String> updatedProperties = entity.getParameters();
         updatedProperties.putAll(request.getProperties());
-        entity = entity.withProperties(updatedProperties);
+        entity = entity.withParameters(updatedProperties);
         repository.save(entity);
         log.info("AbstractObject with {} id updated", entity.getId());
         return new AbstractObjectDTO(entity);

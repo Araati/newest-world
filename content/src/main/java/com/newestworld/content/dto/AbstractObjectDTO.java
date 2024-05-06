@@ -20,7 +20,7 @@ public class AbstractObjectDTO implements AbstractObject {
 
     private String name;
 
-    private Map<String, String> properties;
+    private Map<String, String> parameters;
 
     private LocalDateTime createdAt;
 
@@ -28,7 +28,7 @@ public class AbstractObjectDTO implements AbstractObject {
         this.id = entity.getId();
         this.structureId = entity.getStructureId();
         this.name = entity.getName();
-        this.properties = entity.getProperties();
+        this.parameters = entity.getParameters();
         this.createdAt = entity.getCreatedAt();
     }
 }

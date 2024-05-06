@@ -2,6 +2,7 @@ package com.newestworld.content.dto;
 
 import com.newestworld.commons.model.BasicAction;
 import com.newestworld.commons.model.CompoundActionStructure;
+import com.newestworld.commons.model.StructureProperty;
 import com.newestworld.content.model.entity.CompoundActionStructureEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -19,7 +20,7 @@ public class CompoundActionStructureDTO implements CompoundActionStructure {
     
     private String name;
 
-    private List<String> input;
+    private List<StructureProperty> properties;
     
     private List<BasicAction> steps;
     
@@ -28,7 +29,7 @@ public class CompoundActionStructureDTO implements CompoundActionStructure {
     public CompoundActionStructureDTO(final CompoundActionStructureEntity source, final List<BasicAction> steps) {
         this.id = source.getId();
         this.name = source.getName();
-        this.input = source.getInput();
+        this.properties = source.getProperties();
         this.steps = steps;
         this.createdAt = source.getCreatedAt();
     }

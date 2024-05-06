@@ -9,7 +9,7 @@ public interface CompoundActionStructure {
 
     String getName();
 
-    List<String> getInput();
+    List<StructureProperty> getProperties();
 
     List<BasicAction> getSteps();
 

@@ -36,8 +36,8 @@ public class CompoundActionService {
         // Validation by structure
         CompoundActionStructure structure = compoundActionStructureService.findByName(request.getName());
         List<String> input = request.getInput().stream().map(ActionParamsCreateDTO::getName).collect(Collectors.toList());
-        List<String> expectedInputs = structure.getInput();
-        if (!new HashSet<>(input).containsAll(expectedInputs)) {
+        List<StructureProperty> expectedInputs = structure.getProperties();
+        if (!new HashSet<>(input).containsAll(expectedInputs.stream().map(StructureProperty::getName).toList())) {
             throw new ValidationFailedException();
         }
 

@@ -1,6 +1,7 @@
 package com.newestworld.content.model.entity;
 
 import com.newestworld.commons.model.AbstractObjectStructure;
+import com.newestworld.commons.model.StructureProperty;
 import com.newestworld.content.dto.AbstractObjectCreateDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -31,7 +32,7 @@ public class AbstractObjectEntity {
 
     // Инициализация для того, чтобы не было пересечений с мапой в structure
     @ElementCollection(fetch = FetchType.EAGER)
-    private Map<String, String> properties = new HashMap<>();
+    private Map<String, String> parameters = new HashMap<>();
 
     private boolean deleted;
 
@@ -42,7 +43,9 @@ public class AbstractObjectEntity {
     public AbstractObjectEntity(final AbstractObjectCreateDTO request, final AbstractObjectStructure structure) {
         this.structureId = structure.getId();
         this.name = request.getName();
-        this.properties.putAll(structure.getProperties());
-        this.properties.putAll(request.getProperties());
+        for (final StructureProperty property : structure.getProperties()) {
+            this.parameters.put(property.getName(), property.getInit());
+        }
+        this.parameters.putAll(request.getProperties());
     }
 }

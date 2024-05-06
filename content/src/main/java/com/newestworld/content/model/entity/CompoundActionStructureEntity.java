@@ -1,5 +1,6 @@
 package com.newestworld.content.model.entity;
 
+import com.newestworld.commons.model.StructureProperty;
 import com.newestworld.content.dto.CompoundActionStructureCreateDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -27,7 +28,7 @@ public class CompoundActionStructureEntity {
     private String name;
 
     @ElementCollection(fetch = FetchType.EAGER)
-    private List<String> input;
+    private List<StructureProperty> properties;
 
     private boolean deleted;
 
@@ -37,6 +38,6 @@ public class CompoundActionStructureEntity {
 
     public CompoundActionStructureEntity(final CompoundActionStructureCreateDTO request) {
         this.name = request.getName();
-        this.input = request.getInput();
+        this.properties = request.getProperties();
     }
 }
