@@ -1,21 +1,32 @@
 package com.newestworld.commons.model;
 
 import com.newestworld.commons.annotation.ValidModelParameter;
+import com.newestworld.commons.validation.ClassChecks;
+import jakarta.validation.GroupSequence;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.groups.Default;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@ValidModelParameter
+@GroupSequence({ModelParameter.class, ClassChecks.class})
+@ValidModelParameter(groups = ClassChecks.class)
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 public class ModelParameter {
 
     private long modelId;
+
+    @NotBlank
     private String name;
+
     private boolean required;
     private String data;
+
+    @NotBlank
     private String type;
+
     private String init;
     private Long min;
     private Long max;

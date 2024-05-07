@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.newestworld.commons.exception.ResourceNotFoundException;
+import jakarta.validation.Valid;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
@@ -33,6 +34,7 @@ public interface ModelParameters {
     @NoArgsConstructor
     class Impl implements ModelParameters {
 
+        @Valid
         @JsonValue
         private List<ModelParameter> parameters;
 

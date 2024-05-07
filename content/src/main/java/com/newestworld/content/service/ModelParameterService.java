@@ -24,6 +24,7 @@ public class ModelParameterService {
         List<ModelParameter> parameters = new ArrayList<>();
         for (final ModelParameterCreateDTO modelParameterCreateDTO : request) {
             modelParameterRepository.save(new ModelParameterEntity(actionId, modelParameterCreateDTO));
+            //fixme id is not assigned (value 0)
             parameters.add(new ModelParameter(actionId,
                     modelParameterCreateDTO.getName(),
                     modelParameterCreateDTO.isRequired(),

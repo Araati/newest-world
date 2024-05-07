@@ -1,6 +1,6 @@
 package com.newestworld.commons.annotation;
 
-import com.newestworld.commons.util.validator.ModelParameterValidator;
+import com.newestworld.commons.validation.ModelParameterValidator;
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 
