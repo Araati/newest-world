@@ -25,9 +25,10 @@ public class ActionStructureService {
     public ActionStructure create(final ActionStructureCreateDTO request) {
         ActionStructureEntity actionStructureEntity = new ActionStructureEntity(request);
         actionStructureRepository.save(actionStructureEntity);
+        ModelParameters modelParameters = modelParameterService.create(actionStructureEntity.getId(), request.getParameters());
         List<Node> nodeDTOS = nodeService.createAll(actionStructureEntity.getId(), request.getSteps());
         log.info("ActionStructure with {} id created", actionStructureEntity.getId());
-        return new ActionStructureDTO(actionStructureEntity, request.getParameters(), nodeDTOS);
+        return new ActionStructureDTO(actionStructureEntity, modelParameters, nodeDTOS);
     }
 
     public void delete(final long id) {

@@ -7,6 +7,7 @@ import com.newestworld.commons.exception.ResourceNotFoundException;
 import jakarta.validation.Valid;
 import lombok.NoArgsConstructor;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,6 +24,10 @@ public interface ModelParameters {
         return getByName(name).orElseThrow(() -> new ResourceNotFoundException("Model parameter", name));
     }
 
+    default boolean contains(final String name) {
+        return getByName(name).isPresent();
+    }
+
     default int getSize() {
         return getAll().size();
     }
@@ -32,7 +37,7 @@ public interface ModelParameters {
     }
 
     @NoArgsConstructor
-    class Impl implements ModelParameters {
+    class Impl implements ModelParameters   {
 
         @Valid
         @JsonValue

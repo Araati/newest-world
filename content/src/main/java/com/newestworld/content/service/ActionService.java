@@ -1,14 +1,21 @@
 package com.newestworld.content.service;
 
+import com.newestworld.commons.exception.ValidationFailedException;
 import com.newestworld.commons.model.*;
 import com.newestworld.content.dao.ActionRepository;
 import com.newestworld.content.dto.*;
 import com.newestworld.content.model.entity.ActionEntity;
 import com.newestworld.streams.event.ActionTimeoutCreateEvent;
 import com.newestworld.streams.publisher.EventPublisher;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 @Slf4j
 @Service
@@ -28,15 +35,16 @@ public class ActionService {
 
     public Action create(final ActionCreateDTO request) {
 
-        // Validation by structure
         ActionStructure structure = actionStructureService.findByName(request.getName());
-        //fixme validation
-        /*
-        List<String> input = request.getInput().stream().map(ModelParameterCreateDTO::getName).collect(Collectors.toList());
-        List<StructureProperty> expectedInputs = structure.getProperties();
-        if (!new HashSet<>(input).containsAll(expectedInputs.stream().map(StructureProperty::getName).toList())) {
-            throw new ValidationFailedException();
-        }*/
+
+        // Check, if all inputs are present
+        Set<String> input = request.getInput().keySet();
+        ModelParameters expectedParameters = structure.getParameters();
+        for (ModelParameter parameter : expectedParameters.getAll())    {
+            if(!input.contains(parameter.getName()) && parameter.isRequired())   {
+                throw new ValidationFailedException("Input parameter not present : " + parameter.getName());
+            }
+        }
 
         // Saving action
         ActionEntity actionEntity = new ActionEntity(request, structure.getId());
@@ -44,12 +52,24 @@ public class ActionService {
 
         // Saving action parameters
         //fixme insert values from createDTO into modelParams from structure and save them
-        ModelParameters modelParameters = null;
-        //ModelParameters modelParameters = modelParameterService.create(actionEntity.getId(), request.getInput());
+        List<ModelParameterCreateDTO> createDTOS = new ArrayList<>();
+        for (Map.Entry<String, String> pair: request.getInput().entrySet()) {
+            ModelParameter structureParameter = structure.getParameters().mustGetByName(pair.getKey());
+            ModelParameterCreateDTO dto = new ModelParameterCreateDTO(
+                    pair.getKey(),
+                    structureParameter.isRequired(),
+                    pair.getValue(),
+                    structureParameter.getType(),
+                    structureParameter.getInit(),
+                    structureParameter.getMin(),
+                    structureParameter.getMax());
+            createDTOS.add(dto);
+        }
+        ModelParameters parameters = modelParameterService.create(actionEntity.getId(), createDTOS);
         actionTimeoutCreateEventPublisher.send(new ActionTimeoutCreateEvent(actionEntity.getId(), timeout));
 
         log.info("Action with {} id created", actionEntity.getId());
-        return new ActionDTO(actionEntity, modelParameters, timeout);
+        return new ActionDTO(actionEntity, parameters, timeout);
 
     }
 
