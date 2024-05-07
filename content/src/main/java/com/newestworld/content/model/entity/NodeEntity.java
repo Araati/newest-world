@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
 public class NodeEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "model")
     private long id;
 
     private Long position;
