@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.Map;
 
 @Getter
 @NoArgsConstructor
@@ -20,7 +21,7 @@ public class NodeEvent implements Event {
     // Енамка не передается нормально, разбираться мне лень
     private int type;
 
-    private ModelParameters parameters;
+    private Map<String, String> parameters;
 
     private LocalDateTime createdAt;
 

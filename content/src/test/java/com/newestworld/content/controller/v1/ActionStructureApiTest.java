@@ -51,7 +51,7 @@ class ActionStructureApiTest {
     void create() throws Exception {
         String name = "test";
         List<String> input = List.of("$targetId", "$amount");
-        var start = new NodeCreateDTO(ActionType.START.getId(), 1L, List.of(new ModelParameterCreateDTO("next", "2")));
+        var start = new NodeCreateDTO(ActionType.START.getId(), 1L, List.of(new StructureParameterCreateDTO("next", "2")));
         var end = new NodeCreateDTO(ActionType.END.getId(), 2L, List.of());
 
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.post("/v1/action/structure")
@@ -104,7 +104,7 @@ class ActionStructureApiTest {
     private void createTestAction()   {
         String name = "test";
         List<String> input = List.of("$targetId", "$amount");
-        var start = new NodeCreateDTO(ActionType.START.getId(), 1L, List.of(new ModelParameterCreateDTO("next", "2")));
+        var start = new NodeCreateDTO(ActionType.START.getId(), 1L, List.of(new StructureParameterCreateDTO("next", "2")));
         var end = new NodeCreateDTO(ActionType.END.getId(), 2L, List.of());
         actionStructureService.create(new ActionStructureCreateDTO(name, input, List.of(start, end)));
     }

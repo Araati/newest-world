@@ -1,7 +1,6 @@
 package com.newestworld.content.model.entity;
 
 import com.newestworld.commons.model.AbstractObjectStructure;
-import com.newestworld.commons.model.ModelParameters;
 import com.newestworld.content.dto.AbstractObjectCreateDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -11,7 +10,6 @@ import lombok.With;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
-import java.util.HashMap;
 import java.util.Map;
 
 @Getter
@@ -29,6 +27,9 @@ public class AbstractObjectEntity {
     private long structureId;
 
     private String name;
+
+    @ElementCollection
+    private Map<String, String> parameters;
 
     private boolean deleted;
 

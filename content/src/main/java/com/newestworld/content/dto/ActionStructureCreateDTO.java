@@ -1,7 +1,6 @@
 package com.newestworld.content.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.newestworld.commons.model.ModelParameters;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -18,7 +17,8 @@ public class ActionStructureCreateDTO {
     private String name;
 
     @Valid
-    private List<ModelParameterCreateDTO> parameters;
+    @JsonProperty(required = true)
+    private List<StructureParameterCreateDTO> parameters;
 
     @JsonProperty(value = "steps", required = true)
     private List<NodeCreateDTO> steps;

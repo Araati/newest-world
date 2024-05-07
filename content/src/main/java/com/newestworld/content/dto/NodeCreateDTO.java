@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
+import java.util.Map;
 
 @Getter
 @NoArgsConstructor
@@ -18,7 +18,6 @@ public class NodeCreateDTO {
     @JsonProperty(value = "position", required = true)
     private Long position;
 
-    @JsonProperty(value = "params")
-    private List<ModelParameterCreateDTO> params;
+    private Map<String, String> parameters;
 
 }

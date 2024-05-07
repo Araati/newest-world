@@ -77,8 +77,8 @@ class ActionApiTest {
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .characterEncoding("UTF-8")
-                .content(mapper.writeValueAsString(new ActionCreateDTO("test", List.of(new ModelParameterCreateDTO("$targetId", "1"),
-                        new ModelParameterCreateDTO("$amount", "1000")))));
+                .content(mapper.writeValueAsString(new ActionCreateDTO("test", List.of(new StructureParameterCreateDTO("$targetId", "1"),
+                        new StructureParameterCreateDTO("$amount", "1000")))));
 
         mvc.perform(requestBuilder)
                 .andDo(print())
@@ -97,8 +97,8 @@ class ActionApiTest {
     @Test
     void delete() throws Exception {
         createTestAction();
-        actionService.create(new ActionCreateDTO("test", List.of(new ModelParameterCreateDTO("$targetId", "1"),
-                new ModelParameterCreateDTO("$amount", "1000"))));
+        actionService.create(new ActionCreateDTO("test", List.of(new StructureParameterCreateDTO("$targetId", "1"),
+                new StructureParameterCreateDTO("$amount", "1000"))));
 
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.delete("/v1/action/3");
 
@@ -113,8 +113,8 @@ class ActionApiTest {
         createTestAction();
         List<ModelParameter> input = List.of(new ModelParameter(3, "$targetId", "1"),
                 new ModelParameter(3, "$amount", "1000"));
-        actionService.create(new ActionCreateDTO("test", List.of(new ModelParameterCreateDTO("$targetId", "1"),
-                new ModelParameterCreateDTO("$amount", "1000"))));
+        actionService.create(new ActionCreateDTO("test", List.of(new StructureParameterCreateDTO("$targetId", "1"),
+                new StructureParameterCreateDTO("$amount", "1000"))));
 
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/v1/action/3");
 
@@ -132,7 +132,7 @@ class ActionApiTest {
     private void createTestAction()   {
         String name = "test";
         List<String> input = List.of("$targetId", "$amount");
-        var start = new NodeCreateDTO(ActionType.START.getId(), 1L, List.of(new ModelParameterCreateDTO("next", "2")));
+        var start = new NodeCreateDTO(ActionType.START.getId(), 1L, List.of(new StructureParameterCreateDTO("next", "2")));
         var end = new NodeCreateDTO(ActionType.END.getId(), 2L, List.of());
         actionStructureService.create(new ActionStructureCreateDTO(name, input, List.of(start, end)));
     }

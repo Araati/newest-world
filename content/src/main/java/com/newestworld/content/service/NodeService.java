@@ -1,6 +1,5 @@
 package com.newestworld.content.service;
 
-import com.newestworld.commons.model.ModelParameters;
 import com.newestworld.commons.model.Node;
 import com.newestworld.content.dao.NodeRepository;
 import com.newestworld.content.dto.NodeCreateDTO;
@@ -18,7 +17,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class NodeService {
 
-    private final ModelParameterService modelParameterService;
     private final NodeRepository nodeRepository;
 
     public List<Node> createAll(final long actionId, final List<NodeCreateDTO> request) {
@@ -26,26 +24,17 @@ public class NodeService {
         for (NodeCreateDTO nodeCreateDTO : request) {
             NodeEntity nodeEntity = new NodeEntity(actionId, nodeCreateDTO);
             nodeRepository.save(nodeEntity);
-            ModelParameters modelParameters = modelParameterService.create(nodeEntity.getId(), nodeCreateDTO.getParams());
-            nodeDTOS.add(new NodeDTO(nodeEntity, modelParameters));
+            nodeDTOS.add(new NodeDTO(nodeEntity));
         }
         return nodeDTOS;
     }
 
     public void deleteAll(final long actionId) {
         List<NodeEntity> nodeEntities = nodeRepository.findAllByStructureIdAndDeletedIsFalse(actionId);
-        for (NodeEntity nodeEntity : nodeEntities) {
-            nodeRepository.save(nodeEntity.withDeleted(true));
-            modelParameterService.delete(actionId);
-        }
+        nodeRepository.saveAll(nodeEntities.stream().map(x -> x.withDeleted(true)).toList());
     }
 
     public List<Node> findAllById(final long actionId)  {
-        List<NodeEntity> nodeEntities = nodeRepository.findAllByStructureIdAndDeletedIsFalse(actionId);
-        List<Node> nodes = new ArrayList<>();
-        for (NodeEntity nodeEntity : nodeEntities) {
-            nodes.add(new NodeDTO(nodeEntity, modelParameterService.findById(nodeEntity.getId())));
-        }
-        return nodes;
+        return new ArrayList<>(nodeRepository.findAllByStructureIdAndDeletedIsFalse(actionId).stream().map(NodeDTO::new).toList());
     }
 }

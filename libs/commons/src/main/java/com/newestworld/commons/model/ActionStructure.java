@@ -9,7 +9,7 @@ public interface ActionStructure {
 
     String getName();
 
-    ModelParameters getParameters();
+    List<StructureParameter> getParameters();
 
     List<Node> getSteps();
 

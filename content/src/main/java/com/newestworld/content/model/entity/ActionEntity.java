@@ -9,6 +9,7 @@ import lombok.With;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.Map;
 
 @Getter
 @NoArgsConstructor
@@ -28,6 +29,9 @@ public class ActionEntity {
 
     private boolean deleted;
 
+    @ElementCollection
+    private Map<String, String> parameters;
+
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
@@ -35,5 +39,6 @@ public class ActionEntity {
     public ActionEntity(final ActionCreateDTO source, final long structureId) {
         this.name = source.getName();
         this.structureId = structureId;
+        this.parameters = source.getInput();
     }
 }

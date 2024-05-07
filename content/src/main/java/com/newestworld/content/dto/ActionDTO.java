@@ -1,6 +1,5 @@
 package com.newestworld.content.dto;
 
-import com.newestworld.commons.model.ModelParameters;
 import com.newestworld.commons.model.Action;
 import com.newestworld.content.model.entity.ActionEntity;
 import lombok.AllArgsConstructor;
@@ -8,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.Map;
 
 @Getter
 @NoArgsConstructor
@@ -22,16 +22,16 @@ public class ActionDTO implements Action {
 
     private long timeout;
 
-    private ModelParameters parameters;
+    private Map<String, String> parameters;
 
     private LocalDateTime createdAt;
 
-    public ActionDTO(final ActionEntity source, final ModelParameters source1, final long timeout)    {
+    public ActionDTO(final ActionEntity source, final long timeout)    {
         this.id = source.getId();
         this.name = source.getName();
         this.structureId = source.getStructureId();
         this.timeout = timeout;
-        this.parameters = source1;
+        this.parameters = source.getParameters();
         this.createdAt = source.getCreatedAt();
     }
 

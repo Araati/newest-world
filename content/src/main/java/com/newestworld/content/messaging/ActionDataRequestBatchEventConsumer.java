@@ -1,10 +1,10 @@
 package com.newestworld.content.messaging;
 
-import com.newestworld.commons.model.ModelParameters;
 import com.newestworld.commons.model.ActionStructure;
+import com.newestworld.commons.model.StructureParameter;
 import com.newestworld.content.facade.ActionFacade;
 import com.newestworld.content.facade.ActionStructureFacade;
-import com.newestworld.content.service.ModelParameterService;
+import com.newestworld.content.service.StructureParameterService;
 import com.newestworld.content.service.NodeService;
 import com.newestworld.streams.event.*;
 import com.newestworld.streams.event.batch.ActionDataRequestBatchEvent;
@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 public class ActionDataRequestBatchEventConsumer implements Consumer<ActionDataRequestBatchEvent> {
 
     private final NodeService nodeService;
-    private final ModelParameterService modelParameterService;
+    private final StructureParameterService structureParameterService;
     private final ActionFacade actionFacade;
     private final ActionStructureFacade actionStructureFacade;
     private final EventPublisher<ActionDataBatchEvent> actionDataBatchEventPublisher;
@@ -40,7 +40,7 @@ public class ActionDataRequestBatchEventConsumer implements Consumer<ActionDataR
             ActionStructure structure = actionStructureFacade.findById(actionFacade.findById(request.getId()).getStructureId());
             List<NodeEvent> nodes = nodeService.findAllById(structure.getId())
                     .stream().map(NodeEvent::new).collect(Collectors.toList());
-            ModelParameters input = modelParameterService.findById(request.getId());
+            List<StructureParameter> input = structureParameterService.findById(request.getId());
             dataEvents.add(new ActionDataEvent(request.getId(), input, nodes));
         }
 

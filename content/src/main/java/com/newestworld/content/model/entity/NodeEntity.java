@@ -9,6 +9,7 @@ import lombok.With;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.Map;
 
 @Getter
 @NoArgsConstructor
@@ -28,6 +29,9 @@ public class NodeEntity {
 
     private int type;
 
+    @ElementCollection
+    private Map<String, String> parameters;
+
     private boolean deleted;
 
     @CreationTimestamp
@@ -37,6 +41,7 @@ public class NodeEntity {
     public NodeEntity(final long structureId, final NodeCreateDTO source) {
         this.structureId = structureId;
         this.position = source.getPosition();
+        this.parameters = source.getParameters();
         this.type = source.getType();
     }
 }

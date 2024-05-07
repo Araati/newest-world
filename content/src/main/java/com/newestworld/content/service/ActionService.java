@@ -7,12 +7,11 @@ import com.newestworld.content.dto.*;
 import com.newestworld.content.model.entity.ActionEntity;
 import com.newestworld.streams.event.ActionTimeoutCreateEvent;
 import com.newestworld.streams.publisher.EventPublisher;
-import jakarta.validation.Valid;
+import jakarta.validation.Validator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -22,8 +21,8 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class ActionService {
 
-    private final ModelParameterService modelParameterService;
-    private final NodeService nodeService;
+    private final Validator validator;
+    private final StructureParameterService structureParameterService;
 
     private final ActionRepository actionRepository;
     private final ActionStructureService actionStructureService;
@@ -39,23 +38,18 @@ public class ActionService {
 
         // Check, if all inputs are present
         Set<String> input = request.getInput().keySet();
-        ModelParameters expectedParameters = structure.getParameters();
-        for (ModelParameter parameter : expectedParameters.getAll())    {
+        List<StructureParameter> expectedParameters = structure.getParameters();
+        for (StructureParameter parameter : expectedParameters)    {
             if(!input.contains(parameter.getName()) && parameter.isRequired())   {
                 throw new ValidationFailedException("Input parameter not present : " + parameter.getName());
             }
         }
 
-        // Saving action
-        ActionEntity actionEntity = new ActionEntity(request, structure.getId());
-        actionRepository.save(actionEntity);
-
-        // Saving action parameters
-        //fixme insert values from createDTO into modelParams from structure and save them
-        List<ModelParameterCreateDTO> createDTOS = new ArrayList<>();
+        // Check, if input is valid
         for (Map.Entry<String, String> pair: request.getInput().entrySet()) {
-            ModelParameter structureParameter = structure.getParameters().mustGetByName(pair.getKey());
-            ModelParameterCreateDTO dto = new ModelParameterCreateDTO(
+            StructureParameter structureParameter = structure.getParameters()
+                    .stream().filter(x -> x.getName().equals(pair.getKey())).findAny().orElseThrow(ValidationFailedException::new);
+            ModelParameter dto = new ModelParameter(
                     pair.getKey(),
                     structureParameter.isRequired(),
                     pair.getValue(),
@@ -63,25 +57,32 @@ public class ActionService {
                     structureParameter.getInit(),
                     structureParameter.getMin(),
                     structureParameter.getMax());
-            createDTOS.add(dto);
+            var violations = validator.validate(dto);
+            if (!violations.isEmpty()) {
+                throw new ValidationFailedException();
+            }
         }
-        ModelParameters parameters = modelParameterService.create(actionEntity.getId(), createDTOS);
+
+
+        // Saving action
+        ActionEntity actionEntity = new ActionEntity(request, structure.getId());
+        actionRepository.save(actionEntity);
+
         actionTimeoutCreateEventPublisher.send(new ActionTimeoutCreateEvent(actionEntity.getId(), timeout));
 
         log.info("Action with {} id created", actionEntity.getId());
-        return new ActionDTO(actionEntity, parameters, timeout);
+        return new ActionDTO(actionEntity, timeout);
 
     }
 
     public void delete(final long id) {
         actionRepository.save(actionRepository.mustFindByIdAndDeletedIsFalse(id).withDeleted(true));
-        modelParameterService.delete(id);
+        structureParameterService.delete(id);
         log.info("Action with {} id deleted", id);
     }
 
     public Action findById(final long id) {
         ActionEntity entity = actionRepository.mustFindByIdAndDeletedIsFalse(id);
-        ModelParameters modelParameters = modelParameterService.findById(id);
-        return new ActionDTO(entity, modelParameters, timeout);
+        return new ActionDTO(entity, timeout);
     }
 }

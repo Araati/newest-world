@@ -4,7 +4,7 @@ import com.newestworld.commons.exception.ResourceNotFoundException;
 import com.newestworld.commons.model.ActionType;
 import com.newestworld.commons.model.Action;
 import com.newestworld.content.ContentApplication;
-import com.newestworld.content.dto.ModelParameterCreateDTO;
+import com.newestworld.content.dto.StructureParameterCreateDTO;
 import com.newestworld.content.dto.NodeCreateDTO;
 import com.newestworld.content.dto.ActionCreateDTO;
 import com.newestworld.content.dto.ActionStructureCreateDTO;
@@ -92,8 +92,8 @@ class ActionMessagingTest {
 
         createTestAction();
 
-        actionService.create(new ActionCreateDTO("test", List.of(new ModelParameterCreateDTO("$targetId", "1"),
-                new ModelParameterCreateDTO("$amount", "1000"))));
+        actionService.create(new ActionCreateDTO("test", List.of(new StructureParameterCreateDTO("$targetId", "1"),
+                new StructureParameterCreateDTO("$amount", "1000"))));
 
         dataRequestBatchEventConsumer.accept(new ActionDataRequestBatchEvent(new HashSet<>(List.of(new ActionDataRequestEvent(3)))));
 
@@ -136,7 +136,7 @@ class ActionMessagingTest {
     private void createTestAction()   {
         String name = "test";
         List<String> input = List.of("$targetId", "$amount");
-        var start = new NodeCreateDTO(ActionType.START.getId(), 1L, List.of(new ModelParameterCreateDTO("next", "2")));
+        var start = new NodeCreateDTO(ActionType.START.getId(), 1L, List.of(new StructureParameterCreateDTO("next", "2")));
         var end = new NodeCreateDTO(ActionType.END.getId(), 2L, List.of());
         actionStructureService.create(new ActionStructureCreateDTO(name, input, List.of(start, end)));
     }

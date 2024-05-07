@@ -1,6 +1,7 @@
 package com.newestworld.commons.model;
 
 import java.time.LocalDateTime;
+import java.util.Map;
 
 public interface Action {
 
@@ -10,7 +11,7 @@ public interface Action {
 
     long getStructureId();
 
-    ModelParameters getParameters();
+    Map<String, String> getParameters();
 
     LocalDateTime getCreatedAt();
 

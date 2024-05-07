@@ -1,9 +1,7 @@
 package com.newestworld.content.service;
 
-import com.newestworld.commons.exception.ValidationFailedException;
 import com.newestworld.commons.model.AbstractObject;
 import com.newestworld.commons.model.AbstractObjectStructure;
-import com.newestworld.commons.model.ModelParameters;
 import com.newestworld.content.dao.AbstractObjectRepository;
 import com.newestworld.content.dao.AbstractObjectStructureRepository;
 import com.newestworld.content.dto.*;
@@ -14,7 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
 
 @Slf4j
 @Service
@@ -22,7 +19,7 @@ import java.util.Map;
 public class AbstractObjectService {
 
     private final AbstractObjectRepository repository;
-    private final ModelParameterService modelParameterService;
+    private final StructureParameterService structureParameterService;
     private final AbstractObjectStructureRepository abstractObjectStructureRepository;
 
     public AbstractObject create(final AbstractObjectCreateDTO request) {
@@ -30,7 +27,7 @@ public class AbstractObjectService {
         // Validation by structure
         AbstractObjectStructureEntity structureEntity = abstractObjectStructureRepository.mustFindByNameAndDeletedIsFalse(request.getName());
         AbstractObjectStructure structure = new AbstractObjectStructureDTO(structureEntity,
-                modelParameterService.findById(structureEntity.getId())
+                structureParameterService.findById(structureEntity.getId())
         );
         //fixme validation
         /*
@@ -44,23 +41,21 @@ public class AbstractObjectService {
         AbstractObjectEntity entity = new AbstractObjectEntity(request, structure);
         repository.save(entity);
         log.info("AbstractObject with {} id created", entity.getId());
-        return new AbstractObjectDTO(
-                entity,
-                modelParameterService.findById(entity.getId())
-                );
+        return new AbstractObjectDTO(entity);
 
     }
 
     public AbstractObject update(final AbstractObjectUpdateDTO request) {
 
         AbstractObjectEntity entity = repository.mustFindByIdAndDeletedIsFalse(request.getId());
-        ModelParameters parameters = modelParameterService.findById(entity.getId());
 
+        //fixme
+        /*
         // Check if to-update properties exist in entity
         for (Map.Entry<String, String> pair : request.getProperties().entrySet())   {
             if (parameters.getByName(pair.getKey()).isEmpty())
                 throw new ValidationFailedException();
-        }
+        }*/
 
         //fixme update with new ModelParameters
         /*
@@ -70,31 +65,25 @@ public class AbstractObjectService {
          */
         repository.save(entity);
         log.info("AbstractObject with {} id updated", entity.getId());
-        return new AbstractObjectDTO(
-                entity,
-                modelParameterService.findById(entity.getId())
-                );
+        return new AbstractObjectDTO(entity);
     }
 
     public void delete(final long id) {
         repository.save(repository.mustFindByIdAndDeletedIsFalse(id).withDeleted(true));
-        modelParameterService.delete(id);
+        structureParameterService.delete(id);
         log.info("AbstractObject with {} id deleted", id);
     }
 
     public void deleteAllByStructureId(final long id)   {
         List<AbstractObjectEntity> abstractObjectEntities = repository.findAllByStructureIdAndDeletedIsFalse(id).stream().map(x -> x.withDeleted(true)).toList();
         repository.saveAll(abstractObjectEntities);
-        modelParameterService.deleteAll(abstractObjectEntities.stream().map(AbstractObjectEntity::getId).toList());
+        structureParameterService.deleteAll(abstractObjectEntities.stream().map(AbstractObjectEntity::getId).toList());
         for (AbstractObjectEntity abstractObjectEntity : abstractObjectEntities) {
             log.info("AbstractObject with {} id deleted", abstractObjectEntity.getId());
         }
     }
 
     public AbstractObject findById(final long id) {
-        return new AbstractObjectDTO(
-                repository.mustFindByIdAndDeletedIsFalse(id),
-                modelParameterService.findById(id)
-        );
+        return new AbstractObjectDTO(repository.mustFindByIdAndDeletedIsFalse(id));
     }
 }
