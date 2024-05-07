@@ -77,20 +77,17 @@ public class AbstractObjectService {
 
         AbstractObjectEntity entity = repository.mustFindByIdAndDeletedIsFalse(request.getId());
 
-        //fixme
-        /*
-        // Check if to-update properties exist in entity
-        for (Map.Entry<String, String> pair : request.getInput().entrySet())   {
-            if (parameters.getByName(pair.getKey()).isEmpty())
-                throw new ValidationFailedException();
-        }*/
 
-        //fixme update with new ModelParameters
-        /*
+        // Check if to-update properties exist in entity
+        for (Map.Entry<String, String> pair : request.getParameters().entrySet())   {
+            if (!entity.getParameters().containsKey(pair.getKey()))
+                throw new ValidationFailedException();
+        }
+
         Map<String, String> updatedProperties = entity.getParameters();
-        updatedProperties.putAll(request.getInput());
+        updatedProperties.putAll(request.getParameters());
         entity = entity.withParameters(updatedProperties);
-         */
+
         repository.save(entity);
         log.info("AbstractObject with {} id updated", entity.getId());
         return new AbstractObjectDTO(entity);

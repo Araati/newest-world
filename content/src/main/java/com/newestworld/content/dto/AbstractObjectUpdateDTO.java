@@ -14,10 +14,10 @@ public class AbstractObjectUpdateDTO {
 
     private long id;
 
-    private Map<String, String> properties;
+    private Map<String, String> parameters;
 
     public AbstractObjectUpdateDTO(final AbstractObjectUpdateEvent event) {
         this.id = event.getId();
-        this.properties = event.getProperties();
+        this.parameters = event.getProperties();
     }
 }

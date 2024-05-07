@@ -13,6 +13,6 @@ public class AbstractObjectUpdateEvent implements Event {
 
     private long id;
 
-    private Map<String, String> properties;
+    private Map<String, String> parameters;
 
 }
