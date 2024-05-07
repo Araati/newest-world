@@ -14,11 +14,11 @@ public class AbstractObjectCreateDTO {
     @JsonProperty(value = "name", required = true)
     private String name;
 
-    @JsonProperty(value = "properties", required = true)
-    private Map<String, String> properties;
+    @JsonProperty(required = true)
+    private Map<String, String> input;
 
     public AbstractObjectCreateDTO(final AbstractObjectCreateEvent event) {
         this.name = event.getName();
-        this.properties = event.getProperties();
+        this.input = event.getProperties();
     }
 }
