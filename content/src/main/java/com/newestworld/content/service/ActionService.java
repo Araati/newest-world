@@ -7,13 +7,10 @@ import com.newestworld.content.dto.*;
 import com.newestworld.content.model.entity.ActionEntity;
 import com.newestworld.streams.event.ActionTimeoutCreateEvent;
 import com.newestworld.streams.publisher.EventPublisher;
-import jakarta.validation.ConstraintViolation;
-import jakarta.validation.Validator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -23,7 +20,6 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class ActionService {
 
-    private final Validator validator;
     private final StructureParameterService structureParameterService;
 
     private final ActionRepository actionRepository;
@@ -47,34 +43,7 @@ public class ActionService {
             }
         }
 
-        // Check, if input is valid and insert init values if needed
-        //fixme code duplicate
-        Map<String, String> inputMap = request.getInput();
-        Map<String, String> parameters = new HashMap<>();
-        for (StructureParameter parameter : expectedParameters) {
-            var validatableBuilder = ModelParameter.builder();
-            Set<ConstraintViolation<ModelParameter>> violations;
-            validatableBuilder
-                    .name(parameter.getName())
-                    .required(parameter.isRequired())
-                    .type(parameter.getType())
-                    .min(parameter.getMin())
-                    .max(parameter.getMax());
-            if (inputMap.containsKey(parameter.getName())) {
-                validatableBuilder.data(inputMap.get(parameter.getName()));
-            } else if (parameter.getInit() != null) {
-                validatableBuilder.data(parameter.getInit());
-            } else if (parameter.isRequired()) {
-                throw new ValidationFailedException("Input parameter not present : " + parameter.getName());
-            }
-            var validatable = validatableBuilder.build();
-            violations = validator.validate(validatableBuilder.build());
-            if (!violations.isEmpty()) {
-                throw new ValidationFailedException();
-            }
-            parameters.put(parameter.getName(), validatable.getData());
-        }
-
+        Map<String, String> parameters = structureParameterService.validateAndInsertDefaultIfRequired(request.getInput(), expectedParameters);
 
         // Saving action
         ActionEntity actionEntity = new ActionEntity(request, parameters, structure.getId());

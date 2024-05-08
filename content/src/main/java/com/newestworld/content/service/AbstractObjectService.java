@@ -3,20 +3,16 @@ package com.newestworld.content.service;
 import com.newestworld.commons.exception.ValidationFailedException;
 import com.newestworld.commons.model.AbstractObject;
 import com.newestworld.commons.model.AbstractObjectStructure;
-import com.newestworld.commons.model.ModelParameter;
 import com.newestworld.commons.model.StructureParameter;
 import com.newestworld.content.dao.AbstractObjectRepository;
 import com.newestworld.content.dao.AbstractObjectStructureRepository;
 import com.newestworld.content.dto.*;
 import com.newestworld.content.model.entity.AbstractObjectEntity;
 import com.newestworld.content.model.entity.AbstractObjectStructureEntity;
-import jakarta.validation.ConstraintViolation;
-import jakarta.validation.Validator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -26,7 +22,6 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class AbstractObjectService {
 
-    private final Validator validator;
     private final AbstractObjectRepository repository;
     private final StructureParameterService structureParameterService;
     private final AbstractObjectStructureRepository abstractObjectStructureRepository;
@@ -51,32 +46,7 @@ public class AbstractObjectService {
         }
 
         // Check, if input is valid and insert init values if needed
-        //fixme code duplicate
-        Map<String, String> inputMap = request.getInput();
-        Map<String, String> parameters = new HashMap<>();
-        for (StructureParameter parameter : expectedParameters) {
-            var validatableBuilder = ModelParameter.builder();
-            Set<ConstraintViolation<ModelParameter>> violations;
-            validatableBuilder
-                    .name(parameter.getName())
-                    .required(parameter.isRequired())
-                    .type(parameter.getType())
-                    .min(parameter.getMin())
-                    .max(parameter.getMax());
-            if (inputMap.containsKey(parameter.getName())) {
-                validatableBuilder.data(inputMap.get(parameter.getName()));
-            } else if (parameter.getInit() != null) {
-                validatableBuilder.data(parameter.getInit());
-            } else if (parameter.isRequired()) {
-                throw new ValidationFailedException("Input parameter not present : " + parameter.getName());
-            }
-            var validatable = validatableBuilder.build();
-            violations = validator.validate(validatableBuilder.build());
-            if (!violations.isEmpty()) {
-                throw new ValidationFailedException();
-            }
-            parameters.put(parameter.getName(), validatable.getData());
-        }
+        Map<String, String> parameters = structureParameterService.validateAndInsertDefaultIfRequired(request.getInput(), expectedParameters);
 
         AbstractObjectEntity entity = new AbstractObjectEntity(request, parameters, structure);
         repository.save(entity);
@@ -96,8 +66,16 @@ public class AbstractObjectService {
                 throw new ValidationFailedException();
         }
 
+        // Validation by structure
+        AbstractObjectStructureEntity structureEntity = abstractObjectStructureRepository.mustFindByNameAndDeletedIsFalse(entity.getName());
+        AbstractObjectStructure structure = new AbstractObjectStructureDTO(structureEntity,
+                structureParameterService.findById(structureEntity.getId())
+        );
+
+        Map<String, String> parameters = structureParameterService.validateAndInsertDefaultIfRequired(request.getParameters(), structure.getParameters());
+
         Map<String, String> updatedProperties = entity.getParameters();
-        updatedProperties.putAll(request.getParameters());
+        updatedProperties.putAll(parameters);
         entity = entity.withParameters(updatedProperties);
 
         repository.save(entity);
