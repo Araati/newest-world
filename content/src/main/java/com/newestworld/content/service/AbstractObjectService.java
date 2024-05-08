@@ -26,10 +26,7 @@ public class AbstractObjectService {
 
     public AbstractObject create(final AbstractObjectCreateDTO request) {
 
-        AbstractObjectStructureEntity structureEntity = abstractObjectStructureRepository.mustFindByNameAndDeletedIsFalse(request.getName());
-        AbstractObjectStructure structure = new AbstractObjectStructureDTO(structureEntity,
-                structureParameterService.findById(structureEntity.getId())
-        );
+        final AbstractObjectStructure structure = findStructureByName(request.getName());
 
         Map<String, String> parameters = structureParameterService.validateAndInsertDefaultIfRequired(request.getInput(), structure.getParameters());
 
@@ -45,17 +42,13 @@ public class AbstractObjectService {
         AbstractObjectEntity entity = repository.mustFindByIdAndDeletedIsFalse(request.getId());
 
         // Check if to-update parameters exist in entity
-        for (Map.Entry<String, String> pair : request.getParameters().entrySet())   {
+        for (final Map.Entry<String, String> pair : request.getParameters().entrySet())   {
             if (!entity.getParameters().containsKey(pair.getKey()))
                 throw new ValidationFailedException();
         }
 
-        AbstractObjectStructureEntity structureEntity = abstractObjectStructureRepository.mustFindByNameAndDeletedIsFalse(entity.getName());
-        AbstractObjectStructure structure = new AbstractObjectStructureDTO(structureEntity,
-                structureParameterService.findById(structureEntity.getId())
-        );
-
-        Map<String, String> parameters = structureParameterService.validateAndInsertDefaultIfRequired(request.getParameters(), structure.getParameters());
+        Map<String, String> parameters = structureParameterService.validateAndInsertDefaultIfRequired(request.getParameters(),
+                findStructureByName(entity.getName()).getParameters());
 
         Map<String, String> updatedProperties = entity.getParameters();
         updatedProperties.putAll(parameters);
@@ -83,5 +76,13 @@ public class AbstractObjectService {
 
     public AbstractObject findById(final long id) {
         return new AbstractObjectDTO(repository.mustFindByIdAndDeletedIsFalse(id));
+    }
+
+    // Because of circular references, I'll put it here and call it a day
+    private AbstractObjectStructure findStructureByName(final String name) {
+        final AbstractObjectStructureEntity structureEntity = abstractObjectStructureRepository.mustFindByNameAndDeletedIsFalse(name);
+        return new AbstractObjectStructureDTO(structureEntity,
+                structureParameterService.findById(structureEntity.getId())
+        );
     }
 }

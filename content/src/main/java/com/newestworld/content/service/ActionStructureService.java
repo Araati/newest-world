@@ -24,12 +24,14 @@ public class ActionStructureService {
     private final ActionStructureRepository actionStructureRepository;
 
     public ActionStructure create(final ActionStructureCreateDTO request) {
-        ActionStructureEntity actionStructureEntity = new ActionStructureEntity(request);
-        actionStructureRepository.save(actionStructureEntity);
-        List<StructureParameter> parameters = new ArrayList<>(structureParameterService.create(actionStructureEntity.getId(), request.getParameters()));
-        List<Node> nodeDTOS = nodeService.createAll(actionStructureEntity.getId(), request.getSteps());
-        log.info("ActionStructure with {} id created", actionStructureEntity.getId());
-        return new ActionStructureDTO(actionStructureEntity, parameters, nodeDTOS);
+        ActionStructureEntity entity = new ActionStructureEntity(request);
+        actionStructureRepository.save(entity);
+        List<StructureParameter> parameters = new ArrayList<>(
+                structureParameterService.create(entity.getId(), request.getParameters())
+        );
+        List<Node> nodeDTOS = nodeService.createAll(entity.getId(), request.getSteps());
+        log.info("ActionStructure with {} id created", entity.getId());
+        return new ActionStructureDTO(entity, parameters, nodeDTOS);
     }
 
     public void delete(final long id) {
@@ -40,20 +42,18 @@ public class ActionStructureService {
     }
 
     public ActionStructure findById(final long id) {
-        List<StructureParameter> parameters = structureParameterService.findById(id);
         return new ActionStructureDTO(
                 actionStructureRepository.mustFindByIdAndDeletedIsFalse(id),
-                parameters,
+                structureParameterService.findById(id),
                 nodeService.findAllById(id)
         );
     }
 
     public ActionStructure findByName(final String name)    {
         ActionStructureEntity entity = actionStructureRepository.mustFindByNameAndDeletedIsFalse(name);
-        List<StructureParameter> parameters = structureParameterService.findById(entity.getId());
         return new ActionStructureDTO(
                 entity,
-                parameters,
+                structureParameterService.findById(entity.getId()),
                 nodeService.findAllById(entity.getId())
         );
     }

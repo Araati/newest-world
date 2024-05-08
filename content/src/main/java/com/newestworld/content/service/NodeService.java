@@ -20,21 +20,23 @@ public class NodeService {
     private final NodeRepository nodeRepository;
 
     public List<Node> createAll(final long actionId, final List<NodeCreateDTO> request) {
-        List<Node> nodeDTOS = new ArrayList<>();
-        for (NodeCreateDTO nodeCreateDTO : request) {
-            NodeEntity nodeEntity = new NodeEntity(actionId, nodeCreateDTO);
-            nodeRepository.save(nodeEntity);
-            nodeDTOS.add(new NodeDTO(nodeEntity));
+        List<Node> nodes = new ArrayList<>();
+        for (NodeCreateDTO createDTO : request) {
+            NodeEntity entity = new NodeEntity(actionId, createDTO);
+            nodeRepository.save(entity);
+            nodes.add(new NodeDTO(entity));
         }
-        return nodeDTOS;
+        return nodes;
     }
 
     public void deleteAll(final long actionId) {
-        List<NodeEntity> nodeEntities = nodeRepository.findAllByStructureIdAndDeletedIsFalse(actionId);
-        nodeRepository.saveAll(nodeEntities.stream().map(x -> x.withDeleted(true)).toList());
+        List<NodeEntity> entities = nodeRepository.findAllByStructureIdAndDeletedIsFalse(actionId);
+        nodeRepository.saveAll(entities.stream().map(x -> x.withDeleted(true)).toList());
     }
 
     public List<Node> findAllById(final long actionId)  {
-        return new ArrayList<>(nodeRepository.findAllByStructureIdAndDeletedIsFalse(actionId).stream().map(NodeDTO::new).toList());
+        return new ArrayList<>(
+                nodeRepository.findAllByStructureIdAndDeletedIsFalse(actionId).stream().map(NodeDTO::new).toList()
+        );
     }
 }

@@ -30,7 +30,6 @@ public class ActionService {
     public Action create(final ActionCreateDTO request) {
 
         ActionStructure structure = actionStructureService.findByName(request.getName());
-
         Map<String, String> parameters = structureParameterService.validateAndInsertDefaultIfRequired(request.getInput(), structure.getParameters());
 
         // Saving action

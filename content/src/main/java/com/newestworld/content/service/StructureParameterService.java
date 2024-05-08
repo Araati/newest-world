@@ -14,7 +14,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -24,34 +23,43 @@ public class StructureParameterService {
     private final Validator validator;
     private final StructureParameterRepository structureParameterRepository;
 
-    public List<StructureParameterDTO> create(final long actionId, final List<StructureParameterCreateDTO> request) {
+    public List<StructureParameterDTO> create(final long structureId, final List<StructureParameterCreateDTO> request) {
         List<StructureParameterDTO> parameters = new ArrayList<>();
-        for (final StructureParameterCreateDTO structureParameterCreateDTO : request) {
-            structureParameterRepository.save(new StructureParameterEntity(actionId, structureParameterCreateDTO));
+        
+        for (final StructureParameterCreateDTO createDTO : request) {
+            structureParameterRepository.save(new StructureParameterEntity(structureId, createDTO));
             parameters.add(new StructureParameterDTO(
-                    structureParameterCreateDTO.getName(),
-                    structureParameterCreateDTO.isRequired(),
-                    structureParameterCreateDTO.getType(),
-                    structureParameterCreateDTO.getInit(),
-                    structureParameterCreateDTO.getMin(),
-                    structureParameterCreateDTO.getMax()));
+                    createDTO.getName(),
+                    createDTO.isRequired(),
+                    createDTO.getType(),
+                    createDTO.getInit(),
+                    createDTO.getMin(),
+                    createDTO.getMax())
+            );
         }
+        
         return parameters;
     }
 
-    public void delete(final long modelId) {
-        structureParameterRepository.saveAll(structureParameterRepository.findAllByStructureIdAndDeletedIsFalse(modelId).stream()
-                .map(x -> x.withDeleted(true)).collect(Collectors.toList()));
+    public void delete(final long structureId) {
+        structureParameterRepository.saveAll(
+                structureParameterRepository.findAllByStructureIdAndDeletedIsFalse(structureId).stream()
+                .map(x -> x.withDeleted(true)).toList()
+        );
     }
 
-    public void deleteAll(final List<Long> ids) {
-        structureParameterRepository.saveAll(structureParameterRepository.findAllByStructureIdInAndDeletedIsFalse(ids).stream()
-                .map(x -> x.withDeleted(true)).toList());
+    public void deleteAll(final List<Long> structureIds) {
+        structureParameterRepository.saveAll(
+                structureParameterRepository.findAllByStructureIdInAndDeletedIsFalse(structureIds).stream()
+                .map(x -> x.withDeleted(true)).toList()
+        );
     }
 
-    public List<StructureParameter> findById(final long modelId)   {
-        return new ArrayList<>(structureParameterRepository.findAllByStructureIdAndDeletedIsFalse(modelId)
-                .stream().map(StructureParameterDTO::new).toList());
+    public List<StructureParameter> findById(final long structureId)   {
+        return new ArrayList<>(
+                structureParameterRepository.findAllByStructureIdAndDeletedIsFalse(structureId)
+                .stream().map(StructureParameterDTO::new).toList()
+        );
     }
 
     public Map<String, String> validateAndInsertDefaultIfRequired(final Map<String, String> input, final List<StructureParameter> expectedParameters) {
