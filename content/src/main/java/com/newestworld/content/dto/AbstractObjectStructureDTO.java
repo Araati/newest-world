@@ -1,13 +1,14 @@
 package com.newestworld.content.dto;
 
 import com.newestworld.commons.model.AbstractObjectStructure;
+import com.newestworld.commons.model.StructureParameter;
 import com.newestworld.content.model.entity.AbstractObjectStructureEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.util.Map;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor
@@ -18,14 +19,14 @@ public class AbstractObjectStructureDTO implements AbstractObjectStructure {
 
     private String name;
 
-    private Map<String, String> properties;
+    private List<StructureParameter> parameters;
 
     private LocalDateTime createdAt;
 
-    public AbstractObjectStructureDTO(final AbstractObjectStructureEntity source) {
+    public AbstractObjectStructureDTO(final AbstractObjectStructureEntity source, final List<StructureParameter> parameters) {
         this.id = source.getId();
         this.name = source.getName();
-        this.properties = source.getProperties();
+        this.parameters = parameters;
         this.createdAt = source.getCreatedAt();
     }
 }

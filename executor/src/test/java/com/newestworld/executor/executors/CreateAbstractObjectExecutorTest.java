@@ -1,7 +1,7 @@
 package com.newestworld.executor.executors;
 
-import com.newestworld.commons.model.ActionParameter;
-import com.newestworld.commons.model.ActionParameters;
+import com.newestworld.commons.model.ModelParameter;
+import com.newestworld.commons.model.ModelParameters;
 import com.newestworld.executor.ExecutorApplication;
 import com.newestworld.executor.util.ExecutionContext;
 import com.newestworld.streams.event.AbstractObjectCreateEvent;
@@ -20,11 +20,11 @@ class CreateAbstractObjectExecutorTest {
 
     @Test
     void execute()  {
-        ActionParameters parameters = new ActionParameters.Impl(List.of(new ActionParameter(1, "name", "factory"),
-                new ActionParameter(1, "next", 2)));
+        ModelParameters parameters = new ModelParameters.Impl(List.of(new ModelParameter(1, "name", "factory"),
+                new ModelParameter(1, "next", 2)));
 
         ExecutionContext context = new ExecutionContext();
-        context.createLocalScope(parameters);
+        context.createNodeScope(parameters);
 
         ActionExecutor executor = new CreateAbstractObjectExecutor();
         String next = executor.exec(context);

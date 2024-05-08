@@ -10,7 +10,6 @@ import lombok.With;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
-import java.util.HashMap;
 import java.util.Map;
 
 @Getter
@@ -29,9 +28,8 @@ public class AbstractObjectEntity {
 
     private String name;
 
-    // Инициализация для того, чтобы не было пересечений с мапой в structure
     @ElementCollection(fetch = FetchType.EAGER)
-    private Map<String, String> properties = new HashMap<>();
+    private Map<String, String> parameters;
 
     private boolean deleted;
 
@@ -39,10 +37,9 @@ public class AbstractObjectEntity {
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    public AbstractObjectEntity(final AbstractObjectCreateDTO request, final AbstractObjectStructure structure) {
+    public AbstractObjectEntity(final AbstractObjectCreateDTO request, final Map<String, String> parameters, final AbstractObjectStructure structure) {
         this.structureId = structure.getId();
+        this.parameters = parameters;
         this.name = request.getName();
-        this.properties.putAll(structure.getProperties());
-        this.properties.putAll(request.getProperties());
     }
 }

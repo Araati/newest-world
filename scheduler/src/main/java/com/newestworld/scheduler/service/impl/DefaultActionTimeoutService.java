@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 @Service
 @RequiredArgsConstructor
@@ -41,8 +40,8 @@ public class DefaultActionTimeoutService implements ActionTimeoutService {
     }
 
     public void markAllProcessing(final List<IdReference> list)    {
-        actionTimeoutRepository.saveAll(StreamSupport.stream(actionTimeoutRepository
-                .findAllByActionIdIn(list.stream().map(IdReference::getId).toList()).spliterator(), false)
+        actionTimeoutRepository.saveAll(actionTimeoutRepository
+                .findAllByActionIdIn(list.stream().map(IdReference::getId).toList()).stream()
                 .map(x -> x.withProcessing(true)).toList());
     }
 

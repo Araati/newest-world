@@ -9,7 +9,6 @@ import lombok.With;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
-import java.util.Map;
 
 @Getter
 @NoArgsConstructor
@@ -20,14 +19,11 @@ import java.util.Map;
 public class AbstractObjectStructureEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "structure")
     private long id;
 
     @Column(unique = true)
     private String name;
-
-    @ElementCollection(fetch = FetchType.EAGER)
-    private Map<String, String> properties;
 
     private boolean deleted;
 
@@ -37,6 +33,5 @@ public class AbstractObjectStructureEntity {
 
     public AbstractObjectStructureEntity(final AbstractObjectStructureCreateDTO request) {
         this.name = request.getName();
-        this.properties = request.getProperties();
     }
 }

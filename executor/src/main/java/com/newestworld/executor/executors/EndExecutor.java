@@ -1,7 +1,7 @@
 package com.newestworld.executor.executors;
 
 import com.newestworld.commons.model.ActionType;
-import com.newestworld.commons.model.BasicAction;
+import com.newestworld.commons.model.Node;
 import com.newestworld.executor.util.ExecutionContext;
 import com.newestworld.streams.publisher.EventPublisher;
 import lombok.RequiredArgsConstructor;
@@ -27,13 +27,13 @@ public class EndExecutor implements ActionExecutor {
             }
         }
 
-        log.info("CompoundAction with {} id processed", Long.parseLong(context.getLocalVariable("compound_id").toString()));
+        log.info("Action with {} id processed", Long.parseLong(context.getNodeVariable("action_id").toString()));
         return "";
     }
 
     @Override
-    public boolean support(final BasicAction basicAction) {
-        return basicAction.getType() == ActionType.END;
+    public boolean support(final Node node) {
+        return node.getType() == ActionType.END;
     }
 
 }

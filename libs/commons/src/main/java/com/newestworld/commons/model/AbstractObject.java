@@ -11,7 +11,7 @@ public interface AbstractObject {
 
     String getName();
 
-    Map<String, String> getProperties();
+    Map<String, String> getParameters();
 
     LocalDateTime getCreatedAt();
 

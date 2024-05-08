@@ -1,7 +1,7 @@
 package com.newestworld.commons.model;
 
 import java.time.LocalDateTime;
-import java.util.Map;
+import java.util.List;
 
 public interface AbstractObjectStructure {
 
@@ -9,7 +9,7 @@ public interface AbstractObjectStructure {
 
     String getName();
 
-    Map<String, String> getProperties();
+    List<StructureParameter> getParameters();
 
     LocalDateTime getCreatedAt();
 
