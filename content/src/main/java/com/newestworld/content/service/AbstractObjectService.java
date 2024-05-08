@@ -45,7 +45,7 @@ public class AbstractObjectService {
         Set<String> input = request.getInput().keySet();
         List<StructureParameter> expectedParameters = structure.getParameters();
         for (StructureParameter parameter : expectedParameters)    {
-            if(!input.contains(parameter.getName()) && parameter.isRequired())   {
+            if(!input.contains(parameter.getName()) && parameter.isRequired() && parameter.getInit() == null)   {
                 throw new ValidationFailedException("Input parameter not present : " + parameter.getName());
             }
         }
