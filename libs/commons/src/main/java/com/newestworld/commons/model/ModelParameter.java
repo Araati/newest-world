@@ -26,8 +26,8 @@ public class ModelParameter {
     @NotBlank
     private String type;
 
-    private Long min;
     private Long max;
+    private Long min;
 
 
 }

@@ -11,7 +11,7 @@ import java.lang.annotation.*;
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ValidStructureParameter {
-    String message() default "ModelParameter invalid";
+    String message() default "StructureParameter invalid";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 }

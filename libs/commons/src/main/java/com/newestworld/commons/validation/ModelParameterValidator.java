@@ -25,6 +25,7 @@ public class ModelParameterValidator implements ConstraintValidator<ValidModelPa
     }
 
     private boolean isDataValidAndInBounds(final String data, ModelParameter parameter) {
+        //fixme duplicated code
         if (data == null)
             return true;
 

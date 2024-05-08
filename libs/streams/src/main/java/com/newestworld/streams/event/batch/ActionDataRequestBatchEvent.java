@@ -18,7 +18,7 @@ public class ActionDataRequestBatchEvent implements Event {
     private Collection<ActionDataRequestEvent> batch = new ArrayList<>();
 
     public ActionDataRequestBatchEvent(final ActionTimeoutBatchEvent source) {
-        this.batch = source.getBatch().stream().map(ActionDataRequestEvent::new).collect(Collectors.toList());
+        this.batch = source.getBatch().stream().map(ActionDataRequestEvent::new).toList();
     }
 
     public int getSize()    {

@@ -20,6 +20,7 @@ public class StructureParameterValidator implements ConstraintValidator<ValidStr
     }
 
     private boolean isDataValidAndInBounds(final String data, StructureParameter parameter) {
+        //fixme duplicated code
         if (data == null)
             return true;
 
