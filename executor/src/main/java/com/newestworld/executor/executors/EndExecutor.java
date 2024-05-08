@@ -27,7 +27,7 @@ public class EndExecutor implements ActionExecutor {
             }
         }
 
-        log.info("Action with {} id processed", Long.parseLong(context.getLocalVariable("action_id").toString()));
+        log.info("Action with {} id processed", Long.parseLong(context.getNodeVariable("action_id").toString()));
         return "";
     }
 

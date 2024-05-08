@@ -19,15 +19,15 @@ public class ModifyExecutor implements ActionExecutor {
     @Override
     public String exec(final ExecutionContext context) {
 
-        var target = context.getLocalVariable("target");
-        var field = context.getLocalVariable("field");
-        var value = context.getLocalVariable("value");
+        var target = context.getNodeVariable("target");
+        var field = context.getNodeVariable("field");
+        var value = context.getNodeVariable("value");
 
         Map<String, String> toUpdate = new HashMap<>();
         toUpdate.put(field.toString(), value.toString());
         context.addEvent(new AbstractObjectUpdateEvent(Long.parseLong(target.toString()), toUpdate));
 
-        return context.getLocalVariable("next").toString();
+        return context.getNodeVariable("next").toString();
     }
 
     @Override

@@ -15,8 +15,8 @@ public class StartExecutor implements ActionExecutor {
 
     @Override
     public String exec(final ExecutionContext context) {
-        context.addEvent(new ActionDeleteEvent(Long.parseLong(context.getLocalVariable("action_id").toString())));
-        return context.getLocalVariable("next").toString();
+        context.addEvent(new ActionDeleteEvent(Long.parseLong(context.getNodeVariable("action_id").toString())));
+        return context.getNodeVariable("next").toString();
     }
 
     @Override

@@ -25,7 +25,7 @@ class CreateActionExecutorTest {
                 new ModelParameter(1, "next", 2)));
 
         ExecutionContext context = new ExecutionContext();
-        context.createLocalScope(parameters);
+        context.createNodeScope(parameters);
 
         ActionExecutor executor = new CreateActionExecutor();
         String next = executor.exec(context);

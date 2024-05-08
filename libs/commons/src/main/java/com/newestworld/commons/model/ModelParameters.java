@@ -16,6 +16,8 @@ public interface ModelParameters {
 
     List<ModelParameter> getAll();
 
+    void add(final ModelParameter parameter);
+
     default Optional<ModelParameter> getByName(final String name) {
         return getAll().stream().filter(x -> x.getName().equals(name)).findFirst();
     }
@@ -47,9 +49,14 @@ public interface ModelParameters {
             return parameters;
         }
 
+        public void add(final ModelParameter parameter)   {
+            parameters.add(parameter);
+        }
+
         @JsonCreator
         public Impl(final List<ModelParameter> parameters) {
             this.parameters = parameters;
         }
+
     }
 }

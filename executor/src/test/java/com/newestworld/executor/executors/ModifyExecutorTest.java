@@ -26,7 +26,7 @@ class ModifyExecutorTest {
                 new ModelParameter(1, "next", 2)));
 
         ExecutionContext context = new ExecutionContext();
-        context.createLocalScope(parameters);
+        context.createNodeScope(parameters);
 
         ActionExecutor executor = new ModifyExecutor();
         String next = executor.exec(context);

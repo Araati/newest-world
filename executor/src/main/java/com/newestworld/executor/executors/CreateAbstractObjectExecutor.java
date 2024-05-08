@@ -19,16 +19,16 @@ public class CreateAbstractObjectExecutor implements ActionExecutor {
     public String exec(final ExecutionContext context) {
         var properties = new HashMap<String, String>();
 
-        var name = context.getLocalVariable("name");
+        var name = context.getNodeVariable("name");
 
         // Ignore first (name) and last (next) parameter
-        for (var pair : context.getLocal().entrySet())  {
+        for (var pair : context.getNodeScope().entrySet())  {
             if (!(pair.getKey().equals("name") || pair.getKey().equals("next")))   {
                 properties.put(pair.getKey(), pair.getValue());
             }
         }
         context.addEvent(new AbstractObjectCreateEvent(name.toString(), properties));
-        return context.getLocalVariable("next").toString();
+        return context.getNodeVariable("next").toString();
     }
 
     @Override

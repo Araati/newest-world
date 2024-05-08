@@ -25,8 +25,8 @@ class StartExecutorTest {
                 new ModelParameter(1, "next", 2)));
 
         ExecutionContext context = new ExecutionContext();
-        context.updateGlobalVariable("action_id", "1");
-        context.createLocalScope(parameters);
+        context.updateActionScope("action_id", "1");
+        context.createNodeScope(parameters);
 
         ActionExecutor executor = new StartExecutor();
         String next = executor.exec(context);

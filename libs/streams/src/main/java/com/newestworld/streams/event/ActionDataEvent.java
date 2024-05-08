@@ -15,7 +15,7 @@ public class ActionDataEvent implements Event {
 
     private Long actionId;
 
-    private List<StructureParameter> input;
+    private ModelParameters input;
 
     private List<NodeEvent> nodes;
 
