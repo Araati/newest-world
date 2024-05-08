@@ -30,8 +30,8 @@ public class StructureParameterCreateDTO implements StructureParameter {
 
     private String init;
 
-    private Long min;
-
     private Long max;
+
+    private Long min;
 
 }

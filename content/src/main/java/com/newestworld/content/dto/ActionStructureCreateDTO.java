@@ -13,14 +13,14 @@ import java.util.List;
 @AllArgsConstructor
 public class ActionStructureCreateDTO {
 
-    @JsonProperty(value = "name", required = true)
+    @JsonProperty(required = true)
     private String name;
 
     @Valid
     @JsonProperty(required = true)
     private List<StructureParameterCreateDTO> parameters;
 
-    @JsonProperty(value = "steps", required = true)
+    @JsonProperty(required = true)
     private List<NodeCreateDTO> steps;
 
 }

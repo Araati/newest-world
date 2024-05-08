@@ -6,7 +6,7 @@ public interface StructureParameter {
     boolean isRequired();
     String getType();
     String getInit();
-    Long getMin();
     Long getMax();
+    Long getMin();
 
 }

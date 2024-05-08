@@ -7,9 +7,9 @@ public interface Action {
 
     long getId();
 
-    String getName();
-
     long getStructureId();
+
+    String getName();
 
     Map<String, String> getParameters();
 

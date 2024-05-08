@@ -15,15 +15,15 @@ public class StructureParameterDTO implements StructureParameter {
     private boolean required;
     private String type;
     private String init;
-    private Long min;
     private Long max;
+    private Long min;
 
     public StructureParameterDTO(final StructureParameterEntity source) {
         this.name = source.getName();
         this.required = source.isRequired();
         this.type = source.getType();
         this.init = source.getInit();
-        this.min = source.getMin();
         this.max = source.getMax();
+        this.min = source.getMin();
     }
 }

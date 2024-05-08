@@ -12,7 +12,7 @@ import java.util.Map;
 @AllArgsConstructor
 public class ActionCreateDTO {
 
-    @JsonProperty(value = "name", required = true)
+    @JsonProperty(required = true)
     private String name;
 
     private Map<String, String> input;

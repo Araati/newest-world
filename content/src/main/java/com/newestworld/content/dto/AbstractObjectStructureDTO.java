@@ -23,7 +23,7 @@ public class AbstractObjectStructureDTO implements AbstractObjectStructure {
 
     private LocalDateTime createdAt;
 
-    public AbstractObjectStructureDTO(final AbstractObjectStructureEntity source, List<StructureParameter> parameters) {
+    public AbstractObjectStructureDTO(final AbstractObjectStructureEntity source, final List<StructureParameter> parameters) {
         this.id = source.getId();
         this.name = source.getName();
         this.parameters = parameters;

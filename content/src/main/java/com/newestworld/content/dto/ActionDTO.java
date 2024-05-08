@@ -16,9 +16,9 @@ public class ActionDTO implements Action {
 
     private long id;
 
-    private String name;
-
     private long structureId;
+
+    private String name;
 
     private long timeout;
 
@@ -28,8 +28,8 @@ public class ActionDTO implements Action {
 
     public ActionDTO(final ActionEntity source, final long timeout)    {
         this.id = source.getId();
-        this.name = source.getName();
         this.structureId = source.getStructureId();
+        this.name = source.getName();
         this.timeout = timeout;
         this.parameters = source.getParameters();
         this.createdAt = source.getCreatedAt();

@@ -12,10 +12,10 @@ import java.util.Map;
 @AllArgsConstructor
 public class NodeCreateDTO {
 
-    @JsonProperty(value = "type", required = true)
+    @JsonProperty(required = true)
     private int type;
 
-    @JsonProperty(value = "position", required = true)
+    @JsonProperty(required = true)
     private Long position;
 
     private Map<String, String> parameters;

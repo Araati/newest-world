@@ -7,6 +7,7 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.Optional;
 
 public interface AbstractObjectStructureRepository extends CrudRepository<AbstractObjectStructureEntity, Long> {
+
     Optional<AbstractObjectStructureEntity> findByIdAndDeletedIsFalse(final long id);
     default AbstractObjectStructureEntity mustFindByIdAndDeletedIsFalse(final long id)   {
         return findByIdAndDeletedIsFalse(id).orElseThrow(() -> new ResourceNotFoundException("AbstractObjectStructure", id));

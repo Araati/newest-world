@@ -15,6 +15,7 @@ import java.util.Map;
 @AllArgsConstructor
 public class NodeDTO implements Node {
 
+    //fixme id of node is not required ANYWHERE
     private long id;
 
     private Long position;

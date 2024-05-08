@@ -32,8 +32,8 @@ public class StructureParameterEntity {
 
     private String init;
 
-    private Long min;
     private Long max;
+    private Long min;
 
     private boolean deleted;
 
@@ -47,7 +47,7 @@ public class StructureParameterEntity {
         this.required = source.isRequired();
         this.type = source.getType();
         this.init = source.getInit();
-        this.min = source.getMin();
         this.max = source.getMax();
+        this.min = source.getMin();
     }
 }

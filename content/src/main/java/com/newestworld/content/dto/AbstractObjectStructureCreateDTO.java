@@ -13,7 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 public class AbstractObjectStructureCreateDTO {
 
-    @JsonProperty(value = "name", required = true)
+    @JsonProperty(required = true)
     private String name;
 
     @Valid

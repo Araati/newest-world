@@ -23,9 +23,10 @@ public class ActionEntity {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "model")
     private long id;
 
+    private long structureId;
+
     private String name;
 
-    private long structureId;
 
     private boolean deleted;
 
@@ -36,7 +37,7 @@ public class ActionEntity {
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    public ActionEntity(final ActionCreateDTO source, Map<String, String> parameters, final long structureId) {
+    public ActionEntity(final ActionCreateDTO source, final Map<String, String> parameters, final long structureId) {
         this.name = source.getName();
         this.structureId = structureId;
         this.parameters = parameters;

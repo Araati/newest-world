@@ -23,9 +23,9 @@ public class NodeEntity {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "model")
     private long id;
 
-    private Long position;
-
     private long structureId;
+
+    private Long position;
 
     private int type;
 
