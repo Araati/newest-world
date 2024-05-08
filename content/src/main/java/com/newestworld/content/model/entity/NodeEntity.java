@@ -29,7 +29,7 @@ public class NodeEntity {
 
     private int type;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     private Map<String, String> parameters;
 
     private boolean deleted;

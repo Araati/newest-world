@@ -28,7 +28,7 @@ public class AbstractObjectEntity {
 
     private String name;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     private Map<String, String> parameters;
 
     private boolean deleted;

@@ -29,7 +29,7 @@ public class ActionEntity {
 
     private boolean deleted;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     private Map<String, String> parameters;
 
     @CreationTimestamp
