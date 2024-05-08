@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.Map;
 
 @Getter
 @NoArgsConstructor
@@ -21,7 +22,7 @@ public class NodeDTO implements Node {
 
     private ActionType type;
 
-    private ModelParameters parameters;
+    private Map<String, String> parameters;
 
     private LocalDateTime createdAt;
 

@@ -37,8 +37,9 @@ public class AbstractObjectEntity {
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    public AbstractObjectEntity(final AbstractObjectCreateDTO request, final AbstractObjectStructure structure) {
+    public AbstractObjectEntity(final AbstractObjectCreateDTO request, final Map<String, String> parameters, final AbstractObjectStructure structure) {
         this.structureId = structure.getId();
+        this.parameters = parameters;
         this.name = request.getName();
     }
 }

@@ -36,9 +36,9 @@ public class ActionEntity {
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    public ActionEntity(final ActionCreateDTO source, final long structureId) {
+    public ActionEntity(final ActionCreateDTO source, Map<String, String> parameters, final long structureId) {
         this.name = source.getName();
         this.structureId = structureId;
-        this.parameters = source.getInput();
+        this.parameters = parameters;
     }
 }

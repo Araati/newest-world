@@ -18,6 +18,6 @@ public class AbstractObjectUpdateDTO {
 
     public AbstractObjectUpdateDTO(final AbstractObjectUpdateEvent event) {
         this.id = event.getId();
-        this.parameters = event.getProperties();
+        this.parameters = event.getParameters();
     }
 }

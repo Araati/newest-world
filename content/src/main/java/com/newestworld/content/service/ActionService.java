@@ -7,11 +7,13 @@ import com.newestworld.content.dto.*;
 import com.newestworld.content.model.entity.ActionEntity;
 import com.newestworld.streams.event.ActionTimeoutCreateEvent;
 import com.newestworld.streams.publisher.EventPublisher;
+import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -45,27 +47,37 @@ public class ActionService {
             }
         }
 
-        // Check, if input is valid
-        for (Map.Entry<String, String> pair: request.getInput().entrySet()) {
-            StructureParameter structureParameter = structure.getParameters()
-                    .stream().filter(x -> x.getName().equals(pair.getKey())).findAny().orElseThrow(ValidationFailedException::new);
-            ModelParameter dto = new ModelParameter(
-                    pair.getKey(),
-                    structureParameter.isRequired(),
-                    pair.getValue(),
-                    structureParameter.getType(),
-                    structureParameter.getInit(),
-                    structureParameter.getMin(),
-                    structureParameter.getMax());
-            var violations = validator.validate(dto);
+        // Check, if input is valid and insert init values if needed
+        //fixme code duplicate
+        Map<String, String> inputMap = request.getInput();
+        Map<String, String> parameters = new HashMap<>();
+        for (StructureParameter parameter : expectedParameters) {
+            var validatableBuilder = ModelParameter.builder();
+            Set<ConstraintViolation<ModelParameter>> violations;
+            validatableBuilder
+                    .name(parameter.getName())
+                    .required(parameter.isRequired())
+                    .type(parameter.getType())
+                    .min(parameter.getMin())
+                    .max(parameter.getMax());
+            if (inputMap.containsKey(parameter.getName())) {
+                validatableBuilder.data(inputMap.get(parameter.getName()));
+            } else if (parameter.getInit() != null) {
+                validatableBuilder.data(parameter.getInit());
+            } else if (parameter.isRequired()) {
+                throw new ValidationFailedException("Input parameter not present : " + parameter.getName());
+            }
+            var validatable = validatableBuilder.build();
+            violations = validator.validate(validatableBuilder.build());
             if (!violations.isEmpty()) {
                 throw new ValidationFailedException();
             }
+            parameters.put(parameter.getName(), validatable.getData());
         }
 
 
         // Saving action
-        ActionEntity actionEntity = new ActionEntity(request, structure.getId());
+        ActionEntity actionEntity = new ActionEntity(request, parameters, structure.getId());
         actionRepository.save(actionEntity);
 
         actionTimeoutCreateEventPublisher.send(new ActionTimeoutCreateEvent(actionEntity.getId(), timeout));
