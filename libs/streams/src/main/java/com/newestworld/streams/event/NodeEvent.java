@@ -1,6 +1,5 @@
 package com.newestworld.streams.event;
 
-import com.newestworld.commons.model.ModelParameters;
 import com.newestworld.commons.model.Node;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,8 +13,6 @@ import java.util.Map;
 @AllArgsConstructor
 public class NodeEvent implements Event {
 
-    private long id;
-
     private Long position;
 
     // Енамка не передается нормально, разбираться мне лень
@@ -26,7 +23,6 @@ public class NodeEvent implements Event {
     private LocalDateTime createdAt;
 
     public NodeEvent(final Node node) {
-        this.id = node.getId();
         this.position = node.getPosition();
         this.type = node.getType().getId();
         this.parameters = node.getParameters();

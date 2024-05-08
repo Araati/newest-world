@@ -5,8 +5,6 @@ import java.util.Map;
 
 public interface Node {
 
-    long getId();
-
     Long getPosition();
 
     ActionType getType();

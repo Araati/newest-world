@@ -44,7 +44,7 @@ public class ActionExecutorAggregator {
     private void execute(final Node current, final List<Node> nodes) {
         var supported = executors.stream().filter(x -> x.support(current)).findFirst();
         if (supported.isEmpty()) {
-            log.warn("Node {} with type {} does not have executors", current.getId(), current.getType().name());
+            log.warn("Type {} node does not have executors", current.getType().name());
         } else {
             nodes.remove(current);
 

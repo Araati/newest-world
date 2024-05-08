@@ -15,9 +15,6 @@ import java.util.Map;
 @AllArgsConstructor
 public class NodeDTO implements Node {
 
-    //fixme id of node is not required ANYWHERE
-    private long id;
-
     private Long position;
 
     private ActionType type;
@@ -27,7 +24,6 @@ public class NodeDTO implements Node {
     private LocalDateTime createdAt;
 
     public NodeDTO(final NodeEntity source)   {
-        this.id = source.getId();
         this.position = source.getPosition();
         this.type = ActionType.decode(source.getType());
         this.parameters = source.getParameters();
