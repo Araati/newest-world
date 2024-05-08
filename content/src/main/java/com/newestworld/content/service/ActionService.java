@@ -1,6 +1,5 @@
 package com.newestworld.content.service;
 
-import com.newestworld.commons.exception.ValidationFailedException;
 import com.newestworld.commons.model.*;
 import com.newestworld.content.dao.ActionRepository;
 import com.newestworld.content.dto.*;
@@ -11,9 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 @Slf4j
 @Service
@@ -34,16 +31,7 @@ public class ActionService {
 
         ActionStructure structure = actionStructureService.findByName(request.getName());
 
-        // Check, if all inputs are present
-        Set<String> input = request.getInput().keySet();
-        List<StructureParameter> expectedParameters = structure.getParameters();
-        for (StructureParameter parameter : expectedParameters)    {
-            if(!input.contains(parameter.getName()) && parameter.isRequired() && parameter.getInit() == null)   {
-                throw new ValidationFailedException("Input parameter not present : " + parameter.getName());
-            }
-        }
-
-        Map<String, String> parameters = structureParameterService.validateAndInsertDefaultIfRequired(request.getInput(), expectedParameters);
+        Map<String, String> parameters = structureParameterService.validateAndInsertDefaultIfRequired(request.getInput(), structure.getParameters());
 
         // Saving action
         ActionEntity actionEntity = new ActionEntity(request, parameters, structure.getId());

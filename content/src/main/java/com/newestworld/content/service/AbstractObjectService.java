@@ -3,7 +3,6 @@ package com.newestworld.content.service;
 import com.newestworld.commons.exception.ValidationFailedException;
 import com.newestworld.commons.model.AbstractObject;
 import com.newestworld.commons.model.AbstractObjectStructure;
-import com.newestworld.commons.model.StructureParameter;
 import com.newestworld.content.dao.AbstractObjectRepository;
 import com.newestworld.content.dao.AbstractObjectStructureRepository;
 import com.newestworld.content.dto.*;
@@ -15,7 +14,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 @Slf4j
 @Service
@@ -28,25 +26,12 @@ public class AbstractObjectService {
 
     public AbstractObject create(final AbstractObjectCreateDTO request) {
 
-        //fixme test this method when executor will be up
-
-        // Validation by structure
         AbstractObjectStructureEntity structureEntity = abstractObjectStructureRepository.mustFindByNameAndDeletedIsFalse(request.getName());
         AbstractObjectStructure structure = new AbstractObjectStructureDTO(structureEntity,
                 structureParameterService.findById(structureEntity.getId())
         );
 
-        // Check, if all inputs are present
-        Set<String> input = request.getInput().keySet();
-        List<StructureParameter> expectedParameters = structure.getParameters();
-        for (StructureParameter parameter : expectedParameters)    {
-            if(!input.contains(parameter.getName()) && parameter.isRequired() && parameter.getInit() == null)   {
-                throw new ValidationFailedException("Input parameter not present : " + parameter.getName());
-            }
-        }
-
-        // Check, if input is valid and insert init values if needed
-        Map<String, String> parameters = structureParameterService.validateAndInsertDefaultIfRequired(request.getInput(), expectedParameters);
+        Map<String, String> parameters = structureParameterService.validateAndInsertDefaultIfRequired(request.getInput(), structure.getParameters());
 
         AbstractObjectEntity entity = new AbstractObjectEntity(request, parameters, structure);
         repository.save(entity);
@@ -59,14 +44,12 @@ public class AbstractObjectService {
 
         AbstractObjectEntity entity = repository.mustFindByIdAndDeletedIsFalse(request.getId());
 
-
-        // Check if to-update properties exist in entity
+        // Check if to-update parameters exist in entity
         for (Map.Entry<String, String> pair : request.getParameters().entrySet())   {
             if (!entity.getParameters().containsKey(pair.getKey()))
                 throw new ValidationFailedException();
         }
 
-        // Validation by structure
         AbstractObjectStructureEntity structureEntity = abstractObjectStructureRepository.mustFindByNameAndDeletedIsFalse(entity.getName());
         AbstractObjectStructure structure = new AbstractObjectStructureDTO(structureEntity,
                 structureParameterService.findById(structureEntity.getId())
