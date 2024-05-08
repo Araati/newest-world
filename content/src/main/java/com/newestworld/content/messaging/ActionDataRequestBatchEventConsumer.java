@@ -1,7 +1,6 @@
 package com.newestworld.content.messaging;
 
-import com.newestworld.commons.model.ActionStructure;
-import com.newestworld.commons.model.StructureParameter;
+import com.newestworld.commons.model.*;
 import com.newestworld.content.facade.ActionFacade;
 import com.newestworld.content.facade.ActionStructureFacade;
 import com.newestworld.content.service.StructureParameterService;
@@ -17,7 +16,6 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Component
@@ -36,12 +34,25 @@ public class ActionDataRequestBatchEventConsumer implements Consumer<ActionDataR
         List<ActionDataRequestEvent> requests = new ArrayList<>(event.getBatch());
         List<ActionDataEvent> dataEvents = new ArrayList<>();
 
-        for (ActionDataRequestEvent request : requests) {
-            ActionStructure structure = actionStructureFacade.findById(actionFacade.findById(request.getId()).getStructureId());
-            List<NodeEvent> nodes = nodeService.findAllById(structure.getId())
-                    .stream().map(NodeEvent::new).collect(Collectors.toList());
-            List<StructureParameter> input = structureParameterService.findById(request.getId());
-            dataEvents.add(new ActionDataEvent(request.getId(), input, nodes));
+        for (final ActionDataRequestEvent request : requests) {
+            final Action action = actionFacade.findById(request.getId());
+            final ActionStructure structure = actionStructureFacade.findById(action.getStructureId());
+            final List<NodeEvent> nodes = nodeService.findAllById(structure.getId())
+                    .stream().map(NodeEvent::new).toList();
+            final List<StructureParameter> structureParameters = structureParameterService.findById(action.getStructureId());
+
+            List<ModelParameter> parameters = new ArrayList<>();
+            for (final StructureParameter structureParameter : structureParameters) {
+                parameters.add(new ModelParameter(
+                        structureParameter.getName(),
+                        structureParameter.isRequired(),
+                        action.getParameters().get(structureParameter.getName()),
+                        structureParameter.getType(),
+                        structureParameter.getMin(),
+                        structureParameter.getMax()
+                ));
+            }
+            dataEvents.add(new ActionDataEvent(request.getId(), new ModelParameters.Impl(parameters), nodes));
         }
 
         actionDataBatchEventPublisher.send(new ActionDataBatchEvent(dataEvents));
