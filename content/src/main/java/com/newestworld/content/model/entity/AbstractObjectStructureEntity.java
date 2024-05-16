@@ -27,7 +27,7 @@ public class AbstractObjectStructureEntity {
     private String name;
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private List<StructureParameterEntity> parameters;
+    private List<ModelParameterEntity> parameters;
 
     private boolean deleted;
 
@@ -37,6 +37,6 @@ public class AbstractObjectStructureEntity {
 
     public AbstractObjectStructureEntity(final AbstractObjectStructureCreateDTO request) {
         this.name = request.getName();
-        this.parameters = request.getParameters().stream().map(StructureParameterEntity::new).toList();
+        this.parameters = request.getParameters().stream().map(ModelParameterEntity::new).toList();
     }
 }

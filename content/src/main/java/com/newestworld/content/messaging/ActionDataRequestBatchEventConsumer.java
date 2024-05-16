@@ -39,14 +39,14 @@ public class ActionDataRequestBatchEventConsumer implements Consumer<ActionDataR
                     .stream().map(NodeEvent::new).toList();
 
             List<ModelParameter> parameters = new ArrayList<>();
-            for (final StructureParameter structureParameter : structure.getParameters()) {
+            for (final ModelParameter modelParameter : structure.getParameters()) {
                 parameters.add(new ModelParameter(
-                        structureParameter.getName(),
-                        structureParameter.isRequired(),
-                        action.getParameters().get(structureParameter.getName()),
-                        structureParameter.getType(),
-                        structureParameter.getMin(),
-                        structureParameter.getMax()
+                        modelParameter.getName(),
+                        modelParameter.isRequired(),
+                        action.getParameters().get(modelParameter.getName()),
+                        modelParameter.getType(),
+                        modelParameter.getMax(),
+                        modelParameter.getMin()
                 ));
             }
             dataEvents.add(new ActionDataEvent(request.getId(), new ModelParameters.Impl(parameters), nodes));

@@ -2,7 +2,6 @@ package com.newestworld.content.service;
 
 import com.newestworld.commons.exception.ValidationFailedException;
 import com.newestworld.commons.model.ModelParameter;
-import com.newestworld.commons.model.StructureParameter;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
 import lombok.RequiredArgsConstructor;
@@ -19,34 +18,27 @@ public class StructureParameterValidationService {
     private final Validator validator;
 
 
-    public Map<String, String> validateAndInsertDefaultIfRequired(final Map<String, String> input, final List<StructureParameter> expectedParameters) {
+    public Map<String, String> validateAndInsertDefaultIfRequired(final Map<String, String> input,
+                                                                  final List<ModelParameter> expectedParameters) {
         Map<String, String> parameters = new HashMap<>();
-        for (final StructureParameter expectedParameter : expectedParameters) {
+        for (final ModelParameter expectedParameter : expectedParameters) {
 
             Set<ConstraintViolation<ModelParameter>> violations;
-            var validatableBuilder = ModelParameter.builder();
-
-            validatableBuilder
-                    .name(expectedParameter.getName())
-                    .required(expectedParameter.isRequired())
-                    .type(expectedParameter.getType())
-                    .min(expectedParameter.getMin())
-                    .max(expectedParameter.getMax());
+            ModelParameter assembledParameter = expectedParameter;
 
             if (input.containsKey(expectedParameter.getName()))
-                validatableBuilder.data(input.get(expectedParameter.getName()));
-            else if (expectedParameter.getInit() != null)
-                validatableBuilder.data(expectedParameter.getInit());
-            else if (expectedParameter.isRequired())
+                assembledParameter = assembledParameter.withData(input.get(expectedParameter.getName())); // take data from input
+            else if (expectedParameter.getData() != null)
+                assembledParameter = assembledParameter.withData(expectedParameter.getData()); // take default data from structure
+            else if (expectedParameter.isRequired()) // if required and no data, then exception
                 throw new ValidationFailedException("Input parameter not present: " + expectedParameter.getName());
 
-            var validatable = validatableBuilder.build();
-            violations = validator.validate(validatableBuilder.build());
+            violations = validator.validate(assembledParameter);
 
             if (!violations.isEmpty())
                 throw new ValidationFailedException();
 
-            parameters.put(expectedParameter.getName(), validatable.getData());
+            parameters.put(expectedParameter.getName(), assembledParameter.getData());
         }
         return parameters;
     }

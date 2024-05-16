@@ -15,17 +15,11 @@ public class ModelParameterValidator implements ConstraintValidator<ValidModelPa
 
     @Override
     public boolean isValid(ModelParameter parameter, ConstraintValidatorContext constraintValidatorContext) {
-        return isDataNotRequiredOrPresent(parameter)
-                && isBoundsCorrect(parameter)
+        return isBoundsCorrect(parameter)
                 && isDataValidAndInBounds(parameter.getData(), parameter);
     }
 
-    private boolean isDataNotRequiredOrPresent(final ModelParameter parameter) {
-        return !parameter.isRequired() || parameter.getData() != null;
-    }
-
     private boolean isDataValidAndInBounds(final String data, ModelParameter parameter) {
-        //fixme duplicated code
         if (data == null)
             return true;
 

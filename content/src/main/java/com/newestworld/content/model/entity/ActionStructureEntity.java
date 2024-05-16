@@ -27,7 +27,7 @@ public class ActionStructureEntity {
     private String name;
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private List<StructureParameterEntity> parameters;
+    private List<ModelParameterEntity> parameters;
 
     private boolean deleted;
 
@@ -37,6 +37,6 @@ public class ActionStructureEntity {
 
     public ActionStructureEntity(final ActionStructureCreateDTO request) {
         this.name = request.getName();
-        this.parameters = request.getParameters().stream().map(StructureParameterEntity::new).toList();
+        this.parameters = request.getParameters().stream().map(ModelParameterEntity::new).toList();
     }
 }

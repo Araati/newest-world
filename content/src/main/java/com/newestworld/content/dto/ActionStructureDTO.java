@@ -1,9 +1,10 @@
 package com.newestworld.content.dto;
 
+import com.newestworld.commons.model.ModelParameter;
 import com.newestworld.commons.model.Node;
 import com.newestworld.commons.model.ActionStructure;
-import com.newestworld.commons.model.StructureParameter;
 import com.newestworld.content.model.entity.ActionStructureEntity;
+import com.newestworld.content.model.entity.ModelParameterEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,7 +22,7 @@ public class ActionStructureDTO implements ActionStructure {
     
     private String name;
 
-    private List<StructureParameter> parameters;
+    private List<ModelParameter> parameters = new ArrayList<>();
     
     private List<Node> steps;
     
@@ -30,7 +31,16 @@ public class ActionStructureDTO implements ActionStructure {
     public ActionStructureDTO(final ActionStructureEntity source, final List<Node> steps) {
         this.id = source.getId();
         this.name = source.getName();
-        this.parameters = new ArrayList<>(source.getParameters().stream().map(StructureParameterDTO::new).toList());
+        for (ModelParameterEntity entity : source.getParameters()) {
+            parameters.add(new ModelParameter(
+                    entity.getName(),
+                    entity.isRequired(),
+                    entity.getData(),
+                    entity.getType(),
+                    entity.getMax(),
+                    entity.getMin()
+            ));
+        }
         this.steps = steps;
         this.createdAt = source.getCreatedAt();
     }

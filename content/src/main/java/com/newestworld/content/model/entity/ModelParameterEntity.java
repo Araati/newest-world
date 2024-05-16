@@ -1,6 +1,6 @@
 package com.newestworld.content.model.entity;
 
-import com.newestworld.content.dto.StructureParameterCreateDTO;
+import com.newestworld.commons.model.ModelParameter;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,8 +15,8 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @With
 @Entity
-@Table(name = "structure_parameter")
-public class StructureParameterEntity {
+@Table(name = "model_parameter")
+public class ModelParameterEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,9 +26,10 @@ public class StructureParameterEntity {
 
     private boolean required;
 
+    private String data;
+
     private String type;
 
-    private String init;
 
     private Long max;
     private Long min;
@@ -39,11 +40,11 @@ public class StructureParameterEntity {
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    public StructureParameterEntity(final StructureParameterCreateDTO source) {
+    public ModelParameterEntity(final ModelParameter source) {
         this.name = source.getName();
         this.required = source.isRequired();
         this.type = source.getType();
-        this.init = source.getInit();
+        this.data = source.getData();
         this.max = source.getMax();
         this.min = source.getMin();
     }

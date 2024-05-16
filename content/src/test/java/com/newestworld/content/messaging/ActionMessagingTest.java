@@ -4,7 +4,6 @@ import com.newestworld.commons.exception.ResourceNotFoundException;
 import com.newestworld.commons.model.ActionType;
 import com.newestworld.commons.model.Action;
 import com.newestworld.content.ContentApplication;
-import com.newestworld.content.dto.StructureParameterCreateDTO;
 import com.newestworld.content.dto.NodeCreateDTO;
 import com.newestworld.content.dto.ActionCreateDTO;
 import com.newestworld.content.dto.ActionStructureCreateDTO;
