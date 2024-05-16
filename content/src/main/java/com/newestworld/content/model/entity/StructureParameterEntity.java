@@ -22,8 +22,6 @@ public class StructureParameterEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    private long structureId;
-
     private String name;
 
     private boolean required;
@@ -41,8 +39,7 @@ public class StructureParameterEntity {
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    public StructureParameterEntity(final long id, final StructureParameterCreateDTO source) {
-        this.structureId = id;
+    public StructureParameterEntity(final StructureParameterCreateDTO source) {
         this.name = source.getName();
         this.required = source.isRequired();
         this.type = source.getType();

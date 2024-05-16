@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -26,10 +27,10 @@ public class ActionStructureDTO implements ActionStructure {
     
     private LocalDateTime createdAt;
     
-    public ActionStructureDTO(final ActionStructureEntity source, final List<StructureParameter> parameters, final List<Node> steps) {
+    public ActionStructureDTO(final ActionStructureEntity source, final List<Node> steps) {
         this.id = source.getId();
         this.name = source.getName();
-        this.parameters = parameters;
+        this.parameters = new ArrayList<>(source.getParameters().stream().map(StructureParameterDTO::new).toList());
         this.steps = steps;
         this.createdAt = source.getCreatedAt();
     }

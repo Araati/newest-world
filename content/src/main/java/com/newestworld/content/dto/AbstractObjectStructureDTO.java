@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -23,10 +24,10 @@ public class AbstractObjectStructureDTO implements AbstractObjectStructure {
 
     private LocalDateTime createdAt;
 
-    public AbstractObjectStructureDTO(final AbstractObjectStructureEntity source, final List<StructureParameter> parameters) {
+    public AbstractObjectStructureDTO(final AbstractObjectStructureEntity source) {
         this.id = source.getId();
         this.name = source.getName();
-        this.parameters = parameters;
+        this.parameters = new ArrayList<>(source.getParameters().stream().map(StructureParameterDTO::new).toList());
         this.createdAt = source.getCreatedAt();
     }
 }

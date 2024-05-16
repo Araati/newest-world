@@ -21,14 +21,14 @@ import java.util.Map;
 public class AbstractObjectService {
 
     private final AbstractObjectRepository repository;
-    private final StructureParameterService structureParameterService;
+    private final StructureParameterValidationService structureParameterValidationService;
     private final AbstractObjectStructureRepository abstractObjectStructureRepository;
 
     public AbstractObject create(final AbstractObjectCreateDTO request) {
 
         final AbstractObjectStructure structure = findStructureByName(request.getName());
 
-        Map<String, String> parameters = structureParameterService.validateAndInsertDefaultIfRequired(request.getInput(), structure.getParameters());
+        Map<String, String> parameters = structureParameterValidationService.validateAndInsertDefaultIfRequired(request.getInput(), structure.getParameters());
 
         AbstractObjectEntity entity = new AbstractObjectEntity(request, parameters, structure);
         repository.save(entity);
@@ -47,7 +47,7 @@ public class AbstractObjectService {
                 throw new ValidationFailedException();
         }
 
-        Map<String, String> parameters = structureParameterService.validateAndInsertDefaultIfRequired(request.getParameters(),
+        Map<String, String> parameters = structureParameterValidationService.validateAndInsertDefaultIfRequired(request.getParameters(),
                 findStructureByName(entity.getName()).getParameters());
 
         Map<String, String> updatedProperties = entity.getParameters();
@@ -61,14 +61,12 @@ public class AbstractObjectService {
 
     public void delete(final long id) {
         repository.save(repository.mustFindByIdAndDeletedIsFalse(id).withDeleted(true));
-        structureParameterService.delete(id);
         log.info("AbstractObject with {} id deleted", id);
     }
 
     public void deleteAllByStructureId(final long id)   {
         List<AbstractObjectEntity> abstractObjectEntities = repository.findAllByStructureIdAndDeletedIsFalse(id).stream().map(x -> x.withDeleted(true)).toList();
         repository.saveAll(abstractObjectEntities);
-        structureParameterService.deleteAll(abstractObjectEntities.stream().map(AbstractObjectEntity::getId).toList());
         for (AbstractObjectEntity abstractObjectEntity : abstractObjectEntities) {
             log.info("AbstractObject with {} id deleted", abstractObjectEntity.getId());
         }
@@ -81,8 +79,6 @@ public class AbstractObjectService {
     // Because of circular references, I'll put it here and call it a day
     private AbstractObjectStructure findStructureByName(final String name) {
         final AbstractObjectStructureEntity structureEntity = abstractObjectStructureRepository.mustFindByNameAndDeletedIsFalse(name);
-        return new AbstractObjectStructureDTO(structureEntity,
-                structureParameterService.findById(structureEntity.getId())
-        );
+        return new AbstractObjectStructureDTO(structureEntity);
     }
 }

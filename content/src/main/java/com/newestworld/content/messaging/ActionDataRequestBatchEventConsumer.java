@@ -3,7 +3,6 @@ package com.newestworld.content.messaging;
 import com.newestworld.commons.model.*;
 import com.newestworld.content.facade.ActionFacade;
 import com.newestworld.content.facade.ActionStructureFacade;
-import com.newestworld.content.service.StructureParameterService;
 import com.newestworld.content.service.NodeService;
 import com.newestworld.streams.event.*;
 import com.newestworld.streams.event.batch.ActionDataRequestBatchEvent;
@@ -23,7 +22,6 @@ import java.util.function.Consumer;
 public class ActionDataRequestBatchEventConsumer implements Consumer<ActionDataRequestBatchEvent> {
 
     private final NodeService nodeService;
-    private final StructureParameterService structureParameterService;
     private final ActionFacade actionFacade;
     private final ActionStructureFacade actionStructureFacade;
     private final EventPublisher<ActionDataBatchEvent> actionDataBatchEventPublisher;
@@ -39,10 +37,9 @@ public class ActionDataRequestBatchEventConsumer implements Consumer<ActionDataR
             final ActionStructure structure = actionStructureFacade.findById(action.getStructureId());
             final List<NodeEvent> nodes = nodeService.findAllById(structure.getId())
                     .stream().map(NodeEvent::new).toList();
-            final List<StructureParameter> structureParameters = structureParameterService.findById(action.getStructureId());
 
             List<ModelParameter> parameters = new ArrayList<>();
-            for (final StructureParameter structureParameter : structureParameters) {
+            for (final StructureParameter structureParameter : structure.getParameters()) {
                 parameters.add(new ModelParameter(
                         structureParameter.getName(),
                         structureParameter.isRequired(),

@@ -9,6 +9,7 @@ import lombok.With;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor
@@ -25,6 +26,9 @@ public class ActionStructureEntity {
     @Column(unique = true)
     private String name;
 
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private List<StructureParameterEntity> parameters;
+
     private boolean deleted;
 
     @CreationTimestamp
@@ -33,5 +37,6 @@ public class ActionStructureEntity {
 
     public ActionStructureEntity(final ActionStructureCreateDTO request) {
         this.name = request.getName();
+        this.parameters = request.getParameters().stream().map(StructureParameterEntity::new).toList();
     }
 }

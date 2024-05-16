@@ -17,7 +17,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class ActionService {
 
-    private final StructureParameterService structureParameterService;
+    private final StructureParameterValidationService structureParameterValidationService;
 
     private final ActionRepository actionRepository;
     private final ActionStructureService actionStructureService;
@@ -30,7 +30,7 @@ public class ActionService {
     public Action create(final ActionCreateDTO request) {
 
         ActionStructure structure = actionStructureService.findByName(request.getName());
-        Map<String, String> parameters = structureParameterService.validateAndInsertDefaultIfRequired(request.getInput(), structure.getParameters());
+        Map<String, String> parameters = structureParameterValidationService.validateAndInsertDefaultIfRequired(request.getInput(), structure.getParameters());
 
         // Saving action
         ActionEntity actionEntity = new ActionEntity(request, parameters, structure.getId());
@@ -45,7 +45,6 @@ public class ActionService {
 
     public void delete(final long id) {
         actionRepository.save(actionRepository.mustFindByIdAndDeletedIsFalse(id).withDeleted(true));
-        structureParameterService.delete(id);
         log.info("Action with {} id deleted", id);
     }
 
