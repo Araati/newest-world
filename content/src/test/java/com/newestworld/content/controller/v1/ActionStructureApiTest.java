@@ -3,9 +3,8 @@ package com.newestworld.content.controller.v1;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
 import com.newestworld.commons.exception.ResourceNotFoundException;
-import com.newestworld.commons.model.ActionType;
 import com.newestworld.content.ContentApplication;
-import com.newestworld.content.dto.*;
+import com.newestworld.content.TestData;
 import com.newestworld.content.service.ActionStructureService;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Assertions;
@@ -21,8 +20,6 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
-
-import java.util.List;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -49,63 +46,57 @@ class ActionStructureApiTest {
 
     @Test
     void create() throws Exception {
-        String name = "test";
-        List<String> input = List.of("$targetId", "$amount");
-        var start = new NodeCreateDTO(ActionType.START.getId(), 1L, List.of(new StructureParameterCreateDTO("next", "2")));
-        var end = new NodeCreateDTO(ActionType.END.getId(), 2L, List.of());
 
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.post("/v1/action/structure")
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .characterEncoding("UTF-8")
-                .content(mapper.writeValueAsString(new ActionStructureCreateDTO(name, input, List.of(start, end))));
+                .content(mapper.writeValueAsString(TestData.actionStructureCreateDTO));
 
         mvc.perform(requestBuilder)
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").exists())
-                .andExpect(jsonPath("$.name").value(name))
-                .andExpect(jsonPath("$.input").value(Matchers.equalTo(JsonPath.read(mapper.writeValueAsString(input), "$"))))
-                .andExpect(jsonPath("$.steps").isArray()) //todo: create a proper check
+                .andExpect(jsonPath("$.id").value(TestData.expectedActionStructureId))
+                .andExpect(jsonPath("$.name").value(TestData.actionStructureName))
+                .andExpect(jsonPath("$.parameters").value(Matchers.equalTo(
+                        JsonPath.read(mapper.writeValueAsString(TestData.actionStructureParameters), "$")
+                )))
+                .andExpect(jsonPath("$.steps").value(Matchers.equalTo(
+                        JsonPath.read(mapper.writeValueAsString(TestData.expectedNodeEvents), "$")
+                )))
                 .andExpect(jsonPath("$.createdAt").exists());
     }
 
     @Test
     void delete() throws Exception {
-        createTestAction();
+        actionStructureService.create(TestData.actionStructureCreateDTO);
 
-        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.delete("/v1/action/structure/1");
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.delete("/v1/action/structure/" + TestData.expectedActionStructureId);
 
         mvc.perform(requestBuilder)
                 .andDo(print())
                 .andExpect(status().isOk());
 
-        Assertions.assertThrows(ResourceNotFoundException.class, () -> actionStructureService.findById(1));
+        Assertions.assertThrows(ResourceNotFoundException.class, () -> actionStructureService.findById(TestData.expectedActionStructureId));
     }
 
     @Test
     void findById() throws Exception {
-        createTestAction();
-        String name = "test";
-        List<String> input = List.of("$targetId", "$amount");
+        actionStructureService.create(TestData.actionStructureCreateDTO);
 
-        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/v1/action/structure/1");
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/v1/action/structure/" + TestData.expectedActionStructureId);
 
         mvc.perform(requestBuilder)
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").exists())
-                .andExpect(jsonPath("$.name").value(name))
-                .andExpect(jsonPath("$.input").value(Matchers.equalTo(JsonPath.read(mapper.writeValueAsString(input), "$"))))
-                .andExpect(jsonPath("$.steps").isArray()) //todo: create a proper check
+                .andExpect(jsonPath("$.id").value(TestData.expectedActionStructureId))
+                .andExpect(jsonPath("$.name").value(TestData.actionStructureName))
+                .andExpect(jsonPath("$.parameters").value(Matchers.equalTo(
+                        JsonPath.read(mapper.writeValueAsString(TestData.actionStructureParameters), "$"))
+                ))
+                .andExpect(jsonPath("$.steps").value(Matchers.equalTo(
+                        JsonPath.read(mapper.writeValueAsString(TestData.expectedNodeEvents), "$")
+                )))
                 .andExpect(jsonPath("$.createdAt").exists());
-    }
-
-    private void createTestAction()   {
-        String name = "test";
-        List<String> input = List.of("$targetId", "$amount");
-        var start = new NodeCreateDTO(ActionType.START.getId(), 1L, List.of(new StructureParameterCreateDTO("next", "2")));
-        var end = new NodeCreateDTO(ActionType.END.getId(), 2L, List.of());
-        actionStructureService.create(new ActionStructureCreateDTO(name, input, List.of(start, end)));
     }
 }

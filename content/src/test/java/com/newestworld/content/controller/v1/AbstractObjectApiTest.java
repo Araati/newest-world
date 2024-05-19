@@ -1,11 +1,12 @@
 package com.newestworld.content.controller.v1;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jayway.jsonpath.JsonPath;
 import com.newestworld.content.ContentApplication;
-import com.newestworld.content.dao.AbstractObjectStructureRepository;
-import com.newestworld.content.dto.AbstractObjectCreateDTO;
-import com.newestworld.content.dto.AbstractObjectStructureCreateDTO;
-import com.newestworld.content.model.entity.AbstractObjectStructureEntity;
+import com.newestworld.content.TestData;
 import com.newestworld.content.service.AbstractObjectService;
+import com.newestworld.content.service.AbstractObjectStructureService;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,9 +19,6 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -31,10 +29,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class AbstractObjectApiTest {
 
     @Autowired
-    private AbstractObjectStructureRepository structureRepository;
+    private ObjectMapper mapper;
+    @Autowired
+    private AbstractObjectStructureService structureService;
     @Autowired
     private AbstractObjectService objectService;
-
     @Autowired
     private WebApplicationContext context;
     private MockMvc mvc;
@@ -46,23 +45,19 @@ class AbstractObjectApiTest {
 
     @Test
     void findById() throws Exception {
-        String name = "test";
-        Map<String, String> properties = new HashMap<>();
-        properties.put("test", "");
-        properties.put("test2", "value");
+        structureService.create(TestData.objectStructureCreateDTO);
+        objectService.create(TestData.objectCreateDTO);
 
-        structureRepository.save(new AbstractObjectStructureEntity(new AbstractObjectStructureCreateDTO(name, properties)));
-
-        properties.put("test", "1000");
-        objectService.create(new AbstractObjectCreateDTO(name, properties));
-        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/v1/abstract_object/1");
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/v1/abstract_object/" + TestData.expectedObjectId);
 
         mvc.perform(requestBuilder)
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(1))
-                .andExpect(jsonPath("$.structureId").value(1))
-                .andExpect(jsonPath("$.name").value(name))
-                .andExpect(jsonPath("$.properties").value(properties));
+                .andExpect(jsonPath("$.id").value(TestData.expectedObjectId))
+                .andExpect(jsonPath("$.structureId").value(TestData.expectedObjectStructureId))
+                .andExpect(jsonPath("$.name").value(TestData.objectStructureName))
+                .andExpect(jsonPath("$.parameters").value(Matchers.equalTo(
+                        JsonPath.read(mapper.writeValueAsString(TestData.expectedObjectParameters), "$")
+                )));
     }
 }

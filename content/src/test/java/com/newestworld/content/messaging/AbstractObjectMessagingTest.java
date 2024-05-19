@@ -2,15 +2,9 @@ package com.newestworld.content.messaging;
 
 import com.newestworld.commons.exception.ValidationFailedException;
 import com.newestworld.content.ContentApplication;
-import com.newestworld.content.dao.AbstractObjectRepository;
-import com.newestworld.content.dao.AbstractObjectStructureRepository;
-import com.newestworld.content.dto.AbstractObjectCreateDTO;
-import com.newestworld.content.dto.AbstractObjectStructureCreateDTO;
-import com.newestworld.content.dto.AbstractObjectStructureDTO;
-import com.newestworld.content.model.entity.AbstractObjectEntity;
-import com.newestworld.content.model.entity.AbstractObjectStructureEntity;
-import com.newestworld.streams.event.AbstractObjectCreateEvent;
-import com.newestworld.streams.event.AbstractObjectUpdateEvent;
+import com.newestworld.content.TestData;
+import com.newestworld.content.service.AbstractObjectService;
+import com.newestworld.content.service.AbstractObjectStructureService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,18 +12,15 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 
-import java.util.HashMap;
-import java.util.Map;
-
 @SpringBootTest(classes = ContentApplication.class, properties = {"spring.profiles.active=test"})
 @ActiveProfiles("test")
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 class AbstractObjectMessagingTest {
 
     @Autowired
-    private AbstractObjectStructureRepository structureRepository;
+    private AbstractObjectStructureService objectStructureService;
     @Autowired
-    private AbstractObjectRepository objectRepository;
+    private AbstractObjectService objectService;
 
     @Autowired
     private AbstractObjectCreateEventConsumer createEventConsumer;
@@ -38,44 +29,30 @@ class AbstractObjectMessagingTest {
 
     @Test
     void abstractObjectCreateEventConsume() {
-        String name = "test";
-        Map<String, String> properties = new HashMap<>();
-        properties.put("test", "");
-        properties.put("test2", "value");
 
-        structureRepository.save(new AbstractObjectStructureEntity(new AbstractObjectStructureCreateDTO(name, properties)));
+        objectStructureService.create(TestData.objectStructureCreateDTO);
 
-        properties.put("test", "1000");
-        createEventConsumer.accept(new AbstractObjectCreateEvent(name, properties));
-        var entity = objectRepository.mustFindByIdAndDeletedIsFalse(1);
+        createEventConsumer.accept(TestData.objectCreateEvent);
+        var object = objectService.findById(TestData.expectedObjectId);
 
-        Assertions.assertSame(entity.getName(), name);
-        Assertions.assertEquals(1, entity.getStructureId());
-        Assertions.assertEquals(entity.getParameters(), properties);
+        Assertions.assertEquals(object.getName(), TestData.objectStructureName);
+        Assertions.assertEquals(TestData.expectedObjectStructureId, object.getStructureId());
+        Assertions.assertEquals(object.getParameters(), TestData.expectedObjectParameters);
     }
 
     @Test
     void abstractObjectUpdateEventConsume() {
-        String name = "test";
-        Map<String, String> properties = new HashMap<>();
-        properties.put("test", "");
-        properties.put("test2", "value");
 
-        var structure = new AbstractObjectStructureEntity(new AbstractObjectStructureCreateDTO(name, properties));
-        structureRepository.save(structure);
-        properties.put("test", "1000");
-        objectRepository.save(new AbstractObjectEntity(new AbstractObjectCreateDTO(name, properties), new AbstractObjectStructureDTO(structure)));
+        objectStructureService.create(TestData.objectStructureCreateDTO);
+        objectService.create(TestData.objectCreateDTO);
 
         // Rewrite value check
-        properties.put("test2", "newValue");
-        updateEventConsumer.accept(new AbstractObjectUpdateEvent(1, properties));
-        var entity = objectRepository.mustFindByIdAndDeletedIsFalse(1);
-        Assertions.assertEquals(entity.getParameters(), properties);
+        updateEventConsumer.accept(TestData.validObjectUpdateEvent);
+        Assertions.assertEquals(objectService.findById(TestData.expectedObjectId).getParameters(),
+                TestData.expectedObjectUpdateParameters);
 
         // Update validation check
-        properties.put("test3", "validationException");
-        var event = new AbstractObjectUpdateEvent(1, properties);
-        Assertions.assertThrows(ValidationFailedException.class, () -> updateEventConsumer.accept(event));
+        Assertions.assertThrows(ValidationFailedException.class, () -> updateEventConsumer.accept(TestData.invalidObjectUpdateEvent));
     }
 
 }

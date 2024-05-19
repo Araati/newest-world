@@ -1,12 +1,9 @@
 package com.newestworld.content.messaging;
 
 import com.newestworld.commons.exception.ResourceNotFoundException;
-import com.newestworld.commons.model.ActionType;
 import com.newestworld.commons.model.Action;
 import com.newestworld.content.ContentApplication;
-import com.newestworld.content.dto.NodeCreateDTO;
-import com.newestworld.content.dto.ActionCreateDTO;
-import com.newestworld.content.dto.ActionStructureCreateDTO;
+import com.newestworld.content.TestData;
 import com.newestworld.content.service.ActionService;
 import com.newestworld.content.service.ActionStructureService;
 import com.newestworld.streams.event.*;
@@ -56,26 +53,22 @@ class ActionMessagingTest {
         Field field = ReflectionUtils
                 .findFields(ActionService.class, f -> f.getName().equals("actionTimeoutCreateEventPublisher"),
                         ReflectionUtils.HierarchyTraversalMode.TOP_DOWN)
-                .get(0);
+                .getFirst();
 
         field.setAccessible(true);
         field.set(actionService, actionTimeoutCreateEventPublisher);
     }
     @Test
     void actionCreateEventConsume() {
+        actionStructureService.create(TestData.actionStructureCreateDTO);
 
-        createTestAction();
+        createEventConsumer.accept(TestData.actionCreateEvent);
 
-        Map<String, String> properties = new HashMap<>();
-        properties.put("$targetId", "1");
-        properties.put("$amount", "1000");
-        createEventConsumer.accept(new ActionCreateEvent("test", properties));
+        Action action = actionService.findById(TestData.expectedActionId);
 
-        Action action = actionService.findById(3);
-        Assertions.assertSame("test", action.getName());
-        Assertions.assertEquals(1, action.getStructureId());
-        Assertions.assertEquals("1", action.getInput().mustGetByName("$targetId").getValue());
-        Assertions.assertEquals("1000", action.getInput().mustGetByName("$amount").getValue().toString());
+        Assertions.assertEquals(TestData.actionStructureName, action.getName());
+        Assertions.assertEquals(TestData.expectedActionStructureId, action.getStructureId());
+        Assertions.assertEquals(TestData.expectedActionParameters, action.getParameters());
     }
 
     @Test
@@ -84,17 +77,15 @@ class ActionMessagingTest {
         Field field = ReflectionUtils
                 .findFields(ActionDataRequestBatchEventConsumer.class, f -> f.getName().equals("actionDataBatchEventPublisher"),
                         ReflectionUtils.HierarchyTraversalMode.TOP_DOWN)
-                .get(0);
+                .getFirst();
 
         field.setAccessible(true);
         field.set(dataRequestBatchEventConsumer, actionDataBatchEventPublisher);
 
-        createTestAction();
+        actionStructureService.create(TestData.actionStructureCreateDTO);
+        actionService.create(TestData.actionCreateDTO);
 
-        actionService.create(new ActionCreateDTO("test", List.of(new StructureParameterCreateDTO("$targetId", "1"),
-                new StructureParameterCreateDTO("$amount", "1000"))));
-
-        dataRequestBatchEventConsumer.accept(new ActionDataRequestBatchEvent(new HashSet<>(List.of(new ActionDataRequestEvent(3)))));
+        dataRequestBatchEventConsumer.accept(new ActionDataRequestBatchEvent(new HashSet<>(List.of(new ActionDataRequestEvent(TestData.expectedActionId)))));
 
         // get batch received by mocked publisher
         final ArgumentCaptor<ActionDataBatchEvent> captor = ArgumentCaptor.forClass(ActionDataBatchEvent.class);
@@ -102,42 +93,23 @@ class ActionMessagingTest {
 
         // verify action and inputs
         var argument = captor.getValue().getBatch().stream().findFirst().get();
-        Assertions.assertEquals(3, (long) argument.getActionId());
-        Assertions.assertEquals("1", argument.getInput().mustGetByName("$targetId").getData().toString());
-        Assertions.assertEquals("1000", argument.getInput().mustGetByName("$amount").getData().toString());
+        Assertions.assertEquals(TestData.expectedActionId, (long) argument.getActionId());
+        for (Map.Entry<String, String> entry : TestData.expectedActionParameters.entrySet())   {
+            Assertions.assertEquals(entry.getValue(), argument.getInput().mustGetByName(entry.getKey()).getData());
+        }
 
-        // verify start node
-        var startTest = argument.getNodes().get(0);
-        Assertions.assertEquals(startTest.getType(), ActionType.START.getId());
-        Assertions.assertEquals(1, (long) startTest.getPosition());
-        Assertions.assertEquals("2", startTest.getParameters().mustGetByName("next").getData().toString());
-
-        // verify end node
-        var endTest = argument.getNodes().get(1);
-        Assertions.assertEquals(endTest.getType(), ActionType.END.getId());
-        Assertions.assertEquals(2, (long) endTest.getPosition());
-        Assertions.assertTrue(endTest.getParameters().isEmpty());
+        Assertions.assertEquals(argument.getNodes(), TestData.expectedNodeEvents);
     }
+
 
     @Test
     void actionDeleteEventConsume() {
-        createTestAction();
-        Map<String, String> properties = new HashMap<>();
-        properties.put("$targetId", "1");
-        properties.put("$amount", "1000");
-        actionService.create(new ActionCreateDTO(new ActionCreateEvent("test", properties)));
+        actionStructureService.create(TestData.actionStructureCreateDTO);
+        actionService.create(TestData.actionCreateDTO);
 
-        Assertions.assertDoesNotThrow(() -> actionService.findById(3));
-        actionDeleteEventConsumer.accept(new ActionDeleteEvent(3));
-        Assertions.assertThrows(ResourceNotFoundException.class, () -> actionService.findById(3));
-    }
-
-    private void createTestAction()   {
-        String name = "test";
-        List<String> input = List.of("$targetId", "$amount");
-        var start = new NodeCreateDTO(ActionType.START.getId(), 1L, List.of(new StructureParameterCreateDTO("next", "2")));
-        var end = new NodeCreateDTO(ActionType.END.getId(), 2L, List.of());
-        actionStructureService.create(new ActionStructureCreateDTO(name, input, List.of(start, end)));
+        Assertions.assertDoesNotThrow(() -> actionService.findById(TestData.expectedActionId));
+        actionDeleteEventConsumer.accept(new ActionDeleteEvent(TestData.expectedActionId));
+        Assertions.assertThrows(ResourceNotFoundException.class, () -> actionService.findById(TestData.expectedActionId));
     }
 
 }
