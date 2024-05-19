@@ -11,6 +11,4 @@ public interface Node {
 
     Map<String, String> getParameters();
 
-    LocalDateTime getCreatedAt();
-
 }

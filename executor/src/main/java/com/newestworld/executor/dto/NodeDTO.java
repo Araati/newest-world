@@ -21,8 +21,6 @@ public class NodeDTO implements Node {
 
     private Map<String, String> parameters;
 
-    private LocalDateTime createdAt;
-
     public NodeDTO(final NodeEvent nodeEvent) {
         this.position = nodeEvent.getPosition();
         this.type = ActionType.decode(nodeEvent.getType());
