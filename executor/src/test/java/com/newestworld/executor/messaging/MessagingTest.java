@@ -1,7 +1,6 @@
 package com.newestworld.executor.messaging;
 
 import com.newestworld.executor.ExecutorApplication;
-import com.newestworld.executor.service.ActionExecutorAggregator;
 import com.newestworld.streams.event.*;
 import com.newestworld.streams.event.batch.ActionDataRequestBatchEvent;
 import com.newestworld.streams.event.batch.ActionTimeoutBatchEvent;
@@ -32,8 +31,6 @@ class MessagingTest {
     private ActionTimeoutBatchEventConsumer timeoutBatchEventConsumer;
     @Autowired
     private EventPublisher<ActionDataRequestBatchEvent> actionDataRequestBatchEventPublisher;
-    @Autowired
-    private ActionExecutorAggregator aggregator;
 
     @BeforeEach
     void setUp() throws IllegalAccessException {
@@ -41,7 +38,7 @@ class MessagingTest {
         Field field = ReflectionUtils
                 .findFields(ActionTimeoutBatchEventConsumer.class, f -> f.getName().equals("actionDataRequestBatchEventPublisher"),
                         ReflectionUtils.HierarchyTraversalMode.TOP_DOWN)
-                .get(0);
+                .getFirst();
 
         field.setAccessible(true);
         field.set(timeoutBatchEventConsumer, actionDataRequestBatchEventPublisher);

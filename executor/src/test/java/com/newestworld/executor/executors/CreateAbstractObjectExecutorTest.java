@@ -1,7 +1,5 @@
 package com.newestworld.executor.executors;
 
-import com.newestworld.commons.model.ModelParameter;
-import com.newestworld.commons.model.ModelParameters;
 import com.newestworld.executor.ExecutorApplication;
 import com.newestworld.executor.util.ExecutionContext;
 import com.newestworld.streams.event.AbstractObjectCreateEvent;
@@ -11,7 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 
-import java.util.List;
+import java.util.Map;
 
 @SpringBootTest(classes = ExecutorApplication.class, properties = {"spring.profiles.active=test"})
 @ActiveProfiles("test")
@@ -20,17 +18,27 @@ class CreateAbstractObjectExecutorTest {
 
     @Test
     void execute()  {
-        ModelParameters parameters = new ModelParameters.Impl(List.of(new ModelParameter(1, "name", "factory"),
-                new ModelParameter(1, "next", 2)));
+        String expectedName = "factory";
+        String expectedNext = "2";
+        Map<String, String> parameters = Map.of(
+                "name", expectedName,
+                "key1", "value1",
+                "key2", "value2",
+                "next", expectedNext);
+        Map<String, String> expectedParameters = Map.of(
+                "key1", "value1",
+                "key2", "value2"
+        );
 
         ExecutionContext context = new ExecutionContext();
         context.createNodeScope(parameters);
 
         ActionExecutor executor = new CreateAbstractObjectExecutor();
         String next = executor.exec(context);
-        AbstractObjectCreateEvent event = (AbstractObjectCreateEvent) context.getEvents().get(0);
+        AbstractObjectCreateEvent event = (AbstractObjectCreateEvent) context.getEvents().getFirst();
 
-        Assertions.assertEquals("2", next);
-        Assertions.assertEquals("factory", event.getName());
+        Assertions.assertEquals(expectedNext, next);
+        Assertions.assertEquals(expectedName, event.getName());
+        Assertions.assertEquals(expectedParameters, event.getProperties());
     }
 }

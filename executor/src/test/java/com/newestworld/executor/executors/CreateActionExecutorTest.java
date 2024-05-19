@@ -1,7 +1,5 @@
 package com.newestworld.executor.executors;
 
-import com.newestworld.commons.model.ModelParameter;
-import com.newestworld.commons.model.ModelParameters;
 import com.newestworld.executor.ExecutorApplication;
 import com.newestworld.executor.util.ExecutionContext;
 import com.newestworld.streams.event.ActionCreateEvent;
@@ -11,7 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 
-import java.util.List;
+import java.util.Map;
 
 @SpringBootTest(classes = ExecutorApplication.class, properties = {"spring.profiles.active=test"})
 @ActiveProfiles("test")
@@ -20,16 +18,18 @@ class CreateActionExecutorTest {
 
     @Test
     void execute()  {
-        ModelParameters parameters = new ModelParameters.Impl(List.of(new ModelParameter(1, "name", "factory"),
-                new ModelParameter(1, "something", "randomInput"),
-                new ModelParameter(1, "next", 2)));
+        Map<String, String> parameters = Map.of(
+                "name", "factory",
+                "something", "randomInput",
+                "next", "2"
+        );
 
         ExecutionContext context = new ExecutionContext();
         context.createNodeScope(parameters);
 
         ActionExecutor executor = new CreateActionExecutor();
         String next = executor.exec(context);
-        ActionCreateEvent event = (ActionCreateEvent) context.getEvents().get(0);
+        ActionCreateEvent event = (ActionCreateEvent) context.getEvents().getFirst();
 
         Assertions.assertEquals("2", next);
         Assertions.assertEquals("factory", event.getName());

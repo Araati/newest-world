@@ -1,7 +1,5 @@
 package com.newestworld.executor.executors;
 
-import com.newestworld.commons.model.ModelParameter;
-import com.newestworld.commons.model.ModelParameters;
 import com.newestworld.executor.ExecutorApplication;
 import com.newestworld.executor.util.ExecutionContext;
 import com.newestworld.streams.event.ActionDeleteEvent;
@@ -11,7 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 
-import java.util.List;
+import java.util.Map;
 
 @SpringBootTest(classes = ExecutorApplication.class, properties = {"spring.profiles.active=test"})
 @ActiveProfiles("test")
@@ -20,17 +18,18 @@ class StartExecutorTest {
 
     @Test
     void execute()  {
-        ModelParameters parameters = new ModelParameters.Impl(List.of(
-                new ModelParameter(1, "target", 1),
-                new ModelParameter(1, "next", 2)));
+        Map<String, String > parameters = Map.of(
+                "action_id", "1",
+                "target", "1",
+                "next", "2"
+        );
 
         ExecutionContext context = new ExecutionContext();
-        context.updateActionScope("action_id", "1");
         context.createNodeScope(parameters);
 
         ActionExecutor executor = new StartExecutor();
         String next = executor.exec(context);
-        ActionDeleteEvent event = (ActionDeleteEvent) context.getEvents().get(0);
+        ActionDeleteEvent event = (ActionDeleteEvent) context.getEvents().getFirst();
 
         Assertions.assertEquals("2", next);
         Assertions.assertEquals(1, event.getActionId());

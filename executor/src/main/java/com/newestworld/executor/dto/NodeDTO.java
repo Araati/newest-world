@@ -25,6 +25,5 @@ public class NodeDTO implements Node {
         this.position = nodeEvent.getPosition();
         this.type = ActionType.decode(nodeEvent.getType());
         this.parameters = nodeEvent.getParameters();
-        this.createdAt = nodeEvent.getCreatedAt();
     }
 }

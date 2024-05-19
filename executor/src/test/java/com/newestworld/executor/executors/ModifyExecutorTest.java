@@ -1,7 +1,5 @@
 package com.newestworld.executor.executors;
 
-import com.newestworld.commons.model.ModelParameter;
-import com.newestworld.commons.model.ModelParameters;
 import com.newestworld.executor.ExecutorApplication;
 import com.newestworld.executor.util.ExecutionContext;
 import com.newestworld.streams.event.AbstractObjectUpdateEvent;
@@ -11,7 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 
-import java.util.List;
+import java.util.Map;
 
 @SpringBootTest(classes = ExecutorApplication.class, properties = {"spring.profiles.active=test"})
 @ActiveProfiles("test")
@@ -20,21 +18,23 @@ class ModifyExecutorTest {
 
     @Test
     void execute()  {
-        ModelParameters parameters = new ModelParameters.Impl(List.of(new ModelParameter(1, "target", 1),
-                new ModelParameter(1, "field", "product"),
-                new ModelParameter(1, "value", "steel"),
-                new ModelParameter(1, "next", 2)));
+        Map<String, String> parameters = Map.of(
+                "target", "1",
+                "field", "product",
+                "value", "steel",
+                "next", "2"
+        );
 
         ExecutionContext context = new ExecutionContext();
         context.createNodeScope(parameters);
 
         ActionExecutor executor = new ModifyExecutor();
         String next = executor.exec(context);
-        AbstractObjectUpdateEvent event = (AbstractObjectUpdateEvent) context.getEvents().get(0);
+        AbstractObjectUpdateEvent event = (AbstractObjectUpdateEvent) context.getEvents().getFirst();
 
         Assertions.assertEquals("2", next);
         Assertions.assertEquals(1, event.getId());
-        Assertions.assertEquals("steel", event.getProperties().get("product"));
+        Assertions.assertEquals("steel", event.getParameters().get("product"));
     }
 
 }
