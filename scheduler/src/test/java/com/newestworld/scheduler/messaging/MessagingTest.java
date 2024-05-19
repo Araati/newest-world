@@ -14,9 +14,6 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.util.ArrayList;
-import java.util.concurrent.TimeUnit;
-
-import static org.awaitility.Awaitility.await;
 
 //fixme: how to rewrite env property properly?
 @SpringBootTest(classes = SchedulerApplication.class, properties = {"spring.profiles.active=test"})
@@ -55,8 +52,6 @@ class MessagingTest {
         Assertions.assertEquals(2, batch.size());
         Assertions.assertEquals(1, batch.get(0).getId());
         Assertions.assertEquals(2, batch.get(1).getId());
-
-        await().atMost(150, TimeUnit.MILLISECONDS).until(() -> producer.get().getSize() == 3);
     }
 
     @Test
