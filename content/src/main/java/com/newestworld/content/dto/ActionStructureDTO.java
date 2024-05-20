@@ -24,11 +24,11 @@ public class ActionStructureDTO implements ActionStructure {
 
     private List<ModelParameter> parameters = new ArrayList<>();
     
-    private List<Node> steps;
+    private List<Node> nodes;
     
     private LocalDateTime createdAt;
     
-    public ActionStructureDTO(final ActionStructureEntity source, final List<Node> steps) {
+    public ActionStructureDTO(final ActionStructureEntity source) {
         this.id = source.getId();
         this.name = source.getName();
         for (ModelParameterEntity entity : source.getParameters()) {
@@ -41,7 +41,7 @@ public class ActionStructureDTO implements ActionStructure {
                     entity.getMin()
             ));
         }
-        this.steps = steps;
+        this.nodes = new ArrayList<>(source.getNodes().stream().map(NodeDTO::new).toList());
         this.createdAt = source.getCreatedAt();
     }
 }

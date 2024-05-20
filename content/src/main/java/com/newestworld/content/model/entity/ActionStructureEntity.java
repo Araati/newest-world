@@ -29,6 +29,10 @@ public class ActionStructureEntity {
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<ModelParameterEntity> parameters;
 
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "action_structure_id")
+    private List<NodeEntity> nodes;
+
     private boolean deleted;
 
     @CreationTimestamp
@@ -38,5 +42,6 @@ public class ActionStructureEntity {
     public ActionStructureEntity(final ActionStructureCreateDTO request) {
         this.name = request.getName();
         this.parameters = request.getParameters().stream().map(ModelParameterEntity::new).toList();
+        this.nodes = request.getNodes().stream().map(NodeEntity::new).toList();
     }
 }

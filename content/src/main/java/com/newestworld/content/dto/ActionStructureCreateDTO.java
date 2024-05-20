@@ -22,6 +22,6 @@ public class ActionStructureCreateDTO {
     private List<ModelParameter> parameters;
 
     @JsonProperty(required = true)
-    private List<NodeCreateDTO> steps;
+    private List<NodeCreateDTO> nodes;
 
 }

@@ -23,8 +23,6 @@ public class NodeEntity {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "model")
     private long id;
 
-    private long structureId;
-
     private Long position;
 
     private int type;
@@ -38,10 +36,9 @@ public class NodeEntity {
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    public NodeEntity(final long structureId, final NodeCreateDTO source) {
-        this.structureId = structureId;
+    public NodeEntity(final NodeCreateDTO source) {
         this.position = source.getPosition();
-        this.parameters = source.getParameters();
         this.type = source.getType();
+        this.parameters = source.getParameters();
     }
 }

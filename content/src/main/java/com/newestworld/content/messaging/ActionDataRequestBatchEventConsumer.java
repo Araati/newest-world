@@ -3,7 +3,6 @@ package com.newestworld.content.messaging;
 import com.newestworld.commons.model.*;
 import com.newestworld.content.facade.ActionFacade;
 import com.newestworld.content.facade.ActionStructureFacade;
-import com.newestworld.content.service.NodeService;
 import com.newestworld.streams.event.*;
 import com.newestworld.streams.event.batch.ActionDataRequestBatchEvent;
 import com.newestworld.streams.event.batch.ActionDataBatchEvent;
@@ -21,7 +20,6 @@ import java.util.function.Consumer;
 @RequiredArgsConstructor
 public class ActionDataRequestBatchEventConsumer implements Consumer<ActionDataRequestBatchEvent> {
 
-    private final NodeService nodeService;
     private final ActionFacade actionFacade;
     private final ActionStructureFacade actionStructureFacade;
     private final EventPublisher<ActionDataBatchEvent> actionDataBatchEventPublisher;
@@ -35,8 +33,6 @@ public class ActionDataRequestBatchEventConsumer implements Consumer<ActionDataR
         for (final ActionDataRequestEvent request : requests) {
             final Action action = actionFacade.findById(request.getId());
             final ActionStructure structure = actionStructureFacade.findById(action.getStructureId());
-            final List<NodeEvent> nodes = nodeService.findAllById(structure.getId())
-                    .stream().map(NodeEvent::new).toList();
 
             List<ModelParameter> parameters = new ArrayList<>();
             for (final ModelParameter modelParameter : structure.getParameters()) {
@@ -49,7 +45,8 @@ public class ActionDataRequestBatchEventConsumer implements Consumer<ActionDataR
                         modelParameter.getMin()
                 ));
             }
-            dataEvents.add(new ActionDataEvent(request.getId(), new ModelParameters.Impl(parameters), nodes));
+            dataEvents.add(new ActionDataEvent(request.getId(), new ModelParameters.Impl(parameters),
+                    structure.getNodes().stream().map(NodeEvent::new).toList()));
         }
 
         actionDataBatchEventPublisher.send(new ActionDataBatchEvent(dataEvents));

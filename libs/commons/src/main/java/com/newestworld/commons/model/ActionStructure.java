@@ -11,7 +11,7 @@ public interface ActionStructure {
 
     List<ModelParameter> getParameters();
 
-    List<Node> getSteps();
+    List<Node> getNodes();
 
     LocalDateTime getCreatedAt();
 
