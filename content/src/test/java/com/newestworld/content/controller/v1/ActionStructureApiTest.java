@@ -61,7 +61,7 @@ class ActionStructureApiTest {
                 .andExpect(jsonPath("$.parameters").value(Matchers.equalTo(
                         JsonPath.read(mapper.writeValueAsString(TestData.actionStructureParameters), "$")
                 )))
-                .andExpect(jsonPath("$.steps").value(Matchers.equalTo(
+                .andExpect(jsonPath("$.nodes").value(Matchers.equalTo(
                         JsonPath.read(mapper.writeValueAsString(TestData.expectedNodeEvents), "$")
                 )))
                 .andExpect(jsonPath("$.createdAt").exists());
@@ -94,7 +94,7 @@ class ActionStructureApiTest {
                 .andExpect(jsonPath("$.parameters").value(Matchers.equalTo(
                         JsonPath.read(mapper.writeValueAsString(TestData.actionStructureParameters), "$"))
                 ))
-                .andExpect(jsonPath("$.steps").value(Matchers.equalTo(
+                .andExpect(jsonPath("$.nodes").value(Matchers.equalTo(
                         JsonPath.read(mapper.writeValueAsString(TestData.expectedNodeEvents), "$")
                 )))
                 .andExpect(jsonPath("$.createdAt").exists());
